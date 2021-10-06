@@ -1,16 +1,21 @@
 CC=gcc
 FLEX=flex
-lex:
+BISON=bison
+.lex: lex.l
 	$(FLEX) lex.l
-	$(CC) lex.yy.c -lfl -o token.out
+.syntax: syntax.y
+	$(BISON) -t -d syntax.y
+jp: .lex .syntax
+	$(CC) syntax.tab.c -lfl -ly -o jp.out
 splc:
 	@mkdir bin
 	touch bin/splc
 	@chmod +x bin/splc
-test1:
-	./token.out test1.c
-test2:
-	./token.out test2.c
+
+# test1:
+# 	./token.out test1.c
+# test2:
+# 	./token.out test2.c
 clean:
 	@rm -f lex.yy.c *.out
 	@rm -rf bin/
