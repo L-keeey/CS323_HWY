@@ -1,5 +1,0 @@
-int test_spl()
-{
-    int i = 0, j = 1;
-    float i = 1;
-}
