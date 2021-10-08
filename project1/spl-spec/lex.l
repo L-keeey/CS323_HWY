@@ -4,20 +4,21 @@
 
     #include "syntax.tab.h"
     #include "stdlib.h"
+    #include "parseTree.h"
 
     /* library inclusions */
     int yycolno = 1;
-    #define YY_USER_ACTION
-        yylloc.first_line = yylineno; 
-        yylloc.first_column = yycolno; 
-        yylloc.last_line = yylineno; 
-        yylloc.last_column = yycolno + yyleng; 
+    #define YY_USER_ACTION \
+        yylloc.first_line = yylineno; \
+        yylloc.first_column = yycolno; \
+        yylloc.last_line = yylineno; \
+        yylloc.last_column = yycolno + yyleng; \
         yycolno += yyleng;
 
 %}
 %option yylineno
 
-INT      (0|[1-9][0-9]*) | 0[xX](0|[1-9a-fA-F][0-9a-fA-F]{0,7})
+INT      (0|[1-9][0-9]*) | 0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
 CHAR     \'(([ !\"#$%&\'\(\)\*\+,-./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\}\|~]) | (\\x[0-7][0-9A-Fa-f]))\'
 ID       ([a-zA-Z_])([0-9a-zA-Z_])*
@@ -28,45 +29,141 @@ WS       [ \r\t]
 %%
 "\n"    {yycolno = 1;}
 {WS}    {}
-{TYPE}  {
-         yylval.string_value = yytext;
-         return TYPE;
+"int"   {
+            yylval.Node_value = new_Node_s("TYPE", "int");
+            return TYPE;
         }
-struct  {return STRUCT;}
-if      {return IF;}
-else    {return ELSE;}
-while   {return WHILE;}
-return  {return RETURN;}
-"."     {return DOT;}
-";"     {return SEMI;}
-","     {return COMMA;}
-"="     {return ASSIGN;}
-"<"     {return LT;}
-"<="    {return LE;}
-">"     {return GT;}
-">="    {return GE;}
-"!="    {return NE;}
-"=="    {return EQ;}
-"+"     {return PLU;}
-"-"     {return MINUS;}
-"*"     {return MUL;}
-"/"     {return DIV;}
-"&&"    {return AND;}
-"||"    {return OR;}
-"!"     {return NOT;}
-"("     {return LP;}
-")"     {return RP;}
-"["     {return LB;}
-"]"     {return RB;}
-"{"     {return LC;}
-"}"     {return RC;}
+"float"   {
+            yylval.Node_value = new_Node_s("TYPE", "float");
+            return TYPE;
+        }
+"char"   {
+            yylval.Node_value = new_Node_s("TYPE", "char");
+            return TYPE;
+        }
+struct  {   
+            yylval.Node_value = new_Node("STRUCT");
+            return STRUCT;
+        }
+if      {
+            yylval.Node_value = new_Node("IF");
+            return IF;
+        }
+else    {
+            yylval.Node_value = new_Node("ELSE");
+            return ELSE;
+        }
+while   {
+            yylval.Node_value = new_Node("WHILE");
+            return WHILE;
+        }
+return  {
+            yylval.Node_value = new_Node("RETURN");
+            return RETURN;
+        }
+"."     {
+            yylval.Node_value = new_Node("DOT");
+            return DOT;
+        }
+";"     {
+            yylval.Node_value = new_Node("SEMI");
+            return SEMI;
+        }
+","     {
+            yylval.Node_value = new_Node("COMMA");
+            return COMMA;}
+"="     {
+            yylval.Node_value = new_Node("ASSIGN");
+            return ASSIGN;
+        }
+"<"     {
+            yylval.Node_value = new_Node("LT");
+            return LT;
+        }
+"<="    {
+            yylval.Node_value = new_Node("LE");
+            return LE;
+        }
+">"     {
+            yylval.Node_value = new_Node("GT");
+            return GT;
+        }
+">="    {
+            yylval.Node_value = new_Node("GE");
+            return GE;
+        }
+"!="    {
+            yylval.Node_value = new_Node("NE");
+            return NE;           
+        }
+"=="    {
+            yylval.Node_value = new_Node("EQ");
+            return EQ;
+        }
+"+"     {
+            yylval.Node_value = new_Node("PLUS");
+            return PLUS;
+        }
+"-"     {
+            yylval.Node_value = new_Node("MINUS");
+            return MINUS;
+        }
+"*"     {
+            yylval.Node_value = new_Node("MUL");
+            return MUL;
+        }
+"/"     {
+            yylval.Node_value = new_Node("DIV");
+            return DIV;
+        }
+"&&"    {
+            yylval.Node_value = new_Node("AND");
+            return AND
+        }
+"||"    {
+            yylval.Node_value = new_Node("OR");
+            return OR;
+        }
+"!"     {
+            yylval.Node_value = new_Node("NOT");
+            return NOT;
+        }
+"("     {
+            yylval.Node_value = new_Node("LP");
+            return LP;
+        }
+")"     {
+            yylval.Node_value = new_Node("RP");
+            return RP;
+        }
+"["     {
+            yylval.Node_value = new_Node("LB");
+            return LB;
+        }
+"]"     {
+            yylval.Node_value = new_Node("RB");
+            return RB;
+        }
+"{"     {
+            yylval.Node_value = new_Node("LC");
+            return LC;
+        }
+"}"     {
+            yylval.Node_value = new_Node("RC");
+            return RC;
+        }
 
 {ID}    {
+            yylval.Node_value = new_Node_s("ID", yytext);
+            return ID;
+        }
+
+{INT}   {
             int res = atoi(yytext);
             if (res == 0 && yyleng >1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
-                yylval.int_value = res;
+                yylval.Node_value = new_Node_i("INT", res, has_colon);
                 return INT;
             }
         } 
@@ -76,12 +173,12 @@ return  {return RETURN;}
             if (res == 0.0 && yyleng >1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
-                yylval.float_value = res;
+                yylval.Node_value = new_Node_f("FLOAT", res);
                 return FLOAT;
             }
         }
 {CHAR}  {
-            yylval.string_value = yyleng > 3 ? (char) (yytext) : text;
+            yylval.Node_value = new_Node_s("CHAR", yytext);
             return CHAR;
         }
 
