@@ -2,23 +2,20 @@
     #include "lex.yy.c"
     void yyerror(const char*);
 
-    struct Node root;
+    struct Node* root;
 %}
-
+%locations
 %union{
-    Node* Node_value;
-    char* string_value;
-    int int_value;
-    float float_value;
+    struct Node* Node_value;
 }
 %token <Node_value> STRUCT IF ELSE WHILE RETURN SEMI COMMA LC RC
 %type <Node_value> Def DecList Dec DefList Stmt VarList CompSt StmtList Specifier ParamDec
 %type <Node_value> FunDec VarDec StructSpecifier ExtDecList ExtDefList ExtDef Program
-%token <int_value> INT
-%token <string_value> TYPE
-%token <string_value> ID
-%token <float_value> FLOAT
-%token <string_value> CHAR
+%token <Node_value> INT
+%token <Node_value> TYPE
+%token <Node_value> ID
+%token <Node_value> FLOAT
+%token <Node_value> CHAR
 %type <Node_value> Exp Args
 
 %right <Node_value> ASSIGN
@@ -145,9 +142,6 @@ Args:
     | Exp               { $$ = new_Node_i("Args", @$.first_line, has_num); addChild($$, $1);}
     ;
 %%
-
-
-
 void yyerror(const char *s) {
     fprintf(stderr, "%s\n", s);
 }

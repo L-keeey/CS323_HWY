@@ -1,7 +1,7 @@
 #include "parseTree.h"
 
 // INT, *
-Node* new_Node_i(char* token, int value, enum display_type type)
+struct Node* new_Node_i(char* token, int value, enum display_type type)
 {
     Node* node = (Node*) malloc(sizeof(Node));
     node->token = token;
@@ -16,7 +16,7 @@ Node* new_Node_i(char* token, int value, enum display_type type)
 }
 
 // FLOAT
-Node* new_Node_f(char* token, float value)
+struct Node* new_Node_f(char* token, float value)
 {
     Node* node = (Node*) malloc(sizeof(Node));
     node->token = token;
@@ -28,7 +28,7 @@ Node* new_Node_f(char* token, float value)
 }
 
 // ID, TYPE
-Node* new_Node_s(char* token, char* value)
+struct Node* new_Node_s(char* token, char* value)
 {
     Node* node = (Node*) malloc(sizeof(Node));
     node->token = token;
@@ -40,7 +40,7 @@ Node* new_Node_s(char* token, char* value)
 }
 
 // COMMA, RP, LP, RC, LC, RB, LB, ASSIGN, SEMI, IF, GT
-Node* new_Node(char* token)
+struct Node* new_Node(char* token)
 {
     Node* node = (Node*) malloc(sizeof(Node));
     node->token = token;

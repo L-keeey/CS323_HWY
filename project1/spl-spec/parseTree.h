@@ -19,18 +19,18 @@ typedef struct Node
     int child_num;
     struct Node* child_list[7];
 
-} Node;
+}Node;
 
 // INT, *
-Node* new_Node_i(char* token, int value, enum display_type type);
+struct Node* new_Node_i(char* token, int value, enum display_type type);
 
 // FLOAT
-Node* new_Node_f(char* token, float value);
+struct Node* new_Node_f(char* token, float value);
 
 // ID, TYPE
-Node* new_Node_s(char* token, char* value);
+struct Node* new_Node_s(char* token, char* value);
 
 // COMMA, RP, LP, RC, LC, RB, LB, ASSIGN, SEMI, IF, GT
-Node* new_Node(char* token);
+struct Node* new_Node(char* token);
 
 void addChild(struct Node* parent, struct Node* child);
