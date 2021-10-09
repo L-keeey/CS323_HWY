@@ -7,22 +7,28 @@
 
 %union{
     Node* Node_value;
+    char* string_value;
+    int int_value;
+    float float_value;
 }
-%token STRUCT IF ELSE WHILE RETURN  SEMI COMMA LC RC
+%token <Node_value> STRUCT IF ELSE WHILE RETURN SEMI COMMA LC RC
+%type <Node_value> Def DecList Dec DefList Stmt VarList CompSt StmtList Specifier ParamDec
+%type <Node_value> FunDec VarDec StructSpecifier ExtDecList ExtDefList ExtDef Program
 %token <int_value> INT
 %token <string_value> TYPE
 %token <string_value> ID
 %token <float_value> FLOAT
 %token <string_value> CHAR
+%type <Node_value> Exp Args
 
-%right ASSIGN
-%nonassoc OR
-%nonassoc AND
-%left LT LE GT GE NE EQ 
-%left PLUS MINUS 
-%left MUL DIV
-%right NOT 
-%left LP RP LB RB DOT
+%right <Node_value> ASSIGN
+%nonassoc <Node_value> OR
+%nonassoc <Node_value> AND
+%left <Node_value> LT LE GT GE NE EQ 
+%left <Node_value> PLUS MINUS 
+%left <Node_value> MUL DIV
+%right <Node_value> NOT 
+%left <Node_value> LP RP LB RB DOT
 %%
 
 /* high-level definition */
@@ -79,7 +85,7 @@ CompSt:
     ;
 StmtList: 
       /* to allow empty input */    { $$ = new_Node_i("StmtList", @$.first_line, has_num);}
-    : Stmt StmtList                 { $$ = new_Node_i("StmtList", @$.first_line, has_num); addChild($$, $1); addChild($$, $2);}
+    | Stmt StmtList                 { $$ = new_Node_i("StmtList", @$.first_line, has_num); addChild($$, $1); addChild($$, $2);}
     ;
 Stmt: 
       Exp SEMI                          { $$ = new_Node_i("StmtList", @$.first_line, has_num); addChild($$, $1); addChild($$, $2);}
@@ -93,7 +99,7 @@ Stmt:
 /* local definition */
 DefList: 
      /* to allow empty input */ { $$ = new_Node_i("DefList", @$.first_line, has_num);}
-    :Def DefList                { $$ = new_Node_i("DefList", @$.first_line, has_num); addChild($$, $1); addChild($$, $2);}
+    | Def DefList                { $$ = new_Node_i("DefList", @$.first_line, has_num); addChild($$, $1); addChild($$, $2);}
     ;
 Def: 
      Specifier DecList SEMI { $$ = new_Node_i("Def", @$.first_line, has_num); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
