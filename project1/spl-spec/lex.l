@@ -27,6 +27,7 @@ STRUCT   struct
 WS       [ \r\t]
 
 %%
+
 "\n"    {yycolno = 1;}
 {WS}    {}
 "int"   {
@@ -160,7 +161,7 @@ return  {
 
 {INT}   {
             int res = atoi(yytext);
-            if (res == 0 && yyleng >1){
+            if (res == 0 && yyleng > 1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
                 yylval.Node_value = new_Node_i("INT", res, has_colon);
