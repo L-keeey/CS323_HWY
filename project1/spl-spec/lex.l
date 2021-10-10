@@ -19,7 +19,8 @@
 %}
 
 %option yylineno
-INT      (0|[1-9][0-9]*)|0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
+INT      (0|[1-9][0-9]*)
+HEX      0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
 CHAR     \'(([!\"#$%&\'\(\)\*\+,-./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\}\|~])|(\\x[0-7][0-9A-Fa-f]))\'
 ID       ([a-zA-Z_])([0-9a-zA-Z_])*
@@ -158,6 +159,16 @@ return  {
 {ID}    {
             yylval.Node_value = new_Node_s("ID", yytext);
             return ID;
+        }
+
+{HEX}   {
+            int res = (int) strtol(yytext, nullptr, 16);
+            if (res == 0 && yyleng > 1){
+                printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
+            } else {
+                yylval.Node_value = new_Node_h("INT", res);
+                return INT;
+            }
         }
 
 {INT}   {

@@ -48,7 +48,20 @@ struct Node* new_Node_l(char* token, int line){
     return node;
 }
 
-// INT, *
+// HEX
+struct Node* new_Node_h(char* token, int value)
+{
+    struct Node* node = (struct Node*) malloc(sizeof(struct Node));
+    node->int_value = value;
+    sprintf(string_value, "%d", value);
+    strcpy(node->token, token);
+    node->child_num = 0;
+    node->type = has_colon;
+
+    return node;
+}
+
+// INT
 struct Node* new_Node_i(char* token, int int_value, char* value)
 {
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
