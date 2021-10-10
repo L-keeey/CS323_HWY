@@ -9,6 +9,7 @@
 
     /* library inclusions */
     int yycolno = 1;
+    extern int yylineno;
     #define YY_USER_ACTION \
         yylloc.first_line = yylineno; \
         yylloc.first_column = yycolno; \
@@ -17,7 +18,6 @@
         yycolno += yyleng;
 
 %}
-%option yylineno
 
 INT      (0|[1-9][0-9]*)|0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
@@ -29,7 +29,7 @@ WS       [ \r\t]
 
 %%
 
-"\n"    {yycolno = 1;}
+"\n"    {yycolno = 1;yylineno++;}
 {WS}    {}
 "int"   {
             yylval.Node_value = new_Node_s("TYPE", "int");
@@ -165,7 +165,7 @@ return  {
             if (res == 0 && yyleng > 1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
-                yylval.Node_value = new_Node_i("INT", res, has_colon);
+                yylval.Node_value = new_Node_i("INT", res, yytext);
                 return INT;
             }
         } 
@@ -175,7 +175,7 @@ return  {
             if (res == 0.0 && yyleng >1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
-                yylval.Node_value = new_Node_f("FLOAT", res);
+                yylval.Node_value = new_Node_f("FLOAT", res, yytext);
                 return FLOAT;
             }
         }

@@ -7,8 +7,7 @@ BISON=bison
 
 .lex:
 	$(FLEX) lex.l
-	$(CC) parseTree.c -o parseTree.o
-	$(CC) syntax.tab.c -lfl -ly -o a.out -w
+	$(CC) syntax.tab.c -lfl -ly -o a.out
 splc: .bison .lex
 	@mkdir bin
 	touch bin/splc

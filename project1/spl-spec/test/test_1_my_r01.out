@@ -1,0 +1,123 @@
+
+    ExtDef (0)
+      Specifier (0)
+        TYPE: int
+      FunDec (0)
+        ID: test_1_r01(int a, int b)
+{
+  c = 'c';
+  if (a > b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+        LP
+        VarList (0)
+          Specifier (0)
+            TYPE: int
+          COMMA
+          VarList (0)
+            Specifier (0)
+              TYPE: int
+        RP
+      CompSt (0)
+        LC
+        DefList (0)
+        StmtList (0)
+          StmtList (0)
+            Exp (0)
+              Exp (0)
+                ID: c = 'c';
+  if (a > b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+              ASSIGN
+              Exp (0)
+                CHAR: 'c';
+  if (a > b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+            SEMI
+          StmtList (0)
+            StmtList (0)
+              IF
+              LP
+              Exp (0)
+                Exp (0)
+                  ID: a > b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+                GT
+                Exp (0)
+                  ID: b)
+  {
+    return a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+              RP
+              StmtList (0)
+                CompSt (0)
+                  LC
+                  DefList (0)
+                  StmtList (0)
+                    StmtList (0)
+                      RETURN
+                      Exp (0)
+                        ID: a;
+  }
+  else
+  {
+    return b;
+  }
+}
+
+                      SEMI
+                    StmtList (0)
+              ELSE
+              StmtList (0)
+                CompSt (0)
+                  LC
+                  DefList (0)
+                  StmtList (0)
+                    StmtList (0)
+                      RETURN
+                      Exp (0)
+                        ID: b;
+  }
+}
+
+                      SEMI
+                    StmtList (0)
+            StmtList (0)
+    ExtDefList (0)
