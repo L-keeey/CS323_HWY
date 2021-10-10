@@ -1,122 +1,69 @@
-
+Program (0)
+  ExtDefList (0)
     ExtDef (0)
       Specifier (0)
         TYPE: int
       FunDec (0)
-        ID: test_1_r01(int a, int b)
-{
-  c = 'c';
-  if (a > b)
-  {
-    return a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+        ID: test_1_r01
         LP
         VarList (0)
-          Specifier (0)
-            TYPE: int
-          COMMA
-          VarList (0)
+          ParamDec (0)
             Specifier (0)
               TYPE: int
+            VarDec (0)
+              ID: a
+          COMMA
+          VarList (0)
+            ParamDec (0)
+              Specifier (0)
+                TYPE: int
+              VarDec (0)
+                ID: b
         RP
       CompSt (0)
         LC
         DefList (0)
         StmtList (0)
-          StmtList (0)
+          Stmt (0)
             Exp (0)
               Exp (0)
-                ID: c = 'c';
-  if (a > b)
-  {
-    return a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+                ID: c
               ASSIGN
               Exp (0)
-                CHAR: 'c';
-  if (a > b)
-  {
-    return a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+                CHAR: 'c'
             SEMI
           StmtList (0)
-            StmtList (0)
+            Stmt (0)
               IF
               LP
               Exp (0)
                 Exp (0)
-                  ID: a > b)
-  {
-    return a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+                  ID: a
                 GT
                 Exp (0)
-                  ID: b)
-  {
-    return a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+                  ID: b
               RP
-              StmtList (0)
+              Stmt (0)
                 CompSt (0)
                   LC
                   DefList (0)
                   StmtList (0)
-                    StmtList (0)
+                    Stmt (0)
                       RETURN
                       Exp (0)
-                        ID: a;
-  }
-  else
-  {
-    return b;
-  }
-}
-
+                        ID: a
                       SEMI
                     StmtList (0)
               ELSE
-              StmtList (0)
+              Stmt (0)
                 CompSt (0)
                   LC
                   DefList (0)
                   StmtList (0)
-                    StmtList (0)
+                    Stmt (0)
                       RETURN
                       Exp (0)
-                        ID: b;
-  }
-}
-
+                        ID: b
                       SEMI
                     StmtList (0)
             StmtList (0)

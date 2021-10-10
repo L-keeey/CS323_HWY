@@ -11,14 +11,15 @@
 %union{
     struct Node* Node_value;
 }
-%token <Node_value> STRUCT IF ELSE WHILE RETURN SEMI COMMA LC RC
+%nonassoc <Node_value> LOWER_ELSE
+%nonassoc <Node_value> ELSE
+%token <Node_value> TYPE STRUCT
+%token <Node_value> IF WHILE RETURN 
 
 %token <Node_value> INT
-%token <Node_value> TYPE
 %token <Node_value> ID
 %token <Node_value> FLOAT
 %token <Node_value> CHAR
-%type <Node_value> Exp Args
 
 %right <Node_value> ASSIGN
 %left <Node_value> OR
@@ -28,8 +29,14 @@
 %left <Node_value> MUL DIV
 %right <Node_value> NOT 
 %left <Node_value> LP RP LB RB DOT
-%type <Node_value> FunDec VarDec StructSpecifier ExtDecList ExtDefList ExtDef Program
-%type <Node_value> Def DecList Dec DefList Stmt VarList CompSt StmtList Specifier ParamDec
+
+%token <Node_value> SEMI COMMA 
+%token <Node_value> LC RC
+
+%type <Node_value> Program ExtDecList
+%type <Node_value> VarDec Specifier StructSpecifier ExtDefList ExtDef 
+%type <Node_value> FunDec VarList ParamDec CompSt Stmt StmtList DefList 
+%type <Node_value> Def DecList Dec Args Exp
 %%
 /* high-level definition */
 Program: 
@@ -88,12 +95,12 @@ StmtList:
     | Stmt StmtList                 { $$ = new_Node_l("StmtList", @$.last_line); addChild($$, $1); addChild($$, $2);}
     ;
 Stmt: 
-      Exp SEMI                          { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2);}
-    | CompSt                            { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1);}
-    | RETURN Exp SEMI                   { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | IF LP Exp RP Stmt                 { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
-    | IF LP Exp RP Stmt ELSE Stmt       { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5); addChild($$, $6); addChild($$, $7);}
-    | WHILE LP Exp RP Stmt              { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
+      Exp SEMI                              { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2);}
+    | CompSt                                { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1);}
+    | RETURN Exp SEMI                       { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | IF LP Exp RP Stmt %prec LOWER_ELSE    { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}    
+    | IF LP Exp RP Stmt ELSE Stmt           { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5); addChild($$, $6); addChild($$, $7);}
+    | WHILE LP Exp RP Stmt                  { $$ = new_Node_l("Stmt", @$.last_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
     ;
 
 /* local definition */

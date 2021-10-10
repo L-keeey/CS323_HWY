@@ -9,16 +9,16 @@
 
     /* library inclusions */
     int yycolno = 1;
-    extern int yylineno;
-    #define YY_USER_ACTION \
-        yylloc.first_line = yylineno; \
+    #define YY_USER_ACTION yylloc.first_line = yylineno; \
         yylloc.first_column = yycolno; \
         yylloc.last_line = yylineno; \
         yylloc.last_column = yycolno + yyleng; \
         yycolno += yyleng;
+    
 
 %}
 
+%option yylineno
 INT      (0|[1-9][0-9]*)|0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
 CHAR     \'(([!\"#$%&\'\(\)\*\+,-./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\}\|~])|(\\x[0-7][0-9A-Fa-f]))\'
@@ -29,7 +29,7 @@ WS       [ \r\t]
 
 %%
 
-"\n"    {yycolno = 1;yylineno++;}
+\n    {yycolno = 1; yylineno++;}
 {WS}    {}
 "int"   {
             yylval.Node_value = new_Node_s("TYPE", "int");

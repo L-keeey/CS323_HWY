@@ -10,11 +10,11 @@ enum display_type{
 
 typedef struct Node
 {
-    char* token;
+    char token[100];
     enum display_type type;
 
     int line_No;
-    char* string_value;
+    char string_value[100];
     union{
         int int_value;
         float float_value;
@@ -30,7 +30,7 @@ typedef struct Node
 //*
 struct Node* new_Node_l(char* token, int line){
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-    node->token = token;
+    strcpy(node->token, token);
     node->child_num = 0;
     node->type = has_num;
     // char line_num[100];
@@ -47,8 +47,8 @@ struct Node* new_Node_i(char* token, int int_value, char* value)
 {
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
     node->int_value = int_value;
-    node->string_value = value;
-    node->token = token;
+    strcpy(node->string_value, value);
+    strcpy(node->token, token);
     node->child_num = 0;
     node->type = has_colon;
     // strcpy(node->to_print, token);
@@ -62,11 +62,11 @@ struct Node* new_Node_i(char* token, int int_value, char* value)
 struct Node* new_Node_f(char* token, float float_value, char* value)
 {
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-    node->token = token;
+    strcpy(node->token, token);
     node->child_num = 0;
     node->type = has_colon;
     node->float_value = float_value;
-    node->string_value = value;
+    strcpy(node->string_value, value);
     return node;
 }
 
@@ -74,10 +74,10 @@ struct Node* new_Node_f(char* token, float float_value, char* value)
 struct Node* new_Node_s(char* token, char* value)
 {
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-    node->token = token;
+    strcpy(node->token, token);
     node->child_num = 0;
     node->type = has_colon;
-    node->string_value = value;
+    strcpy(node->string_value, value);
 
     return node;
 }
@@ -86,7 +86,7 @@ struct Node* new_Node_s(char* token, char* value)
 struct Node* new_Node(char* token)
 {
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-    node->token = token;
+    strcpy(node->token, token);
     node->child_num = 0;
     node->type = type_only;
         
@@ -101,15 +101,21 @@ void addChild(struct Node* parent, struct Node* child)
 
 void print_info(struct Node* node, int space)
 {
-    for (int i = 0; i < space; i++){
+    for (int i = 0; i < space; i++)
+    {
         printf("  ");
     }
 
-    if (node->type == has_colon){
+    if (node->type == has_colon)
+    {
         printf("%s: %s\n", node->token, node->string_value);
-    }else if(node->type == has_num){
+    }
+    else if(node->type == has_num)
+    {
         printf("%s (%d)\n", node->token, node->line_No);
-    }else{
+    }
+    else
+    {
         printf("%s\n", node->token);
     }
 }
