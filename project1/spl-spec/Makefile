@@ -20,4 +20,5 @@ clean:
 	@rm -f lex.yy.c *.out
 	@rm -f syntax.tab.*
 	@rm -rf bin/
+	@rm -f a.out
 .PHONY: splc
