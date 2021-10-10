@@ -125,12 +125,12 @@ Def:
     | Specifier DecList error {show_yyerror(MISSING_SEMI);}
     ;
 DecList: 
-      Dec                   { $$ = new_Node_l("DecList", @$.first_line);}
+      Dec                   { $$ = new_Node_l("DecList", @$.first_line); addChild($$, $1);}
     | Dec COMMA DecList     { $$ = new_Node_l("DecList", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | Dec DecList error {show_yyerror(MISSING_COMMA);}
     ;
 Dec: 
-      VarDec                { $$ = new_Node_l("Dec", @$.first_line);}
+      VarDec                { $$ = new_Node_l("Dec", @$.first_line); addChild($$, $1);}
     | VarDec ASSIGN Exp     { $$ = new_Node_l("Dec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     ;
 

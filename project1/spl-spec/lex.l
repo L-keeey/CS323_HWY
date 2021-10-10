@@ -162,7 +162,8 @@ return  {
         }
 
 {HEX}   {
-            int res = (int) strtol(yytext, nullptr, 16);
+            char* rubbish[10];
+            int res = (int) strtol(yytext,rubbish, 16);
             if (res == 0 && yyleng > 1){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
