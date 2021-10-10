@@ -51,12 +51,15 @@ ExtDefList:
     ;
 ExtDef: 
       Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
     | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Specifier error {show_yyerror(MISSING_SEMI);}
     ;
 ExtDecList:
       VarDec                    { $$ = new_Node_l("ExtDecList", @$.first_line); addChild($$, $1);}
     | VarDec COMMA ExtDecList   { $$ = new_Node_l("ExtDecList", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | VarDec ExtDecList error {show_yyerror(MISSING_COMMA);}
     ;
 
 /* specifier */
@@ -66,6 +69,7 @@ Specifier:
     ;
 StructSpecifier: 
       STRUCT ID LC DefList RC   { $$ = new_Node_l("StructSpecifier", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
+    | STRUCT ID LC DecList error {show_yyerror(MISSING_RC);}
     | STRUCT ID                 { $$ = new_Node_l("StructSpecifier", @$.first_line); addChild($$, $1); addChild($$, $2);}               
     ;
     
@@ -73,13 +77,17 @@ StructSpecifier:
 VarDec: 
       ID                { $$ = new_Node_l("VarDec", @$.first_line); addChild($$, $1);}
     | VarDec LB INT RB  { $$ = new_Node_l("VarDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+    | VarDec LB INT error {show_yyerror(MISSING_RB);}
     ;
 FunDec: 
       ID LP VarList RP  { $$ = new_Node_l("FunDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+    | ID LP VarList error {show_yyerror(MISSING_RP);}
     | ID LP RP          { $$ = new_Node_l("FunDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | ID LP error {show_yyerror(MISSING_RP);}
     ;
 VarList: 
       ParamDec COMMA VarList    { $$ = new_Node_l("VarList", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | ParamDec VarList error {show_yyerror(MISSING_COMMA);}
     | ParamDec                  { $$ = new_Node_l("VarList", @$.first_line); addChild($$, $1); }
     ;
 ParamDec: Specifier VarDec      { $$ = new_Node_l("ParamDec", @$.first_line); addChild($$, $1); addChild($$, $2);}
@@ -88,6 +96,7 @@ ParamDec: Specifier VarDec      { $$ = new_Node_l("ParamDec", @$.first_line); ad
 /* statement */
 CompSt: 
       LC DefList StmtList RC    { $$ = new_Node_l("CompSt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+    | LC DefList StmtList error {show_yyerror(MISSING_RC);}
     ;
 StmtList: 
       /* to allow empty input */    { $$ = new_Node_l_n("StmtList", @$.first_line);}
@@ -95,11 +104,15 @@ StmtList:
     ;
 Stmt: 
       Exp SEMI                              { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2);}
+    | Exp error {show_yyerror(MISSING_SEMI);}
     | CompSt                                { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1);}
     | RETURN Exp SEMI                       { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | RETURN Exp error {show_yyerror(MISSING_SEMI);}
     | IF LP Exp RP Stmt %prec LOWER_ELSE    { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}    
     | IF LP Exp RP Stmt ELSE Stmt           { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5); addChild($$, $6); addChild($$, $7);}
     | WHILE LP Exp RP Stmt                  { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
+    | WHILE LP Exp error Stmt {show_yyerror(MISSING_RP);}
+    | IF LP Exp error Stmt {show_yyerror(MISSING_RP);}
     ;
 
 /* local definition */
@@ -109,10 +122,12 @@ DefList:
     ;
 Def: 
      Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Specifier DecList error {show_yyerror(MISSING_SEMI);}
     ;
 DecList: 
       Dec                   { $$ = new_Node_l("DecList", @$.first_line);}
     | Dec COMMA DecList     { $$ = new_Node_l("DecList", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Dec DecList error {show_yyerror(MISSING_COMMA);}
     ;
 Dec: 
       VarDec                { $$ = new_Node_l("Dec", @$.first_line);}
@@ -135,11 +150,15 @@ Exp:
     | Exp MUL Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | Exp DIV Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | LP Exp RP             { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | LP Exp error {show_yyerror(MISSING_RP);}
     | MINUS Exp %prec NOT   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
     | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | ID LP Args error {show_yyerror(MISSING_RP);}
+    | ID LP error {show_yyerror(MISSING_RP);}
     | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+    | Exp LB Exp error {show_yyerror(MISSING_RB);}
     | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
     | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
@@ -148,11 +167,13 @@ Exp:
     ;
 Args: 
       Exp COMMA Args    { $$ = new_Node_l("Args", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Exp COMMA COMMA Args error {show_yyerror(EXTRC_COMMA);}
     | Exp               { $$ = new_Node_l("Args", @$.first_line); addChild($$, $1);}
     ;
 %%
 void yyerror(const char *s) {
-    fprintf(stderr, "%s\n", s);
+    error_num += 1;
+    fprintf(stdout, "Error type B at line %d: ", yylloc.first_line - 1);
 }
 
 void pre_order_traversal(struct Node* root, int space)
