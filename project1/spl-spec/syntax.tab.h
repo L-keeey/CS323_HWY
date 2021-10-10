@@ -49,39 +49,40 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    STRUCT = 258,
-    IF = 259,
-    ELSE = 260,
-    WHILE = 261,
-    RETURN = 262,
-    SEMI = 263,
-    COMMA = 264,
-    LC = 265,
-    RC = 266,
-    INT = 267,
-    TYPE = 268,
-    ID = 269,
-    FLOAT = 270,
-    CHAR = 271,
-    ASSIGN = 272,
-    OR = 273,
-    AND = 274,
-    LT = 275,
-    LE = 276,
-    GT = 277,
-    GE = 278,
-    NE = 279,
-    EQ = 280,
-    PLUS = 281,
-    MINUS = 282,
-    MUL = 283,
-    DIV = 284,
-    NOT = 285,
-    LP = 286,
-    RP = 287,
-    LB = 288,
-    RB = 289,
-    DOT = 290
+    LOWER_ELSE = 258,
+    ELSE = 259,
+    TYPE = 260,
+    STRUCT = 261,
+    IF = 262,
+    WHILE = 263,
+    RETURN = 264,
+    INT = 265,
+    ID = 266,
+    FLOAT = 267,
+    CHAR = 268,
+    ASSIGN = 269,
+    OR = 270,
+    AND = 271,
+    LT = 272,
+    LE = 273,
+    GT = 274,
+    GE = 275,
+    NE = 276,
+    EQ = 277,
+    PLUS = 278,
+    MINUS = 279,
+    MUL = 280,
+    DIV = 281,
+    NOT = 282,
+    LP = 283,
+    RP = 284,
+    LB = 285,
+    RB = 286,
+    DOT = 287,
+    SEMI = 288,
+    COMMA = 289,
+    LC = 290,
+    RC = 291
   };
 #endif
 
@@ -89,11 +90,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 11 "syntax.y"
+#line 10 "syntax.y"
 
     struct Node* Node_value;
 
-#line 97 "syntax.tab.h"
+#line 98 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,4 +1,6 @@
+name="test/test_1_r01"
 clear
 make clean
 make
-./a.out test/test_1_r01.spl
+bin/splc ${name}".spl"
+diff ${name}".out1" ${name}".out" 

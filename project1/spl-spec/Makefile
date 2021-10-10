@@ -7,10 +7,10 @@ BISON=bison
 
 .lex:
 	$(FLEX) lex.l
-	$(CC) syntax.tab.c -lfl -ly -o a.out
+	$(CC) syntax.tab.c -lfl -ly -o splc
 splc: .bison .lex
 	@mkdir bin
-	touch bin/splc
+	@mv splc bin/
 	@chmod +x bin/splc
 # test1:
 # 	./token.out test1.c
