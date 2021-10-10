@@ -22,8 +22,8 @@
 INT      (0|[1-9][0-9]*)|0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
 CHAR     \'(([!\"#$%&\'\(\)\*\+,-./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\}\|~])|(\\x[0-7][0-9A-Fa-f]))\'
-ID       ([a-zA-Z_])([0-9a-zA-Z_])*
-TYPE     int | float | char
+ID       ([a-zA-Z_])([0-9a-zA-Z_])
+TYPE     int|float|char
 STRUCT   struct
 WS       [ \r\t]
 

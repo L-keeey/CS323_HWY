@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 enum display_type{
     has_num,
@@ -111,4 +112,79 @@ void print_info(struct Node* node, int space)
     }else{
         printf("%s\n", node->token);
     }
+}
+
+// enum DAY
+// {
+//       MON=1, TUE, WED, THU, FRI, SAT, SUN
+// };
+enum ERROR_TYPE
+{
+    MISSING_SEMI=1, // que shi fen hao
+    MISSING_RC,
+    MISSING_RB,
+    MISSING_RP,
+    MISSING_LC,
+    MISSING_LB,
+    MISSING_LP,
+    MISSING_COMMA,
+    MISSING_SPEC,
+    EXTRC_SEMI,
+    EXTRC_COMMA
+}error_type;
+
+void show_yyerror(enum ERROR_TYPE type) {
+    char msg[30];
+    switch (type)
+    {
+    case /* constant-expression */MISSING_SEMI:
+        /* code */
+        strcpy(msg, "Missing semicolon \';\'");
+        break;
+    
+    case MISSING_SPEC:
+        strcpy(msg, "Missing specifier");
+        break;
+
+    case MISSING_COMMA:
+        strcpy(msg, "Missing comma \',\'");
+        break;
+
+    case MISSING_LB:
+        strcpy(msg, "Missing left bracket \'[\'");
+        break;
+
+    case MISSING_RB:
+        strcpy(msg, "Missing closing bracket \'[\'");
+        break;
+
+    case MISSING_LC:
+        strcpy(msg, "Missing left curly braces \'{\'");
+        break;
+
+    case MISSING_RC:
+        strcpy(msg, "Missing close curly braces \'}\'");
+        break;
+
+    case MISSING_LP:
+        strcpy(msg, "Missing left parenthesis \'(\'");
+        break;
+
+    case MISSING_RP:
+        strcpy(msg, "Missing closing parenthesis \')\'");
+        break;
+
+    case EXTRC_SEMI:
+        strcpy(msg, "Redundant comma appears");
+        break;
+
+    case EXTRC_COMMA:
+        strcpy(msg, "Redundant semicolon appears");
+        break;
+
+    default:
+        break;
+    }
+
+    fprintf(stdout, "Error type B at Line %d: %s", msg);
 }

@@ -2,6 +2,8 @@
     #include "lex.yy.c"
     void yyerror(const char*);
 
+
+    // yydebug = 1;
     struct Node* root;
     int error_num = 0;
 %}
