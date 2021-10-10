@@ -49,40 +49,43 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    LOWER_ELSE = 258,
-    ELSE = 259,
-    TYPE = 260,
-    STRUCT = 261,
-    IF = 262,
-    WHILE = 263,
-    RETURN = 264,
-    INT = 265,
-    ID = 266,
-    FLOAT = 267,
-    CHAR = 268,
-    ASSIGN = 269,
-    OR = 270,
-    AND = 271,
-    LT = 272,
-    LE = 273,
-    GT = 274,
-    GE = 275,
-    NE = 276,
-    EQ = 277,
-    PLUS = 278,
-    MINUS = 279,
-    MUL = 280,
-    DIV = 281,
-    NOT = 282,
-    LP = 283,
-    RP = 284,
-    LB = 285,
-    RB = 286,
-    DOT = 287,
-    SEMI = 288,
-    COMMA = 289,
-    LC = 290,
-    RC = 291
+    LOWER_ERROR = 258,
+    ERROR = 259,
+    LOWER_ELSE = 260,
+    ELSE = 261,
+    TYPE = 262,
+    STRUCT = 263,
+    IF = 264,
+    WHILE = 265,
+    RETURN = 266,
+    INT = 267,
+    FLOAT = 268,
+    CHAR = 269,
+    ID = 270,
+    ASSIGN = 271,
+    OR = 272,
+    AND = 273,
+    LT = 274,
+    LE = 275,
+    GT = 276,
+    GE = 277,
+    NE = 278,
+    EQ = 279,
+    LOWER_MINUS = 280,
+    PLUS = 281,
+    MINUS = 282,
+    MUL = 283,
+    DIV = 284,
+    NOT = 285,
+    LP = 286,
+    RP = 287,
+    LB = 288,
+    RB = 289,
+    DOT = 290,
+    SEMI = 291,
+    COMMA = 292,
+    LC = 293,
+    RC = 294
   };
 #endif
 
@@ -94,7 +97,7 @@ union YYSTYPE
 
     struct Node* Node_value;
 
-#line 98 "syntax.tab.h"
+#line 101 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

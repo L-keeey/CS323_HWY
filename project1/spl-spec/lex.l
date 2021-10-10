@@ -9,6 +9,7 @@
 
     /* library inclusions */
     int yycolno = 1;
+    int error_num;
     #define YY_USER_ACTION yylloc.first_line = yylineno; \
         yylloc.first_column = yycolno; \
         yylloc.last_line = yylineno; \
@@ -23,10 +24,12 @@ INT      (0|[1-9][0-9]*)
 HEX      0[xX](0|[1-9a-fA-F][0-9a-fA-F]*)
 FLOAT    -?((0|[1-9][0-9]*)\.[0-9]+)
 CHAR     \'(([!\"#$%&\'\(\)\*\+,-./0-9:;<=>\?@A-Z\[\\\]\^_`a-z\{\}\|~])|(\\x[0-7][0-9A-Fa-f]))\'
+ERROR_CHAR \'.*\'
 ID       ([a-zA-Z_])([0-9a-zA-Z_])*
 TYPE     int|float|char
 STRUCT   struct
-WS       [ \r\t]
+WS       [ \r\t]*
+
 
 %%
 
@@ -195,7 +198,21 @@ return  {
             yylval.Node_value = new_Node_s("CHAR", yytext);
             return CHAR;
         }
+[0-9]+{ID} {
+    printf("Error type A at Line %d: unknown lexeme %s \n", yylineno, yytext); 
+    error_num += 1;
+    return ERROR;
+}
 
-. { printf("Error type A at Line %d: Unknown characters \'%s\' \n", yylineno, yytext); }
+{ERROR_CHAR} {
+    printf("Error type A at Line %d: Invalid char %s \n", yylineno, yytext); 
+    error_num += 1;
+    return ERROR;
+}
+
+. { printf("Error type A at Line %d: unknown lexeme %s \n", yylineno, yytext); 
+error_num += 1;
+    return ERROR;
+}
 <<EOF>> { /* printf("There are %d occurrences of valid identifiers\n", identifiers); */ yyterminate(); }
 
