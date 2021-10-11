@@ -1,0 +1,6 @@
+int test_11912013_2 () {
+    int a[];
+    int b = 2;
+    int c = 3.1;
+    return a[b] + c;
+}

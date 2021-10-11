@@ -1,0 +1,3 @@
+int test_11912013_4 (int a int b int c) {
+    return a + b + c
+}
