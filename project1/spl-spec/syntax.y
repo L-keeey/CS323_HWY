@@ -97,7 +97,6 @@ ParamDec: Specifier VarDec      { $$ = new_Node_l("ParamDec", @$.first_line); ad
 /* statement */
 CompSt: 
       LC DefList StmtList RC    { $$ = new_Node_l("CompSt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
-    | LC DefList StmtList DefList error {show_yyerror(MISSING_SPEC);}
     ;
 StmtList: 
       /* to allow empty input */    { $$ = new_Node_l_n("StmtList", @$.first_line);}
