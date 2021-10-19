@@ -202,8 +202,11 @@ int main(int argc, char **argv){
         exit(-1);
     }
     char output_dir[100];
-    strncpy(output_dir,argv[1],strlen(argv[1])-4);
-    strcat(output_dir,".out1");
+    for (int i = 0; i < 100; i ++) {
+        output_dir[i] = '\0';
+    }
+    strncpy(output_dir, argv[1], strlen(argv[1])-4);
+    strcat(output_dir,".out");
     freopen(output_dir,"w",stdout);
     yyparse();
 
