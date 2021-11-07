@@ -569,13 +569,13 @@ static const yytype_uint8 yyrline[] =
 {
        0,    44,    44,    51,    52,    55,    56,    57,    58,    61,
       62,    63,    68,    69,    72,    73,    74,    79,    80,    81,
-      84,    85,    86,    87,    90,    91,    92,    94,    99,   103,
-     104,   107,   108,   109,   110,   111,   112,   113,   114,   115,
-     116,   121,   122,   125,   126,   127,   130,   131,   132,   135,
-     136,   141,   142,   143,   144,   145,   146,   147,   148,   149,
-     150,   151,   152,   153,   154,   155,   156,   157,   158,   159,
-     160,   161,   162,   163,   164,   165,   166,   167,   168,   169,
-     170,   173,   174,   175
+      84,    85,    86,    87,    90,    91,    92,    94,    99,   102,
+     103,   106,   107,   108,   109,   110,   111,   112,   113,   114,
+     115,   120,   121,   124,   125,   126,   129,   130,   131,   134,
+     135,   140,   141,   142,   143,   144,   145,   146,   147,   148,
+     149,   150,   151,   152,   153,   154,   155,   156,   157,   158,
+     159,   160,   161,   162,   163,   164,   165,   166,   167,   168,
+     169,   172,   173,   174
 };
 #endif
 
@@ -1789,331 +1789,331 @@ yyreduce:
     break;
 
   case 29:
-#line 103 "syntax.y"
+#line 102 "syntax.y"
                                     { (yyval.Node_value) = new_Node_l_n("StmtList", (yyloc).first_line);}
 #line 1795 "syntax.tab.c"
     break;
 
   case 30:
-#line 104 "syntax.y"
+#line 103 "syntax.y"
                                     { (yyval.Node_value) = new_Node_l("StmtList", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1801 "syntax.tab.c"
     break;
 
   case 31:
-#line 107 "syntax.y"
+#line 106 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1807 "syntax.tab.c"
     break;
 
   case 32:
-#line 108 "syntax.y"
+#line 107 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1813 "syntax.tab.c"
     break;
 
   case 33:
-#line 109 "syntax.y"
+#line 108 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1819 "syntax.tab.c"
     break;
 
   case 34:
-#line 110 "syntax.y"
+#line 109 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-4].Node_value)); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1825 "syntax.tab.c"
     break;
 
   case 35:
-#line 111 "syntax.y"
+#line 110 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-6].Node_value)); addChild((yyval.Node_value), (yyvsp[-5].Node_value)); addChild((yyval.Node_value), (yyvsp[-4].Node_value)); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1831 "syntax.tab.c"
     break;
 
   case 36:
-#line 112 "syntax.y"
+#line 111 "syntax.y"
                                             { (yyval.Node_value) = new_Node_l("Stmt", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-4].Node_value)); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1837 "syntax.tab.c"
     break;
 
   case 37:
-#line 113 "syntax.y"
+#line 112 "syntax.y"
                               {show_yyerror(MISSING_RP);}
 #line 1843 "syntax.tab.c"
     break;
 
   case 38:
-#line 114 "syntax.y"
+#line 113 "syntax.y"
                 {show_yyerror(MISSING_SEMI);}
 #line 1849 "syntax.tab.c"
     break;
 
   case 39:
-#line 115 "syntax.y"
+#line 114 "syntax.y"
                        {show_yyerror(MISSING_SEMI);}
 #line 1855 "syntax.tab.c"
     break;
 
   case 40:
-#line 116 "syntax.y"
+#line 115 "syntax.y"
                            {show_yyerror(MISSING_RP);}
 #line 1861 "syntax.tab.c"
     break;
 
   case 41:
-#line 121 "syntax.y"
+#line 120 "syntax.y"
                                 { (yyval.Node_value) = new_Node_l_n("DefList", (yyloc).first_line);}
 #line 1867 "syntax.tab.c"
     break;
 
   case 42:
-#line 122 "syntax.y"
+#line 121 "syntax.y"
                                  { (yyval.Node_value) = new_Node_l("DefList", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1873 "syntax.tab.c"
     break;
 
   case 43:
-#line 125 "syntax.y"
+#line 124 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Def", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1879 "syntax.tab.c"
     break;
 
   case 44:
-#line 126 "syntax.y"
+#line 125 "syntax.y"
                               {show_yyerror(MISSING_SEMI);}
 #line 1885 "syntax.tab.c"
     break;
 
   case 45:
-#line 127 "syntax.y"
+#line 126 "syntax.y"
                          {show_yyerror(MISSING_SPEC);}
 #line 1891 "syntax.tab.c"
     break;
 
   case 46:
-#line 130 "syntax.y"
+#line 129 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("DecList", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1897 "syntax.tab.c"
     break;
 
   case 47:
-#line 131 "syntax.y"
+#line 130 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("DecList", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1903 "syntax.tab.c"
     break;
 
   case 48:
-#line 132 "syntax.y"
+#line 131 "syntax.y"
                         {show_yyerror(MISSING_COMMA);}
 #line 1909 "syntax.tab.c"
     break;
 
   case 49:
-#line 135 "syntax.y"
+#line 134 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Dec", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1915 "syntax.tab.c"
     break;
 
   case 50:
-#line 136 "syntax.y"
+#line 135 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Dec", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1921 "syntax.tab.c"
     break;
 
   case 51:
-#line 141 "syntax.y"
+#line 140 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1927 "syntax.tab.c"
     break;
 
   case 52:
-#line 142 "syntax.y"
+#line 141 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1933 "syntax.tab.c"
     break;
 
   case 53:
-#line 143 "syntax.y"
+#line 142 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1939 "syntax.tab.c"
     break;
 
   case 54:
-#line 144 "syntax.y"
+#line 143 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1945 "syntax.tab.c"
     break;
 
   case 55:
-#line 145 "syntax.y"
+#line 144 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1951 "syntax.tab.c"
     break;
 
   case 56:
-#line 146 "syntax.y"
+#line 145 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1957 "syntax.tab.c"
     break;
 
   case 57:
-#line 147 "syntax.y"
+#line 146 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1963 "syntax.tab.c"
     break;
 
   case 58:
-#line 148 "syntax.y"
+#line 147 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1969 "syntax.tab.c"
     break;
 
   case 59:
-#line 149 "syntax.y"
+#line 148 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1975 "syntax.tab.c"
     break;
 
   case 60:
-#line 150 "syntax.y"
+#line 149 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1981 "syntax.tab.c"
     break;
 
   case 61:
-#line 151 "syntax.y"
+#line 150 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1987 "syntax.tab.c"
     break;
 
   case 62:
-#line 152 "syntax.y"
+#line 151 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1993 "syntax.tab.c"
     break;
 
   case 63:
-#line 153 "syntax.y"
+#line 152 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 1999 "syntax.tab.c"
     break;
 
   case 64:
-#line 154 "syntax.y"
+#line 153 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2005 "syntax.tab.c"
     break;
 
   case 65:
-#line 155 "syntax.y"
+#line 154 "syntax.y"
                    {show_yyerror(MISSING_RP);}
 #line 2011 "syntax.tab.c"
     break;
 
   case 66:
-#line 156 "syntax.y"
+#line 155 "syntax.y"
                                     { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2017 "syntax.tab.c"
     break;
 
   case 67:
-#line 157 "syntax.y"
+#line 156 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2023 "syntax.tab.c"
     break;
 
   case 68:
-#line 158 "syntax.y"
+#line 157 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2029 "syntax.tab.c"
     break;
 
   case 69:
-#line 159 "syntax.y"
+#line 158 "syntax.y"
                        {show_yyerror(MISSING_RP);}
 #line 2035 "syntax.tab.c"
     break;
 
   case 70:
-#line 160 "syntax.y"
+#line 159 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2041 "syntax.tab.c"
     break;
 
   case 71:
-#line 161 "syntax.y"
+#line 160 "syntax.y"
                   {show_yyerror(MISSING_RP);}
 #line 2047 "syntax.tab.c"
     break;
 
   case 72:
-#line 162 "syntax.y"
+#line 161 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2053 "syntax.tab.c"
     break;
 
   case 73:
-#line 163 "syntax.y"
+#line 162 "syntax.y"
                        {show_yyerror(MISSING_RB);}
 #line 2059 "syntax.tab.c"
     break;
 
   case 74:
-#line 164 "syntax.y"
+#line 163 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2065 "syntax.tab.c"
     break;
 
   case 75:
-#line 165 "syntax.y"
+#line 164 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2071 "syntax.tab.c"
     break;
 
   case 76:
-#line 166 "syntax.y"
+#line 165 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2077 "syntax.tab.c"
     break;
 
   case 77:
-#line 167 "syntax.y"
+#line 166 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2083 "syntax.tab.c"
     break;
 
   case 78:
-#line 168 "syntax.y"
+#line 167 "syntax.y"
                             { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2089 "syntax.tab.c"
     break;
 
   case 79:
-#line 169 "syntax.y"
+#line 168 "syntax.y"
                     {}
 #line 2095 "syntax.tab.c"
     break;
 
   case 80:
-#line 170 "syntax.y"
+#line 169 "syntax.y"
             {}
 #line 2101 "syntax.tab.c"
     break;
 
   case 81:
-#line 173 "syntax.y"
+#line 172 "syntax.y"
                         { (yyval.Node_value) = new_Node_l("Args", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2107 "syntax.tab.c"
     break;
 
   case 82:
-#line 174 "syntax.y"
+#line 173 "syntax.y"
                                  {show_yyerror(EXTRC_COMMA);}
 #line 2113 "syntax.tab.c"
     break;
 
   case 83:
-#line 175 "syntax.y"
+#line 174 "syntax.y"
                         { (yyval.Node_value) = new_Node_l("Args", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[0].Node_value));}
 #line 2119 "syntax.tab.c"
     break;
@@ -2357,7 +2357,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 177 "syntax.y"
+#line 176 "syntax.y"
 
 void yyerror(const char *s) {
     error_num += 1;
@@ -2387,8 +2387,11 @@ int main(int argc, char **argv){
         exit(-1);
     }
     char output_dir[100];
-    strncpy(output_dir,argv[1],strlen(argv[1])-4);
-    strcat(output_dir,".out1");
+    for (int i = 0; i < 100; i ++) {
+        output_dir[i] = '\0';
+    }
+    strncpy(output_dir, argv[1], strlen(argv[1])-4);
+    strcat(output_dir,".out");
     freopen(output_dir,"w",stdout);
     yyparse();
 
