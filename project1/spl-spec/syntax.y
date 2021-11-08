@@ -1,6 +1,7 @@
 %{
     #include "lex.yy.c"
     #include "string.h"
+    #include "symbolTable.cpp"
     void yyerror(const char*);
 
     struct Node* root;
@@ -54,7 +55,7 @@ ExtDefList:
 ExtDef: 
       Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+    | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line)}
     | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
     ;
 ExtDecList:
@@ -109,10 +110,10 @@ Stmt:
     | IF LP Exp RP Stmt %prec LOWER_ELSE    { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}    
     | IF LP Exp RP Stmt ELSE Stmt           { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5); addChild($$, $6); addChild($$, $7);}
     | WHILE LP Exp RP Stmt                  { $$ = new_Node_l("Stmt", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); addChild($$, $5);}
-    | WHILE LP Exp error Stmt {show_yyerror(MISSING_RP);}   
-    | Exp error {show_yyerror(MISSING_SEMI);} 
-    | RETURN Exp error {show_yyerror(MISSING_SEMI);}
-    | IF LP Exp error Stmt {show_yyerror(MISSING_RP);}
+    | WHILE LP Exp error Stmt               {show_yyerror(MISSING_RP);}   
+    | Exp error                             {show_yyerror(MISSING_SEMI);} 
+    | RETURN Exp error                      {show_yyerror(MISSING_SEMI);}
+    | IF LP Exp error Stmt                  {show_yyerror(MISSING_RP);}
     ;
 
 /* local definition */
@@ -151,15 +152,15 @@ Exp:
     | Exp MUL Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | Exp DIV Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | LP Exp RP             { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | LP Exp error {show_yyerror(MISSING_RP);}
+    | LP Exp error          {show_yyerror(MISSING_RP);}
     | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
-    | ID LP Args error {show_yyerror(MISSING_RP);}
-    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | ID LP error {show_yyerror(MISSING_RP);}
+    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($1,$3,@$.first_line);}
+    | ID LP Args error      {show_yyerror(MISSING_RP);}
+    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($1,NULL,@$.first_line);}
+    | ID LP error           {show_yyerror(MISSING_RP);}
     | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
-    | Exp LB Exp error {show_yyerror(MISSING_RB);}
+    | Exp LB Exp error      {show_yyerror(MISSING_RB);}
     | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
     | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}

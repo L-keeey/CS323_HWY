@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include "type.h"
 
 enum display_type{
     has_num,
@@ -21,6 +21,8 @@ typedef struct Node
         int int_value;
         float float_value;
     };
+
+    Type* type_value;
 
     int child_num;
     struct Node* child_list[7];
