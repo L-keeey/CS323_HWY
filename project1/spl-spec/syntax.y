@@ -53,7 +53,7 @@ ExtDefList:
     | ExtDef ExtDefList         { $$ = new_Node_l("ExtDefList", @$.first_line); addChild($$, $1); addChild($$, $2);}
     ;
 ExtDef: 
-      Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+      Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
     | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line)}
     | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
@@ -122,7 +122,7 @@ DefList:
     | Def DefList                { $$ = new_Node_l("DefList", @$.first_line); addChild($$, $1); addChild($$, $2);}
     ;
 Def: 
-     Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+     Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);)}
     | Specifier DecList error {show_yyerror(MISSING_SEMI);}
     | error DecList SEMI {show_yyerror(MISSING_SPEC);}
     ;

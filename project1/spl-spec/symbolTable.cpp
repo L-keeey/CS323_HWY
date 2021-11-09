@@ -36,6 +36,56 @@ public:
             return NULL;
     }
 
+    //ExtDef->Specifier ExtDecList SEMI
+    //Def-> Specifier DecList SEMI
+    void defVar(Node* specifier,Node* ExtDecList,int line){
+        //Type* vartype=specifierNodeType(specifier);
+        std::stack<Node*> namestack;
+        namestack.push(ExtDecList);
+        while(!namestack.empty()){
+            Node* iter=namestack.pop();
+            if(strcmp(iter->token, "ExtDecList") == 0||strcmp(iter->token, "DecList") == 0){
+                for(int i=0;i<iter->child_num,i++){
+                    Node* n=iter->child_list[i];
+                    if(strcmp(n->token, "COMMA") != 0){
+                        namestack.push(n);
+                    }
+                }
+            }else if(strcmp(iter->token, "VarDec") == 0){
+                int childNum = varDec->child_num;
+                // none array type
+                if (childNum == 1)
+                    Type* type = specifierNodeType(specifier);
+                    Node* id = iter->child_list[0];
+                    variable_table[id->string_value]=type;
+                // VarDec -> VarDec LB INT RB | ID
+                else{
+                    Type* type = specifierNodeType(specifier);
+                    Node* varDec=iter;
+                    while(childNum == 3){
+                        int size = varDec->child_list[2]->int_value;
+
+                        Array* a = (struct Array*) malloc(sizeof(struct Array));
+                        a->base = type;
+                        a->size = size;
+
+                        Type* array = (struct Type*) malloc(sizeof(struct Type));
+                        array->category = array->ARRAY;
+                        array->array = a;
+                        
+                        type = array;
+                        varDec = varDec->child_list[0];
+                        childNum = varDec->child_num;
+                    }
+                    variable_table[VarDec->string_value]=type;
+                }
+            }else{
+                //the token is 'Dec'
+                namestack.push(iter->child_list[0]);
+            }
+        }
+    }
+
     // ExtDef -> Specifier FunDec CompSt
     void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
         // fetch return type
