@@ -73,13 +73,13 @@ public:
             paramDec = varList->child_list[0];
             types.push_back(paramDecNodeType(paramDec));
         }
-        
+
         function_table[funName] = types;
     }
 
     // Exp -> ID LP Args RP
     // Exp -> ID LP RP 
-    void invokeFun(Node* ID, Node* args, int line){
+    void invokeFun(Node* exp, Node* ID, Node* args, int line){
         std::string funName = ID->string_value;
         std::vector<Type*>* typesPtr = searchFunction(funName);
         bool noFun = typesPtr == NULL;
@@ -90,6 +90,8 @@ public:
             printType11Error(line);
         else{
             std::vector<Type*> funTypes = *typesPtr;
+            exp->type_value = funTypes[0];
+            
             int paramSize = funTypes.size()-1;
             if (args == NULL && paramSize > 0)
                 printType9Error(line);                

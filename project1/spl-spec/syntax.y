@@ -155,9 +155,9 @@ Exp:
     | LP Exp error          {show_yyerror(MISSING_RP);}
     | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
     | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($1,$3,@$.first_line);}
+    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($$,$1,$3,@$.first_line);}
     | ID LP Args error      {show_yyerror(MISSING_RP);}
-    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($1,NULL,@$.first_line);}
+    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($$,$1,NULL,@$.first_line);}
     | ID LP error           {show_yyerror(MISSING_RP);}
     | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
     | Exp LB Exp error      {show_yyerror(MISSING_RB);}
