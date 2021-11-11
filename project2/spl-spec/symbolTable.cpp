@@ -38,6 +38,7 @@ public:
 
     //ExtDef->Specifier ExtDecList SEMI
     //Def-> Specifier DecList SEMI
+    //check if the defined var exist
     void defVar(Node* specifier,Node* ExtDecList,int line){
         //Type* vartype=specifierNodeType(specifier);
         std::stack<Node*> namestack;
@@ -57,7 +58,11 @@ public:
                 if (childNum == 1)
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
-                    variable_table[id->string_value]=type;
+                    if(variable_table.count(id->string_value)>0){
+                        printType3Error(line);
+                    }else{
+                        variable_table[id->string_value]=type;
+                    }
                 // VarDec -> VarDec LB INT RB | ID
                 else{
                     Type* type = specifierNodeType(specifier);
@@ -77,7 +82,11 @@ public:
                         varDec = varDec->child_list[0];
                         childNum = varDec->child_num;
                     }
-                    variable_table[VarDec->string_value]=type;
+                    if(variable_table.count(VarDec->string_value)>0){
+                        printType3Error(line);
+                    }else{
+                        variable_table[VarDec->string_value]=type;
+                    }
                 }
             }else{
                 //the token is 'Dec'
@@ -188,10 +197,84 @@ public:
         }
     }
 
+    Type* findID(string name,int line){
+        if(variable_table.count(name)>0){
+            return variable_table[name];
+        }
+        printType1Error(line);
+        return NULL;
+    }
+
+    void check_rvalue(Node* exp,int line){
+        if(exp->child_num==1){
+            if(strcmp(exp->child_list[0]->token,"ID")==0){
+                return;
+            }
+        }else if(exp->child_num==3){
+            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"DOT")==0&&strcmp(exp->child_list[2]->token,"ID")==0){
+                return;
+            }
+        }else if(exp->child_num==4){
+            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"LB")==0&&strcmp(exp->child_list[2]->token,"Exp")==0&&strcmp(exp->child_list[3]->token,"RB")==0){
+                return;
+            }
+        }
+        printType6Error(line);
+    }
+
+    Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
+        //deal with null
+        if(exp1->type_value==NULL||exp2->type_value==NULL){
+            printType7Error(line);
+            return NULL;
+        }
+        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(exp2->type_value->primitive==exp2->type_value->INT||exp2->type_value->primitive==exp2->type_value->FLOAT)){
+            return new_prim_type("float");
+        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->FLOAT){
+            return new_prim_type("float");
+        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->INT){
+            return new_prim_type("int");
+        }else{
+            printType7Error(line);
+            return NULL;
+        }
+
+    }
+
+    //do "and" and "or" allow float value?
+    //return 1 if the expression have int value
+    int checkINTexp(Node* exp){
+        if(exp->type_value->primitive==exp->type_value->INT){
+            return 1;
+        }else{
+            return 0;
+        }
+    } 
+
 private:
     static std::map<std::string, Type*> variable_table;
     static std::map<std::string, std::vector<Type*>> function_table;
     static std::map<std::string, Type*>struct_table;
+
+    void printType1Error(int line){
+        std::cout << "Error type 1 at Line " << line << ": variable is used without a definition." << std::endl;
+    }
+
+    void printType3Error(int line){
+        std::cout << "Error type 3 at Line " << line << ": variable is redefined." << std::endl;
+    }
+
+    void printType6Error(int line){
+        std::cout << "Error type 6 at Line " << line << ": rvalue appears on the left-hand side of the assignment operator." << std::endl;
+    }
+
+    void printType7Error(int line){
+        std::cout << "Error type 7 at Line " << line << ": unmantching operands,such as adding an integer to a structure variable" << std::endl;
+    }
+
+    void printType12Error(int line){
+        std::cout << "Error type 12 at Line " << line << ": array indexing with a non-integer type expression." << std::endl;
+    }    
 
     void printType2Error(int line){
         std::cout << "Error type 2 at Line " << line << ": function should be invoked with a definition." << std::endl;

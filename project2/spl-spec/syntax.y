@@ -138,34 +138,40 @@ Dec:
 
 /* Expression */
 Exp: 
-      Exp ASSIGN Exp        { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp AND Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp OR Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp LT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp LE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp GT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp GE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp NE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp EQ Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp PLUS Exp          { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp MINUS Exp         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp MUL Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | Exp DIV Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | LP Exp RP             { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
+      Exp ASSIGN Exp        { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);check_rvalue($1,@$.first_line);$$.type_value=$3.type_value;}
+    | Exp AND Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1)&&checkINTexp($3))){printType7Error(@$.first_line);}$$.type_value=$1.type_value;}
+    | Exp OR Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1)&&checkINTexp($3))){printType7Error(@$.first_line);}$$.type_value=$1.type_value;}
+    | Exp LT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp LE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp GT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp GE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp NE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp EQ Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$.type_value=new_prim_type("int");}
+    | Exp PLUS Exp          { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$.type_value=typeAfterCalc($1,$3,@$.first_line);}
+    | Exp MINUS Exp         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$.type_value=typeAfterCalc($1,$3,@$.first_line);}
+    | Exp MUL Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$.type_value=typeAfterCalc($1,$3,@$.first_line);}
+    | Exp DIV Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$.type_value=typeAfterCalc($1,$3,@$.first_line);}
+    | LP Exp RP             { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$.type_value=$2.type_value;}
     | LP Exp error          {show_yyerror(MISSING_RP);}
-    | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($$,$1,$3,@$.first_line);}
+    | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);$$.type_value=$3.type_value;}
+    | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);if(!checkINTexp($2)){printType7Error(@$.first_line);}$$.type_value=$2.type_value;}
+    | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($$,$1,$3,@$.first_line);findID($1.string_value,@$.first_line)
+        //todo: maybe we should modify the exp->type_value here (function return value)
+    }
     | ID LP Args error      {show_yyerror(MISSING_RP);}
-    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($$,$1,NULL,@$.first_line);}
+    | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($$,$1,NULL,@$.first_line);findID($1.string_value,@$.first_line)
+        //todo: maybe we should modify the exp->type_value here (function return value)   
+    }
     | ID LP error           {show_yyerror(MISSING_RP);}
-    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);if(!checkINTexp($3)){printType12Error(@$.first_line);}$$.type_value=$1.type_value->array->base;}
     | Exp LB Exp error      {show_yyerror(MISSING_RB);}
-    | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
-    | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
-    | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
-    | FLOAT                 { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
-    | CHAR                  { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);}
+    | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);findID($3.string_value,@$.first_line)
+        //todo: maybe we should modify the exp->type_value here (structure field value)
+    }
+    | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$.type_value=findID($1.string_value,@$.first_line)}
+    | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$.type_value=new_prim_type("int")}
+    | FLOAT                 { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$.type_value=new_prim_type("float")}
+    | CHAR                  { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$.type_value=new_prim_type("char")}
     | Exp ERROR Exp {}
     | ERROR {}
     ;
