@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stack>
 
 #include "parseTree.h"
 
@@ -44,18 +45,19 @@ public:
         std::stack<Node*> namestack;
         namestack.push(ExtDecList);
         while(!namestack.empty()){
-            Node* iter=namestack.pop();
+            Node* iter=namestack.top();
+            namestack.pop();
             if(strcmp(iter->token, "ExtDecList") == 0||strcmp(iter->token, "DecList") == 0){
-                for(int i=0;i<iter->child_num,i++){
+                for(int i=0;i<iter->child_num;i++){
                     Node* n=iter->child_list[i];
                     if(strcmp(n->token, "COMMA") != 0){
                         namestack.push(n);
                     }
                 }
             }else if(strcmp(iter->token, "VarDec") == 0){
-                int childNum = varDec->child_num;
+                int childNum = iter->child_num;
                 // none array type
-                if (childNum == 1)
+                if (childNum == 1){
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
                     if(variable_table.count(id->string_value)>0){
@@ -64,11 +66,11 @@ public:
                         variable_table[id->string_value]=type;
                     }
                 // VarDec -> VarDec LB INT RB | ID
-                else{
+                }else{
                     Type* type = specifierNodeType(specifier);
-                    Node* varDec=iter;
+                    Node* VarDec=iter;
                     while(childNum == 3){
-                        int size = varDec->child_list[2]->int_value;
+                        int size = VarDec->child_list[2]->int_value;
 
                         Array* a = (struct Array*) malloc(sizeof(struct Array));
                         a->base = type;
@@ -79,8 +81,8 @@ public:
                         array->array = a;
                         
                         type = array;
-                        varDec = varDec->child_list[0];
-                        childNum = varDec->child_num;
+                        VarDec = VarDec->child_list[0];
+                        childNum = VarDec->child_num;
                     }
                     if(variable_table.count(VarDec->string_value)>0){
                         printType3Error(line);
@@ -90,7 +92,57 @@ public:
                 }
             }else{
                 //the token is 'Dec'
-                namestack.push(iter->child_list[0]);
+                if(iter->child_num==1){
+                    namestack.push(iter->child_list[0]);
+                }else{
+                    //Vardec ASSIGN Exp
+                    Node* exp=iter->child_list[3];
+                    iter=iter->child_list[0];
+                    int childNum = iter->child_num;
+                    //this part is copy from above
+                    // none array type
+                    if (childNum == 1){
+                        Type* type = specifierNodeType(specifier);
+                        Node* id = iter->child_list[0];
+                        if(variable_table.count(id->string_value)>0){
+                            printType3Error(line);
+                        }else if(isSameTypes(exp->type_value,type)){
+                            //ASSIGN with not equal type
+                            printType5Error(line);
+                        }else{
+                            variable_table[id->string_value]=type;
+                        }
+                    // VarDec -> VarDec LB INT RB | ID
+                    }else{
+                        Type* type = specifierNodeType(specifier);
+                        Node* VarDec=iter;
+                        while(childNum == 3){
+                            int size = VarDec->child_list[2]->int_value;
+
+                            Array* a = (struct Array*) malloc(sizeof(struct Array));
+                            a->base = type;
+                            a->size = size;
+
+                            Type* array = (struct Type*) malloc(sizeof(struct Type));
+                            array->category = array->ARRAY;
+                            array->array = a;
+                            
+                            type = array;
+                            VarDec = VarDec->child_list[0];
+                            childNum = VarDec->child_num;
+                        }
+                        if(variable_table.count(VarDec->string_value)>0){
+                            printType3Error(line);
+                        }else if(isSameTypes(exp->type_value,type)){
+                            //ASSIGN with not equal type
+                            printType5Error(line);
+                        }else{
+                            variable_table[VarDec->string_value]=type;
+                        }
+                }
+
+                }
+                
             }
         }
     }
@@ -197,7 +249,7 @@ public:
         }
     }
 
-    Type* findID(string name,int line){
+    Type* findID(std::string name,int line){
         if(variable_table.count(name)>0){
             return variable_table[name];
         }
@@ -208,11 +260,15 @@ public:
     void check_rvalue(Node* exp,int line){
         if(exp->child_num==1){
             if(strcmp(exp->child_list[0]->token,"ID")==0){
-                return;
+                if(findID(exp->child_list[0]->string_value,line)!=NULL){
+                    return;
+                }
             }
         }else if(exp->child_num==3){
             if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"DOT")==0&&strcmp(exp->child_list[2]->token,"ID")==0){
                 return;
+            }else if(strcmp(exp->child_list[0]->token,"LP")==0&&strcmp(exp->child_list[1]->token,"Exp")==0&&strcmp(exp->child_list[2]->token,"RP")==0){
+                check_rvalue(exp->child_list[1],line);
             }
         }else if(exp->child_num==4){
             if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"LB")==0&&strcmp(exp->child_list[2]->token,"Exp")==0&&strcmp(exp->child_list[3]->token,"RB")==0){
@@ -294,6 +350,10 @@ private:
 
     void printType11Error(int line){
         std::cout << "Error type 11 at Line " << line << ": non-function variable could not apply function invocation." << std::endl;
+    }    
+
+     void printType5Error(int line){
+        std::cout << "Error type 5 at Line " << line << ": the type of the operands at both sides of assignment operator should match." << std::endl;
     }    
 
     Type* specifierNodeType(Node* specifier){
