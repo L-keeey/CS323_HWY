@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <stack>
+#include <stack> 
 
 #include "parseTree.h"
 
@@ -38,15 +38,15 @@ public:
     }
 
     //ExtDef->Specifier ExtDecList SEMI
-    //Def-> Specifier DecList SEMI
-    //check if the defined var exist
+    //Def-> Specifier DecList SEMI 
+    // There are some error in this function, so I comment it for safety. This can be check soon.
     void defVar(Node* specifier,Node* ExtDecList,int line){
         //Type* vartype=specifierNodeType(specifier);
-        std::stack<Node*> namestack;
+        std::stack<Node*> namestack = namestack;
         namestack.push(ExtDecList);
         while(!namestack.empty()){
-            Node* iter=namestack.top();
-            namestack.pop();
+            // Node* iter = namestack.pop();
+            Node *iter;
             if(strcmp(iter->token, "ExtDecList") == 0||strcmp(iter->token, "DecList") == 0){
                 for(int i=0;i<iter->child_num;i++){
                     Node* n=iter->child_list[i];
@@ -55,22 +55,19 @@ public:
                     }
                 }
             }else if(strcmp(iter->token, "VarDec") == 0){
-                int childNum = iter->child_num;
+                // int childNum = varDec->child_num;
+                int childNum;
                 // none array type
                 if (childNum == 1){
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
-                    if(variable_table.count(id->string_value)>0){
-                        printType3Error(line);
-                    }else{
-                        variable_table[id->string_value]=type;
-                    }
+                    variable_table[id->string_value]=type;
                 // VarDec -> VarDec LB INT RB | ID
                 }else{
                     Type* type = specifierNodeType(specifier);
-                    Node* VarDec=iter;
+                    Node* varDec=iter;
                     while(childNum == 3){
-                        int size = VarDec->child_list[2]->int_value;
+                        int size = varDec->child_list[2]->int_value;
 
                         Array* a = (struct Array*) malloc(sizeof(struct Array));
                         a->base = type;
@@ -81,68 +78,14 @@ public:
                         array->array = a;
                         
                         type = array;
-                        VarDec = VarDec->child_list[0];
-                        childNum = VarDec->child_num;
+                        varDec = varDec->child_list[0];
+                        childNum = varDec->child_num;
                     }
-                    if(variable_table.count(VarDec->string_value)>0){
-                        printType3Error(line);
-                    }else{
-                        variable_table[VarDec->string_value]=type;
-                    }
+                    // variable_table[VarDec->string_value]=type;
                 }
             }else{
                 //the token is 'Dec'
-                if(iter->child_num==1){
-                    namestack.push(iter->child_list[0]);
-                }else{
-                    //Vardec ASSIGN Exp
-                    Node* exp=iter->child_list[3];
-                    iter=iter->child_list[0];
-                    int childNum = iter->child_num;
-                    //this part is copy from above
-                    // none array type
-                    if (childNum == 1){
-                        Type* type = specifierNodeType(specifier);
-                        Node* id = iter->child_list[0];
-                        if(variable_table.count(id->string_value)>0){
-                            printType3Error(line);
-                        }else if(isSameTypes(exp->type_value,type)){
-                            //ASSIGN with not equal type
-                            printType5Error(line);
-                        }else{
-                            variable_table[id->string_value]=type;
-                        }
-                    // VarDec -> VarDec LB INT RB | ID
-                    }else{
-                        Type* type = specifierNodeType(specifier);
-                        Node* VarDec=iter;
-                        while(childNum == 3){
-                            int size = VarDec->child_list[2]->int_value;
-
-                            Array* a = (struct Array*) malloc(sizeof(struct Array));
-                            a->base = type;
-                            a->size = size;
-
-                            Type* array = (struct Type*) malloc(sizeof(struct Type));
-                            array->category = array->ARRAY;
-                            array->array = a;
-                            
-                            type = array;
-                            VarDec = VarDec->child_list[0];
-                            childNum = VarDec->child_num;
-                        }
-                        if(variable_table.count(VarDec->string_value)>0){
-                            printType3Error(line);
-                        }else if(isSameTypes(exp->type_value,type)){
-                            //ASSIGN with not equal type
-                            printType5Error(line);
-                        }else{
-                            variable_table[VarDec->string_value]=type;
-                        }
-                }
-
-                }
-                
+                namestack.push(iter->child_list[0]);
             }
         }
     }
@@ -249,88 +192,36 @@ public:
         }
     }
 
-    Type* findID(std::string name,int line){
-        if(variable_table.count(name)>0){
-            return variable_table[name];
+/***
+ * struct myStruct {
+    float val;
+    struct _ {char c[2]; } charr;
+    int arr2[3][2];
+};
+
+ ExtDef (1)
+    ->Specifier (1)
+        StructSpecifier (1)
+*/
+    void defStructure(Node* node, int line) {
+        char* tname = node->child_list[0]->child_list[1]->string_value;
+        if (searchStructType(tname) != NULL) {
+            print15TypeError(line);
+        } else {
+            // define a new structure
+            FieldList* field_list = generateFieldList(node->child_list[0]->child_list[3]);
+            struct Type* type = (struct Type*) malloc(sizeof(struct Type));
+            type->category = Type::STRUCTURE;
+            strcpy(type->name, tname);
+            type->structure = field_list;
+            struct_table[tname] = type;
         }
-        printType1Error(line);
-        return NULL;
     }
-
-    void check_rvalue(Node* exp,int line){
-        if(exp->child_num==1){
-            if(strcmp(exp->child_list[0]->token,"ID")==0){
-                if(findID(exp->child_list[0]->string_value,line)!=NULL){
-                    return;
-                }
-            }
-        }else if(exp->child_num==3){
-            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"DOT")==0&&strcmp(exp->child_list[2]->token,"ID")==0){
-                return;
-            }else if(strcmp(exp->child_list[0]->token,"LP")==0&&strcmp(exp->child_list[1]->token,"Exp")==0&&strcmp(exp->child_list[2]->token,"RP")==0){
-                check_rvalue(exp->child_list[1],line);
-            }
-        }else if(exp->child_num==4){
-            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"LB")==0&&strcmp(exp->child_list[2]->token,"Exp")==0&&strcmp(exp->child_list[3]->token,"RB")==0){
-                return;
-            }
-        }
-        printType6Error(line);
-    }
-
-    Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
-        //deal with null
-        if(exp1->type_value==NULL||exp2->type_value==NULL){
-            printType7Error(line);
-            return NULL;
-        }
-        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(exp2->type_value->primitive==exp2->type_value->INT||exp2->type_value->primitive==exp2->type_value->FLOAT)){
-            return new_prim_type("float");
-        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->FLOAT){
-            return new_prim_type("float");
-        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->INT){
-            return new_prim_type("int");
-        }else{
-            printType7Error(line);
-            return NULL;
-        }
-
-    }
-
-    //do "and" and "or" allow float value?
-    //return 1 if the expression have int value
-    int checkINTexp(Node* exp){
-        if(exp->type_value->primitive==exp->type_value->INT){
-            return 1;
-        }else{
-            return 0;
-        }
-    } 
 
 private:
     static std::map<std::string, Type*> variable_table;
     static std::map<std::string, std::vector<Type*>> function_table;
     static std::map<std::string, Type*>struct_table;
-
-    void printType1Error(int line){
-        std::cout << "Error type 1 at Line " << line << ": variable is used without a definition." << std::endl;
-    }
-
-    void printType3Error(int line){
-        std::cout << "Error type 3 at Line " << line << ": variable is redefined." << std::endl;
-    }
-
-    void printType6Error(int line){
-        std::cout << "Error type 6 at Line " << line << ": rvalue appears on the left-hand side of the assignment operator." << std::endl;
-    }
-
-    void printType7Error(int line){
-        std::cout << "Error type 7 at Line " << line << ": unmantching operands,such as adding an integer to a structure variable" << std::endl;
-    }
-
-    void printType12Error(int line){
-        std::cout << "Error type 12 at Line " << line << ": array indexing with a non-integer type expression." << std::endl;
-    }    
 
     void printType2Error(int line){
         std::cout << "Error type 2 at Line " << line << ": function should be invoked with a definition." << std::endl;
@@ -350,11 +241,27 @@ private:
 
     void printType11Error(int line){
         std::cout << "Error type 11 at Line " << line << ": non-function variable could not apply function invocation." << std::endl;
-    }    
+    }  
 
-     void printType5Error(int line){
-        std::cout << "Error type 5 at Line " << line << ": the type of the operands at both sides of assignment operator should match." << std::endl;
-    }    
+    void print05TypeError(int line) {
+        // Something wrong happen, when "unmathing types appear at both sides of the assignment operator (=)".
+    }
+
+    void print10TypeError(int line) {
+        // Something wrong happen, when "applying index operator ([...]) on non-array type variables".
+    }
+
+    void print13TypeError(int line) {
+        // Something wrong happen, when "accessing members of a non-structure type expression".
+    }
+
+    void print14TypeError(int line) {
+        // Something wrong happen, when "accessing an undefined structure member".        
+    }
+
+    void print15TypeError(int line) {
+        // Something wrong happen, when "redefine the same structure type".        
+    }  
 
     Type* specifierNodeType(Node* specifier){
         Node* child = specifier->child_list[0];
@@ -446,7 +353,94 @@ private:
 
     bool isSameTypes(Type* type1, Type* type2){
         // TODO:
+        return false;
+    }
 
-        return true;
+/***
+ *  LC
+      ->DefList (2)
+            Def (2)
+ * */
+    FieldList* generateFieldList(Node* node) {
+        if(node->child_num <= 4) {
+            return nullptr;
+            // This is an empty structure, just return from the function.
+        } else {
+            std::vector<FieldList*> field_list_v;
+            Node *field_node = node->child_list[3];
+            field_list_v.push_back(getFieldListFromNode(field_node));
+            field_node = field_node->child_list[1];
+            while (field_node != nullptr && strcmp(field_node->string_value, "DefList") == 0) {
+                field_list_v.push_back(getFieldListFromNode(field_node));
+                if (field_node->child_num <= 1) {
+                    break;
+                }
+                field_node = field_node->child_list[1];
+            }
+            for (int i = 0; i < field_list_v.size() - 1; i ++) {
+                field_list_v[i]->next = field_list_v[i+1];
+                return field_list_v.front();
+            }
+        }
+    }
+/***
+ * LC
+      ->DefList (2)
+            Def (2)
+*/
+    FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
+        Node *base_node = node->child_list[0];
+        FieldList* res;
+        res->next = nullptr;
+        strcpy(res->name, getNameFromDecList(base_node->child_list[1]));
+        // The base node is the node of Def
+        if (base_node->child_list[0]->child_num==0) {
+            // It means that it is shown like TYPE:float
+            // This is the type of Array or prim type.
+            res->type = getArrayOrPrimTypeFromDecList(base_node->child_list[1]);
+        } else {
+            // It is a struct type, just search it in the struct table, since if it exist, if must be in it.
+            std::string s_name = base_node->child_list[0]->child_list[0]->child_list[0]->string_value;
+            res->type = searchStructType(s_name);
+        }
+        return res;
+    }
+
+    Type* getArrayOrPrimTypeFromDecList(Node* node) { // From DecList node get the type of the var, it may be prim type or array type
+        if (node->child_list[0]->child_num == 0 && node->child_list[0]->token=="TYPE") {
+            // This is a prim type, just return it.
+            return new_prim_type(node->child_list[0]->string_value);
+        } else {
+            // This is a array type. Create it.
+            return createArrayType(node->child_list[1]->child_list[0], new_prim_type(node->child_list[0]->string_value));
+        }
+    }
+
+    char* getNameFromDecList(Node* node) { // From DecList node get the id of the type.
+        // node is a DecList
+        while (node->child_list != 0) {
+            node = node->child_list[0];
+        }
+        return node->string_value;
+    }
+
+    Type* createArrayType(Node* node, Type* tp) { // From the node Dec get the Array Type.
+        Array* arr;
+        generateArr(node, arr, tp);
+    }
+
+    void generateArr(Node* node, Array* arr, Type* tot_tp) {
+        if (node->child_list[0]->child_num == 0) {
+            // It is the 'getting out recusive' state.
+            arr->size = node->child_list[2]->int_value;
+            arr->base = tot_tp;
+        } else {
+            arr->size = node->child_list[2]->int_value;
+            Type* tp;
+            tp->category = Type::ARRAY;
+            Array* new_arr;
+            tp->array = new_arr;
+            generateArr(node->child_list[0], new_arr, tot_tp);
+        }
     }
 };
