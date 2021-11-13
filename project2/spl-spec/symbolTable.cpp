@@ -250,11 +250,24 @@ public:
     }
 
     Type* findID(std::string name,int line){
-        if(variable_table.count(name)>0){
-            return variable_table[name];
+        Type* out=searchVariable(name);
+        if(out==NULL){
+            printType1Error(line);
         }
-        printType1Error(line);
-        return NULL;
+        return out;
+    }
+
+    void checkAssignOperand(Node* exp1, Node* exp2, int line){
+        if (!isSameTypes(exp1->type_value, exp2->type_value))
+            printType5Error(line);        
+    }
+
+    void determineExpType(Node* expLeft, Node* exp1, int line){
+        Type* expType = exp1->type_value;
+        if(expType->category == expType->ARRAY){
+            expLeft->type_value = expType->array->base;
+        }else
+            printType10Error(line);
     }
 
     void check_rvalue(Node* exp,int line){
@@ -278,17 +291,24 @@ public:
         printType6Error(line);
     }
 
+    Type* checkStructMember(Node* exp,Node* id,int line){
+        //TODO: 1. return the type of the structure member
+        //2. throw type 13 error when the exp is not a structure with line number
+        //3. throw type 14 error when id is not a valid structure member line number
+
+    }
+
     Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
         //deal with null
         if(exp1->type_value==NULL||exp2->type_value==NULL){
             printType7Error(line);
             return NULL;
         }
-        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(exp2->type_value->primitive==exp2->type_value->INT||exp2->type_value->primitive==exp2->type_value->FLOAT)){
+        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(checkINTexp(exp2,0)||exp2->type_value->primitive==exp2->type_value->FLOAT)){
             return new_prim_type("float");
-        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->FLOAT){
+        }else if(checkINTexp(exp1,0)&&exp2->type_value->primitive==exp2->type_value->FLOAT){
             return new_prim_type("float");
-        }else if(exp1->type_value->primitive==exp1->type_value->INT&&exp2->type_value->primitive==exp2->type_value->INT){
+        }else if(checkINTexp(exp1,0)&&checkINTexp(exp2,0)){
             return new_prim_type("int");
         }else{
             printType7Error(line);
@@ -299,9 +319,18 @@ public:
 
     //do "and" and "or" allow float value?
     //return 1 if the expression have int value
-    int checkINTexp(Node* exp){
+    int checkINTexp(Node* exp, int allowbool){
         if(exp->type_value->primitive==exp->type_value->INT){
-            return 1;
+            if(allowbool){
+                return 1;
+            }else{
+                if(strcmp(exp->type_value->name,"bool")==0){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+            
         }else{
             return 0;
         }
@@ -352,9 +381,25 @@ private:
         std::cout << "Error type 11 at Line " << line << ": non-function variable could not apply function invocation." << std::endl;
     }    
 
-     void printType5Error(int line){
+    void printType10Error(int line){
+        std::cout << "Error type 10 at Line " << line << ": non-array type variable could not apply indexing operator." << std::endl;
+    } 
+
+    void printType5Error(int line){
         std::cout << "Error type 5 at Line " << line << ": the type of the operands at both sides of assignment operator should match." << std::endl;
     }    
+
+    void printType15Error(int line){
+        std::cout << "Error type 15 at Line " << line << ": the structure should not be redfined." << std::endl;
+    } 
+
+    void printType14Error(int line){
+        std::cout << "Error type 14 at Line " << line << ": the structure should be defined before access." << std::endl;
+    } 
+
+    void printType13Error(int line){
+        std::cout << "Error type 13 at Line " << line << ": non-structure type variable could not apply dot operator." << std::endl;
+    } 
 
     Type* specifierNodeType(Node* specifier){
         Node* child = specifier->child_list[0];
@@ -444,6 +489,7 @@ private:
         }
     }
 
+    //please throw error type here
     bool isSameTypes(Type* type1, Type* type2){
         // TODO:
 

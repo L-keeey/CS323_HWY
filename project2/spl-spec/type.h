@@ -31,7 +31,10 @@ struct Type* new_prim_type(char* type){
         prim->primitive = prim->INT;
     else if (strcmp(type, "float"))
         prim->primitive = prim->FLOAT;
-    else
+    else if (strcmp(type,"bool")){
+        prim->primitive = prim->INT;
+        strcpy(prim->name,"bool");
+    }else
         prim->primitive = prim->CHAR;
 
     return prim;
