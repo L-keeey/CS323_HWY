@@ -1068,7 +1068,7 @@ YY_RULE_SETUP
 #line 190 "lex.l"
 {
             float res = atof(yytext);
-            if (res == 0.0 && yyleng >1){
+            if (res == 0.0 && yyleng >3){
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
                 yylval.Node_value = new_Node_f("FLOAT", res, yytext);
