@@ -106,6 +106,7 @@ ExtDef (1)
     StructSpecifier (1)
 */
 void defStructure(Node* node, int line) {
+    sout("def struct");
     char* tname = node->child_list[0]->child_list[1]->string_value;
     if (searchStructType(tname) != NULL) {
         printType15Error(line);
@@ -119,6 +120,7 @@ void defStructure(Node* node, int line) {
         struct_table[tname] = type;
         calStructHash(tname, type);
     }
+    sout("struct def complete");
 }
 
 //ExtDef->Specifier ExtDecList SEMI
@@ -126,7 +128,7 @@ void defStructure(Node* node, int line) {
 //check if the defined var exist
 void defVar(Node* specifier,Node* ExtDecList,int line){
     //Type* vartype=specifierNodeType(specifier);
-    std::cout<<"in def var"<<std::endl;
+    sout("in def var");
     std::stack<Node*> namestack;
     namestack.push(ExtDecList);
     while(!namestack.empty()){
@@ -190,8 +192,8 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 if (childNum == 1){
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
-                    std::cout<<"checking value"<<std::endl;
-                    std::cout<< exp <<std::endl;
+                    sout("checking value");
+                    sout(exp);
                     if(variable_table.count(id->string_value)>0){
                         printType3Error(line);
                     }else if (exp->type_value==NULL){

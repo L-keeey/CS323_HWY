@@ -52,7 +52,7 @@ ExtDefList:
     ;
 ExtDef: 
       Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
-    | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2);}
+    | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); defStructure($1, @$.first_line);}
     | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line);}
     | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
     ;

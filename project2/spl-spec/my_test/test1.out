@@ -1,0 +1,79 @@
+in def var
+checking value
+0x55771a158060
+check is same type
+0
+0
+foo
+0
+0
+1
+check is same type
+0
+0
+foo
+0
+0
+1
+0x55771a15a7d0
+adding argument
+adding argument to map
+Error type 3 at Line 6: variable is redefined.
+adding argument to map
+in def var
+visit invoke fun
+setting exp type
+cheking rvalue
+check is same type
+0
+0
+foo
+0
+0
+1
+exp1:type
+0
+exp2:type
+0
+exp1:type
+0
+exp2:type
+0
+in def var
+checking value
+0x55771a15f380
+Error type 3 at Line 12: variable is redefined.
+exp1:type
+0
+exp2:type
+0
+cheking rvalue
+check is same type
+0
+0
+foo
+0
+0
+1
+exp1:type
+0
+exp2:type
+0
+cheking rvalue
+check is same type
+0
+0
+foo
+0
+0
+1
+check is same type
+0
+0
+foo
+0
+0
+1
+0x55771a162eb0
+0x55771a162ef0
+0x55771a162f50
