@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <stack> 
+#include <stack>
 
 #include "parseTree.h"
 
@@ -51,7 +51,6 @@ public:
     struct _ {char c[2]; } charr;
     int arr2[3][2];
 };
-
  ExtDef (1)
     ->Specifier (1)
         StructSpecifier (1)
@@ -73,15 +72,15 @@ public:
     }
 
     //ExtDef->Specifier ExtDecList SEMI
-    //Def-> Specifier DecList SEMI 
-    // There are some error in this function, so I comment it for safety. This can be check soon.
+    //Def-> Specifier DecList SEMI
+    //check if the defined var exist
     void defVar(Node* specifier,Node* ExtDecList,int line){
         //Type* vartype=specifierNodeType(specifier);
-        std::stack<Node*> namestack = namestack;
+        std::stack<Node*> namestack;
         namestack.push(ExtDecList);
         while(!namestack.empty()){
-            // Node* iter = namestack.pop();
-            Node *iter;
+            Node* iter=namestack.top();
+            namestack.pop();
             if(strcmp(iter->token, "ExtDecList") == 0||strcmp(iter->token, "DecList") == 0){
                 for(int i=0;i<iter->child_num;i++){
                     Node* n=iter->child_list[i];
@@ -90,19 +89,22 @@ public:
                     }
                 }
             }else if(strcmp(iter->token, "VarDec") == 0){
-                // int childNum = varDec->child_num;
-                int childNum;
+                int childNum = iter->child_num;
                 // none array type
                 if (childNum == 1){
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
-                    variable_table[id->string_value]=type;
+                    if(variable_table.count(id->string_value)>0){
+                        printType3Error(line);
+                    }else{
+                        variable_table[id->string_value]=type;
+                    }
                 // VarDec -> VarDec LB INT RB | ID
                 }else{
                     Type* type = specifierNodeType(specifier);
-                    Node* varDec=iter;
+                    Node* VarDec=iter;
                     while(childNum == 3){
-                        int size = varDec->child_list[2]->int_value;
+                        int size = VarDec->child_list[2]->int_value;
 
                         Array* a = (struct Array*) malloc(sizeof(struct Array));
                         a->base = type;
@@ -113,14 +115,68 @@ public:
                         array->array = a;
                         
                         type = array;
-                        varDec = varDec->child_list[0];
-                        childNum = varDec->child_num;
+                        VarDec = VarDec->child_list[0];
+                        childNum = VarDec->child_num;
                     }
-                    // variable_table[VarDec->string_value]=type;
+                    if(variable_table.count(VarDec->string_value)>0){
+                        printType3Error(line);
+                    }else{
+                        variable_table[VarDec->string_value]=type;
+                    }
                 }
             }else{
                 //the token is 'Dec'
-                namestack.push(iter->child_list[0]);
+                if(iter->child_num==1){
+                    namestack.push(iter->child_list[0]);
+                }else{
+                    //Vardec ASSIGN Exp
+                    Node* exp=iter->child_list[3];
+                    iter=iter->child_list[0];
+                    int childNum = iter->child_num;
+                    //this part is copy from above
+                    // none array type
+                    if (childNum == 1){
+                        Type* type = specifierNodeType(specifier);
+                        Node* id = iter->child_list[0];
+                        if(variable_table.count(id->string_value)>0){
+                            printType3Error(line);
+                        }else if(isSameTypes(exp->type_value,type)){
+                            //ASSIGN with not equal type
+                            printType5Error(line);
+                        }else{
+                            variable_table[id->string_value]=type;
+                        }
+                    // VarDec -> VarDec LB INT RB | ID
+                    }else{
+                        Type* type = specifierNodeType(specifier);
+                        Node* VarDec=iter;
+                        while(childNum == 3){
+                            int size = VarDec->child_list[2]->int_value;
+
+                            Array* a = (struct Array*) malloc(sizeof(struct Array));
+                            a->base = type;
+                            a->size = size;
+
+                            Type* array = (struct Type*) malloc(sizeof(struct Type));
+                            array->category = array->ARRAY;
+                            array->array = a;
+                            
+                            type = array;
+                            VarDec = VarDec->child_list[0];
+                            childNum = VarDec->child_num;
+                        }
+                        if(variable_table.count(VarDec->string_value)>0){
+                            printType3Error(line);
+                        }else if(isSameTypes(exp->type_value,type)){
+                            //ASSIGN with not equal type
+                            printType5Error(line);
+                        }else{
+                            variable_table[VarDec->string_value]=type;
+                        }
+                }
+
+                }
+                
             }
         }
     }
@@ -302,31 +358,70 @@ public:
         return NULL;
     }
 
-
- ExtDef (1)
-    ->Specifier (1)
-        StructSpecifier (1)
-*/
-    void defStructure(Node* node, int line) {
-        char* tname = node->child_list[0]->child_list[1]->string_value;
-        if (searchStructType(tname) != NULL) {
-            print15TypeError(line);
-        } else {
-            // define a new structure
-            FieldList* field_list = generateFieldList(node->child_list[0]->child_list[3]);
-            struct Type* type = (struct Type*) malloc(sizeof(struct Type));
-            type->category = Type::STRUCTURE;
-            strcpy(type->name, tname);
-            type->structure = field_list;
-            struct_table[tname] = type;
+    Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
+        //deal with null
+        if(exp1->type_value==NULL||exp2->type_value==NULL){
+            printType7Error(line);
+            return NULL;
         }
+        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(checkINTexp(exp2,0)||exp2->type_value->primitive==exp2->type_value->FLOAT)){
+            return new_prim_type("float");
+        }else if(checkINTexp(exp1,0)&&exp2->type_value->primitive==exp2->type_value->FLOAT){
+            return new_prim_type("float");
+        }else if(checkINTexp(exp1,0)&&checkINTexp(exp2,0)){
+            return new_prim_type("int");
+        }else{
+            printType7Error(line);
+            return NULL;
+        }
+
     }
+
+    //do "and" and "or" allow float value?
+    //return 1 if the expression have int value
+    int checkINTexp(Node* exp, int allowbool){
+        if(exp->type_value->primitive==exp->type_value->INT){
+            if(allowbool){
+                return 1;
+            }else{
+                if(strcmp(exp->type_value->name,"bool")==0){
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+            
+        }else{
+            return 0;
+        }
+    } 
 
 private:
     static std::map<std::string, Type*> variable_table;
     static std::map<std::string, std::vector<Type*>> function_table;
     static std::map<std::string, Type*>struct_table;
 
+    static std::map<std::string, ll> struct_hash_table;
+
+    void printType1Error(int line){
+        std::cout << "Error type 1 at Line " << line << ": variable is used without a definition." << std::endl;
+    }
+
+    void printType3Error(int line){
+        std::cout << "Error type 3 at Line " << line << ": variable is redefined." << std::endl;
+    }
+
+    void printType6Error(int line){
+        std::cout << "Error type 6 at Line " << line << ": rvalue appears on the left-hand side of the assignment operator." << std::endl;
+    }
+
+    void printType7Error(int line){
+        std::cout << "Error type 7 at Line " << line << ": unmantching operands,such as adding an integer to a structure variable" << std::endl;
+    }
+
+    void printType12Error(int line){
+        std::cout << "Error type 12 at Line " << line << ": array indexing with a non-integer type expression." << std::endl;
+    }    
 
     void printType2Error(int line){
         std::cout << "Error type 2 at Line " << line << ": function should be invoked with a definition." << std::endl;
@@ -346,32 +441,27 @@ private:
 
     void printType11Error(int line){
         std::cout << "Error type 11 at Line " << line << ": non-function variable could not apply function invocation." << std::endl;
-    }  
+    }    
 
-    void print05TypeError(int line) {
-        // Something wrong happen, when "unmathing types appear at both sides of the assignment operator (=)".
-        std::cout << "Error type 5 at Line " << line << ": unmathing types appear at both sides of the assignment operator (=)." << std::endl;
-    }
+    void printType10Error(int line){
+        std::cout << "Error type 10 at Line " << line << ": non-array type variable could not apply indexing operator." << std::endl;
+    } 
 
-    void print10TypeError(int line) {
-        // Something wrong happen, when "applying index operator ([...]) on non-array type variables".
-        std::cout << "Error type 10 at Line " << line << ": applying index operator ([...]) on non-array type variables." << std::endl;
-    }
+    void printType5Error(int line){
+        std::cout << "Error type 5 at Line " << line << ": the type of the operands at both sides of assignment operator should match." << std::endl;
+    }    
 
-    void print13TypeError(int line) {
-        // Something wrong happen, when "accessing members of a non-structure type expression".
-        std::cout << "Error type 13 at Line " << line << ": accessing members of a non-structure type expression." << std::endl;
-    }
+    void printType15Error(int line){
+        std::cout << "Error type 15 at Line " << line << ": the structure should not be redfined." << std::endl;
+    } 
 
-    void print14TypeError(int line) {
-        // Something wrong happen, when "accessing an undefined structure member".        
-        std::cout << "Error type 14 at Line " << line << ": accessing an undefined structure member." << std::endl;
-    }
+    void printType14Error(int line){
+        std::cout << "Error type 14 at Line " << line << ": the structure should be defined before access." << std::endl;
+    } 
 
-    void print15TypeError(int line) {
-        // Something wrong happen, when "redefine the same structure type".        
-        std::cout << "Error type 15 at Line " << line << ": redefine the same structure type." << std::endl;
-    }  
+    void printType13Error(int line){
+        std::cout << "Error type 13 at Line " << line << ": non-structure type variable could not apply dot operator." << std::endl;
+    } 
 
     Type* specifierNodeType(Node* specifier){
         Node* child = specifier->child_list[0];
@@ -464,7 +554,6 @@ private:
     //please throw error type here
     // NO, the function is recusively called here, the error must be thrown outer
      bool isSameTypes(Type* type1, Type* type2){
-
         if (type1->category != type2->category) {
             return false; // The main struct are not the same.
         } else if (type1->category == Type::PRIMITIVE) {
@@ -473,8 +562,6 @@ private:
             return checkTwoArrayEquv(type1->array, type2->array);
         } else if (type1->category == Type::STRUCTURE) { // There are all Struct type, first try to use simply compare the name of the both struct.
         // try to solve the structure equivence.
-        // TODO: try to solve the structure equivence.
-
             return isSameStruct(type1, type2);
         } else
             return false;
@@ -637,4 +724,5 @@ private:
             s_hash = s_hash % MOD;
             return s_hash % MOD;
         }
+    }
 };
