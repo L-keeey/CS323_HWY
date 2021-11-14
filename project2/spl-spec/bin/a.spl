@@ -2,5 +2,8 @@ struct myStruct {
     float val;
     struct _ {char c[2]; } charr;
     int arr2[3][2];
-    int fk;
 };
+
+st myst;
+myst.val = 3;
+
