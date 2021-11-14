@@ -1,9 +1,12 @@
+enum CATE {PRIMITIVE, ARRAY, STRUCTURE};
+enum PRIM {_INT, _FLOAT, _CHAR};
+
 typedef struct Type{
     char name[32];
-    enum {PRIMITIVE, ARRAY, STRUCTURE} category;
+    CATE category;
     union 
     {
-        enum {INT, FLOAT, CHAR} primitive;
+        PRIM primitive;
         struct Array *array;
         struct FieldList *structure;
         
@@ -25,17 +28,17 @@ typedef struct FieldList
 
 struct Type* new_prim_type(char* type){
     struct Type* prim = (struct Type*) malloc(sizeof(struct Type));
-    prim->category = prim->PRIMITIVE;
+    prim->category = PRIMITIVE;
     
     if(strcmp(type, "int"))
-        prim->primitive = prim->INT;
+        prim->primitive = _INT;
     else if (strcmp(type, "float"))
-        prim->primitive = prim->FLOAT;
+        prim->primitive = _FLOAT;
     else if (strcmp(type,"bool")){
-        prim->primitive = prim->INT;
+        prim->primitive = _INT;
         strcpy(prim->name,"bool");
     }else
-        prim->primitive = prim->CHAR;
+        prim->primitive = _CHAR;
 
     return prim;
 }

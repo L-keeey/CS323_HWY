@@ -1,21 +1,21 @@
 CC=gcc
 FLEX=flex
 BISON=bison
+CPP=g++
 
+.comp:
+	$(CPP) -c symbolTable.cpp -o symbolTable.o
+	$(CPP) main.cpp -lfl -ly -o splc
 .bison:
 	$(BISON) -t -d -v syntax.y
 
 .lex:
 	$(FLEX) lex.l
-	$(CC) syntax.tab.c -lfl -ly -o splc
-splc: .bison .lex
+	
+splc: .lex .bison  .comp
 	@mkdir bin
 	@mv splc bin/
 	@chmod +x bin/splc
-# test1:
-# 	./token.out test1.c
-# test2:
-# 	./token.out test2.c
 clean:
 	@rm -f lex.yy.c *.out
 	@rm -f syntax.tab.*

@@ -1,11 +1,9 @@
 %{
-    #include "lex.yy.c"
     #include "string.h"
     #include "symbolTable.cpp"
     void yyerror(const char*);
 
     struct Node* root;
-    int error_num = 0;
 %}
 %locations
 %union{
@@ -55,7 +53,7 @@ ExtDefList:
 ExtDef: 
       Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
     | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2);}
-    | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line)}
+    | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line);}
     | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
     ;
 ExtDecList:
@@ -122,7 +120,7 @@ DefList:
     | Def DefList                { $$ = new_Node_l("DefList", @$.first_line); addChild($$, $1); addChild($$, $2);}
     ;
 Def: 
-     Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);)}
+     Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
     | Specifier DecList error {show_yyerror(MISSING_SEMI);}
     | error DecList SEMI {show_yyerror(MISSING_SPEC);}
     ;
@@ -153,19 +151,19 @@ Exp:
     | Exp DIV Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$->type_value=typeAfterCalc($1,$3,@$.first_line);}
     | LP Exp RP             { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$->type_value=$2->type_value;}
     | LP Exp error          {show_yyerror(MISSING_RP);}
-    | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);$$->type_value=$3->type_value;}
+    | MINUS Exp %prec LOWER_MINUS   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);$$->type_value=$2->type_value;}
     | NOT Exp               { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2);if(!checkINTexp($2,1)){printType7Error(@$.first_line);}$$->type_value=new_prim_type("bool");}
     | ID LP Args RP         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4); invokeFun($$,$1,$3,@$.first_line);}
     | ID LP Args error      {show_yyerror(MISSING_RP);}
     | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($$,$1,NULL,@$.first_line);}
     | ID LP error           {show_yyerror(MISSING_RP);}
-    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);if(!checkINTexp($3,0)){printType12Error(@$.first_line);} determineExpType($$,$1,@$.first_line)}
+    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);if(!checkINTexp($3,0)){printType12Error(@$.first_line);} determineExpType($$,$1,@$.first_line);}
     | Exp LB Exp error      {show_yyerror(MISSING_RB);}
     | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$->type_value=checkStructMember($1,$3,@$.first_line);}
-    | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=findID($1->string_value,@$.first_line)}
-    | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("int")}
-    | FLOAT                 { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("float")}
-    | CHAR                  { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("char")}
+    | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=findID($1->string_value,@$.first_line);}
+    | INT                   { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("int");}
+    | FLOAT                 { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("float");}
+    | CHAR                  { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=new_prim_type("char");}
     | Exp ERROR Exp {}
     | ERROR {}
     ;
@@ -193,27 +191,3 @@ void slice(const char *str,char *result, int start,int end ){
     
 }
 
-int main(int argc, char **argv){
-    if(argc != 2) {
-        fprintf(stderr, "Usage: %s <file_path>\n", argv[0]);
-        exit(-1);
-    }
-    else if(!(yyin = fopen(argv[1], "r"))) {
-        perror(argv[1]);
-        exit(-1);
-    }
-    char output_dir[100];
-    for (int i = 0; i < 100; i ++) {
-        output_dir[i] = '\0';
-    }
-    strncpy(output_dir, argv[1], strlen(argv[1])-4);
-    strcat(output_dir,".out");
-    freopen(output_dir,"w",stdout);
-    yyparse();
-
-    if(error_num == 0){
-        pre_order_traversal(root, 0);
-    }
-    fclose(stdout);
-    return 0;
-}
