@@ -12,6 +12,8 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
+#define sout(msg) std::cout << msg << std::endl
+
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
 static std::map<std::string, std::vector<Type*>> function_table;
@@ -33,7 +35,7 @@ FieldList* getFieldListFromNode(Node *node);
 FieldList* generateFieldList(Node* node);
 bool isSameTypes(Type* type1, Type* type2);
 void checkReturnType(Type* define, Node* compSt, int line);
-Type* paramDecNodeType(Node* paramDec);
+Type* paramDecNodeType(Node* paramDec, int line);
 Type* specifierNodeType(Node* specifier);
 void printType1Error(int line);
 void printType2Error(int line);
@@ -64,7 +66,7 @@ void defStructure(Node* node, int line);
 Type* searchStructType(std::string typeName);
 std::vector<Type*>* searchFunction(std::string funName);
 Type* searchVariable(std::string varName);
-
+void addarg(Node* varList,int line);
 
 Type* searchVariable(std::string varName){
     std::map<std::string, Type*>::iterator iter;
@@ -192,7 +194,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     std::cout<< exp <<std::endl;
                     if(variable_table.count(id->string_value)>0){
                         printType3Error(line);
-                    }else if(isSameTypes(exp->type_value,type)){
+                    }else if(!isSameTypes(exp->type_value,type)){
                         //ASSIGN with not equal type
                         printType5Error(line);
                     }else{
@@ -219,7 +221,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     }
                     if(variable_table.count(VarDec->string_value)>0){
                         printType3Error(line);
-                    }else if(isSameTypes(exp->type_value,type)){
+                    }else if(!isSameTypes(exp->type_value,type)){
                         //ASSIGN with not equal type
                         printType5Error(line);
                     }else{
@@ -261,22 +263,28 @@ void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
         // VarList -> ParamDec COMMA VarList
         while (childNum == 3){
             paramDec = varList->child_list[0];
-            types.push_back(paramDecNodeType(paramDec));
+            types.push_back(paramDecNodeType(paramDec, line));
 
             varList = varList->child_list[2];
             childNum = varList->child_num;
         }
         // VarList -> ParamDec
         paramDec = varList->child_list[0];
-        types.push_back(paramDecNodeType(paramDec));
+        types.push_back(paramDecNodeType(paramDec, line));
     }
 
     function_table[funName] = types;
+    for (size_t i = 0; i < types.size(); i++)
+    {
+        sout(types[i]);
+    }
+    
 }
 
 // Exp -> ID LP Args RP
 // Exp -> ID LP RP 
 void invokeFun(Node* exp, Node* ID, Node* args, int line){
+    sout("visit invoke fun");
     std::string funName = ID->string_value;
     std::vector<Type*>* typesPtr = searchFunction(funName);
     bool noFun = typesPtr == NULL;
@@ -288,10 +296,14 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
     else{
         std::vector<Type*> funTypes = *typesPtr;
         exp->type_value = funTypes[0];
-        
+        sout("setting exp type");
         int paramSize = funTypes.size()-1;
-        if (args == NULL && paramSize > 0)
-            printType9Error(line);                
+        if (args == NULL){
+            if(paramSize > 0)
+                printType9Error(line);
+            else
+                return;
+        }            
         else{
             int index = 1;
 
@@ -307,10 +319,12 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
                     return;
                 }else{
                     Type* define = funTypes[index++];
-                    if (isSameTypes(type, define)){
+                    sout("ready to judge is same type");
+                    if (!isSameTypes(type, define)){
                         printType8Error(line);
                         return;
                     }
+                    sout("is same type end");
                 }
         
             }
@@ -323,7 +337,7 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
                 return;
             }else{
                 Type* define = funTypes[index++];
-                if (isSameTypes(type, define)){
+                if (!isSameTypes(type, define)){
                     printType8Error(line);
                     return;
                 }
@@ -331,6 +345,7 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
 
             if (index <= paramSize)
                 printType9Error(line); 
+            sout("The invoke fun is end.");
         }
     }
 }
@@ -357,6 +372,7 @@ void determineExpType(Node* expLeft, Node* exp1, int line){
 }
 
 void check_rvalue(Node* exp,int line){
+    sout("cheking rvalue");
     if(exp->child_num==1){
         if(strcmp(exp->child_list[0]->token,"ID")==0){
             if(findID(exp->child_list[0]->string_value,line)!=NULL){
@@ -433,7 +449,7 @@ Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
 //return 1 if the expression have int value
 int checkINTexp(Node* exp, int allowbool){
     if(exp->type_value->primitive==_INT){
-        if(allowbool){
+        if(!allowbool){
             return 1;
         }else{
             if(strcmp(exp->type_value->name,"bool")==0){
@@ -443,7 +459,7 @@ int checkINTexp(Node* exp, int allowbool){
             }
         }
         
-    }else{
+    } else {
         return 0;
     }
 } 
@@ -524,15 +540,17 @@ Type* specifierNodeType(Node* specifier){
     }   
 }
 
-Type* paramDecNodeType(Node* paramDec){
+Type* paramDecNodeType(Node* paramDec,int line){
     // ParamDec -> Specifier VarDec 
     Node* specifier = paramDec->child_list[0];
     Node* varDec = paramDec->child_list[1];
 
     int childNum = varDec->child_num;
     // none array type
-    if (childNum == 1)
+    if (childNum == 1){
         return specifierNodeType(specifier);
+    }
+        
     // VarDec -> VarDec LB INT RB | ID
     else{
         Type* type = specifierNodeType(specifier);
@@ -598,11 +616,18 @@ void checkReturnType(Type* define, Node* compSt, int line){
 
 //please throw error type here
 // NO, the function is recusively called here, the error must be thrown outer
-    bool isSameTypes(Type* type1, Type* type2){
+bool isSameTypes(Type* type1, Type* type2){
+    sout("check is same type");
+    sout(type1->category);
+    sout(type2->category);
     if (type1->category != type2->category) {
         return false; // The main struct are not the same.
     } else if (type1->category == PRIMITIVE) {
-        return type1->primitive == type2->primitive;
+        sout("foo");
+        sout(type1->primitive);
+        sout(type2->primitive);
+        sout((type2->primitive==type1->primitive));
+        return (type1->primitive == type2->primitive);
     } else if (type1->category == ARRAY) {
         return checkTwoArrayEquv(type1->array, type2->array);
     } else if (type1->category == STRUCTURE) { // There are all Struct type, first try to use simply compare the name of the both struct.
@@ -775,3 +800,108 @@ ll calFieldListHash(FieldList* fieldList) {
     }
 }
 
+void addarg(Node* varList,int line){
+    sout("adding argument");
+   
+    int childNum = varList->child_num;
+    Node* paramDec;
+
+    // VarList -> ParamDec COMMA VarList
+    while (childNum == 3){
+        paramDec = varList->child_list[0];
+        
+        // ParamDec -> Specifier VarDec 
+        Node* specifier = paramDec->child_list[0];
+        Node* varDec = paramDec->child_list[1];        
+        Type* type = specifierNodeType(specifier);
+
+        childNum = varDec->child_num;
+        if (childNum == 1){ 
+            sout("adding argument to map");
+            Node* ID = varDec->child_list[0];
+            if(variable_table.count(ID->string_value)>0){
+                printType3Error(line);
+            }else{
+                variable_table[ID->string_value]=type;
+            }
+        }
+        //array part
+        else{
+            Type* type = specifierNodeType(specifier);
+
+            while(childNum == 3){
+                int size = varDec->child_list[2]->int_value;
+
+                Array* a = (struct Array*) malloc(sizeof(struct Array));
+                a->base = type;
+                a->size = size;
+
+                Type* array = (struct Type*) malloc(sizeof(struct Type));
+                array->category = ARRAY;
+                array->array = a;
+                
+                type = array;
+                varDec = varDec->child_list[0];
+                childNum = varDec->child_num;
+            }
+
+            Node* ID = varDec->child_list[0];
+            if(variable_table.count(ID->string_value)>0){
+                printType3Error(line);
+            }else{
+                variable_table[ID->string_value]=type;
+            }
+
+        }
+
+        varList = varList->child_list[2];
+        childNum = varList->child_num;
+    }
+    paramDec = varList->child_list[0];
+        
+    // ParamDec -> Specifier VarDec 
+    Node* specifier = paramDec->child_list[0];
+    Node* varDec = paramDec->child_list[1];        
+    Type* type = specifierNodeType(specifier);
+
+    childNum = varDec->child_num;
+    if (childNum == 1){ 
+        sout("adding argument to map");
+        Node* ID = varDec->child_list[0];
+        if(variable_table.count(ID->string_value)>0){
+            printType3Error(line);
+        }else{
+            variable_table[ID->string_value]=type;
+        }
+    }
+    //array part
+    else{
+        Type* type = specifierNodeType(specifier);
+
+        while(childNum == 3){
+            int size = varDec->child_list[2]->int_value;
+
+            Array* a = (struct Array*) malloc(sizeof(struct Array));
+            a->base = type;
+            a->size = size;
+
+            Type* array = (struct Type*) malloc(sizeof(struct Type));
+            array->category = ARRAY;
+            array->array = a;
+            
+            type = array;
+            varDec = varDec->child_list[0];
+            childNum = varDec->child_num;
+        }
+
+        Node* ID = varDec->child_list[0];
+        if(variable_table.count(ID->string_value)>0){
+            printType3Error(line);
+        }else{
+            variable_table[ID->string_value]=type;
+        }
+
+    }
+
+        
+}

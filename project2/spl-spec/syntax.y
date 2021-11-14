@@ -80,7 +80,7 @@ VarDec:
     | VarDec LB INT error %prec LOWER_ERROR {show_yyerror(MISSING_RB);}
     ;
 FunDec: 
-      ID LP VarList RP  { $$ = new_Node_l("FunDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);}
+      ID LP VarList RP  { $$ = new_Node_l("FunDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);addarg($3,@$.first_line);}
     | ID LP RP          { $$ = new_Node_l("FunDec", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);}
     | ID LP VarList error {show_yyerror(MISSING_RP);}
     | ID LP error {show_yyerror(MISSING_RP);}
