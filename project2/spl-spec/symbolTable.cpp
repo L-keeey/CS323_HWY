@@ -124,6 +124,7 @@ void defStructure(Node* node, int line) {
 //check if the defined var exist
 void defVar(Node* specifier,Node* ExtDecList,int line){
     //Type* vartype=specifierNodeType(specifier);
+    std::cout<<"in def var"<<std::endl;
     std::stack<Node*> namestack;
     namestack.push(ExtDecList);
     while(!namestack.empty()){
@@ -178,7 +179,8 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 namestack.push(iter->child_list[0]);
             }else{
                 //Vardec ASSIGN Exp
-                Node* exp=iter->child_list[3];
+                
+                Node* exp=iter->child_list[2];
                 iter=iter->child_list[0];
                 int childNum = iter->child_num;
                 //this part is copy from above
@@ -186,6 +188,8 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 if (childNum == 1){
                     Type* type = specifierNodeType(specifier);
                     Node* id = iter->child_list[0];
+                    std::cout<<"checking value"<<std::endl;
+                    std::cout<< exp <<std::endl;
                     if(variable_table.count(id->string_value)>0){
                         printType3Error(line);
                     }else if(isSameTypes(exp->type_value,type)){
@@ -694,7 +698,7 @@ void generateArr(Node* node, Array* arr, Type* tot_tp) {
         arr->size = node->child_list[2]->int_value;
         struct Type* tp = (struct Type*) malloc(sizeof(struct Type));
         tp->category = ARRAY;
-        struct Array* new_arr = (struct Type*) malloc(sizeof(struct Type));
+        struct Array* new_arr = (struct Array*) malloc(sizeof(struct Array));
         tp->array = new_arr;
         generateArr(node->child_list[0], new_arr, tot_tp);
     }

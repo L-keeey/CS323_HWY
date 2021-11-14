@@ -18,7 +18,7 @@ int main(int argc, char **argv){
     yyparse();
 
     if(error_num == 0){
-        pre_order_traversal(root, 0);
+        // pre_order_traversal(root, 0);
     }
     fclose(stdout);
     return 0;
