@@ -194,6 +194,8 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     std::cout<< exp <<std::endl;
                     if(variable_table.count(id->string_value)>0){
                         printType3Error(line);
+                    }else if (exp->type_value==NULL){
+                        variable_table[id->string_value]=type;
                     }else if(!isSameTypes(exp->type_value,type)){
                         //ASSIGN with not equal type
                         printType5Error(line);
@@ -359,6 +361,10 @@ Type* findID(std::string name,int line){
 }
 
 void checkAssignOperand(Node* exp1, Node* exp2, int line){
+    if (exp1->type_value == NULL || exp2->type_value == NULL) {
+        // Do nothing;
+        return;
+    }
     if (!isSameTypes(exp1->type_value, exp2->type_value))
         printType5Error(line);        
 }
@@ -901,7 +907,5 @@ void addarg(Node* varList,int line){
             variable_table[ID->string_value]=type;
         }
 
-    }
-
-        
+    }    
 }

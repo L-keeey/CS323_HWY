@@ -30,11 +30,11 @@ struct Type* new_prim_type(char* type){
     struct Type* prim = (struct Type*) malloc(sizeof(struct Type));
     prim->category = PRIMITIVE;
     
-    if(strcmp(type, "int"))
+    if(strcmp(type, "int")==0)
         prim->primitive = _INT;
-    else if (strcmp(type, "float"))
+    else if (strcmp(type, "float")==0)
         prim->primitive = _FLOAT;
-    else if (strcmp(type,"bool")){
+    else if (strcmp(type,"bool")==0){
         prim->primitive = _INT;
         strcpy(prim->name,"bool");
     }else
