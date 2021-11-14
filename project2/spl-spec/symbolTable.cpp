@@ -192,93 +192,6 @@ public:
         }
     }
 
-    Type* findID(std::string name,int line){
-        Type* out=searchVariable(name);
-        if(out==NULL){
-            printType1Error(line);
-        }
-        return out;
-    }
-
-    void checkAssignOperand(Node* exp1, Node* exp2, int line){
-        if (!isSameTypes(exp1->type_value, exp2->type_value))
-            printType5Error(line);        
-    }
-
-    void determineExpType(Node* expLeft, Node* exp1, int line){
-        Type* expType = exp1->type_value;
-        if(expType->category == expType->ARRAY){
-            expLeft->type_value = expType->array->base;
-        }else
-            printType10Error(line);
-    }
-
-    void check_rvalue(Node* exp,int line){
-        if(exp->child_num==1){
-            if(strcmp(exp->child_list[0]->token,"ID")==0){
-                if(findID(exp->child_list[0]->string_value,line)!=NULL){
-                    return;
-                }
-            }
-        }else if(exp->child_num==3){
-            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"DOT")==0&&strcmp(exp->child_list[2]->token,"ID")==0){
-                return;
-            }else if(strcmp(exp->child_list[0]->token,"LP")==0&&strcmp(exp->child_list[1]->token,"Exp")==0&&strcmp(exp->child_list[2]->token,"RP")==0){
-                check_rvalue(exp->child_list[1],line);
-            }
-        }else if(exp->child_num==4){
-            if(strcmp(exp->child_list[0]->token,"Exp")==0&&strcmp(exp->child_list[1]->token,"LB")==0&&strcmp(exp->child_list[2]->token,"Exp")==0&&strcmp(exp->child_list[3]->token,"RB")==0){
-                return;
-            }
-        }
-        printType6Error(line);
-    }
-
-    Type* checkStructMember(Node* exp,Node* id,int line){
-        //TODO: 1. return the type of the structure member
-        //2. throw type 13 error when the exp is not a structure with line number
-        //3. throw type 14 error when id is not a valid structure member line number
-
-    }
-
-    Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
-        //deal with null
-        if(exp1->type_value==NULL||exp2->type_value==NULL){
-            printType7Error(line);
-            return NULL;
-        }
-        if(exp1->type_value->primitive==exp1->type_value->FLOAT&&(checkINTexp(exp2,0)||exp2->type_value->primitive==exp2->type_value->FLOAT)){
-            return new_prim_type("float");
-        }else if(checkINTexp(exp1,0)&&exp2->type_value->primitive==exp2->type_value->FLOAT){
-            return new_prim_type("float");
-        }else if(checkINTexp(exp1,0)&&checkINTexp(exp2,0)){
-            return new_prim_type("int");
-        }else{
-            printType7Error(line);
-            return NULL;
-        }
-
-    }
-
-    //do "and" and "or" allow float value?
-    //return 1 if the expression have int value
-    int checkINTexp(Node* exp, int allowbool){
-        if(exp->type_value->primitive==exp->type_value->INT){
-            if(allowbool){
-                return 1;
-            }else{
-                if(strcmp(exp->type_value->name,"bool")==0){
-                    return 0;
-                }else{
-                    return 1;
-                }
-            }
-            
-        }else{
-            return 0;
-        }
-    } 
-
 /***
  * struct myStruct {
     float val;
@@ -330,44 +243,30 @@ private:
         std::cout << "Error type 11 at Line " << line << ": non-function variable could not apply function invocation." << std::endl;
     }  
 
-    void printType10Error(int line){
-        std::cout << "Error type 10 at Line " << line << ": non-array type variable could not apply indexing operator." << std::endl;
-    } 
-
-    void printType5Error(int line){
-        std::cout << "Error type 5 at Line " << line << ": the type of the operands at both sides of assignment operator should match." << std::endl;
-    }    
     void print05TypeError(int line) {
         // Something wrong happen, when "unmathing types appear at both sides of the assignment operator (=)".
+        std::cout << "Error type 5 at Line " << line << ": unmathing types appear at both sides of the assignment operator (=)." << std::endl;
     }
 
     void print10TypeError(int line) {
         // Something wrong happen, when "applying index operator ([...]) on non-array type variables".
+        std::cout << "Error type 10 at Line " << line << ": applying index operator ([...]) on non-array type variables." << std::endl;
     }
 
     void print13TypeError(int line) {
         // Something wrong happen, when "accessing members of a non-structure type expression".
+        std::cout << "Error type 13 at Line " << line << ": accessing members of a non-structure type expression." << std::endl;
     }
 
     void print14TypeError(int line) {
         // Something wrong happen, when "accessing an undefined structure member".        
+        std::cout << "Error type 14 at Line " << line << ": accessing an undefined structure member." << std::endl;
     }
 
     void print15TypeError(int line) {
         // Something wrong happen, when "redefine the same structure type".        
+        std::cout << "Error type 15 at Line " << line << ": redefine the same structure type." << std::endl;
     }  
-
-    void printType15Error(int line){
-        std::cout << "Error type 15 at Line " << line << ": the structure should not be redfined." << std::endl;
-    } 
-
-    void printType14Error(int line){
-        std::cout << "Error type 14 at Line " << line << ": the structure should be defined before access." << std::endl;
-    } 
-
-    void printType13Error(int line){
-        std::cout << "Error type 13 at Line " << line << ": non-structure type variable could not apply dot operator." << std::endl;
-    } 
 
     Type* specifierNodeType(Node* specifier){
         Node* child = specifier->child_list[0];
@@ -457,10 +356,18 @@ private:
         }
     }
 
-    //please throw error type here
     bool isSameTypes(Type* type1, Type* type2){
-        // TODO:
-        return false;
+        if (type1->category != type2->category) {
+            return false; // The main struct are not the same.
+        } else if (type1->category == Type::PRIMITIVE) {
+            return type1->primitive == type2->primitive;
+        } else if (type1->category == Type::ARRAY) {
+            return checkTwoArrayEquv(type1->array, type2->array);
+        } else if (type1->category == Type::STRUCTURE) { // There are all Struct type, first try to use simply compare the name of the both struct.
+        // TODO: try to solve the structure equivence.
+            return isSameStruct(type1, type2);
+        } else
+            return false;
     }
 
 /***
@@ -549,5 +456,23 @@ private:
             tp->array = new_arr;
             generateArr(node->child_list[0], new_arr, tot_tp);
         }
+    }
+
+    bool checkTwoArrayEquv(Array* arr1, Array* arr2){
+        if (arr1->base->category != arr2->base->category) {
+            return false;
+        } else if (arr1->base->category == arr2->base->category) {
+            if (arr1->base->category == Type::PRIMITIVE) {
+                return arr1->base->primitive == arr2->base->primitive;
+            } else if (arr1->base->category == Type::STRUCTURE) {
+                return isSameStruct(arr1->base, arr2->base);
+            } else if (arr1->base->category == Type::ARRAY) {
+                return checkTwoArrayEquv(arr1->base->array, arr2->base->array);
+            } else return false;
+        } else return false;
+    }
+
+    bool isSameStruct(Type* type1, Type* type2) {
+        return false;
     }
 };
