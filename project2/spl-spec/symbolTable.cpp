@@ -386,7 +386,7 @@ Type* checkStructMember(Node* exp, Node* id, int line){
         FieldList* fl = s_type->structure;
         bool flag = false;
         char* mem_name = id->string_value;
-        Type* tp;
+        Type* tp = nullptr;
         while (fl->next != nullptr) {
             if (strcmp(mem_name, fl->name) == 0) {
                 flag = true;
@@ -642,7 +642,7 @@ FieldList* generateFieldList(Node* node) {
 */
 FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
     Node *base_node = node->child_list[0];
-    FieldList* res;
+    struct FieldList* res = (struct FieldList*) malloc(sizeof(struct FieldList));
     res->next = nullptr;
     strcpy(res->name, getNameFromDecList(base_node->child_list[1]));
     // The base node is the node of Def
@@ -677,8 +677,8 @@ char* getNameFromDecList(Node* node) { // From DecList node get the id of the ty
 }
 
 Type* createArrayType(Node* node, Type* tp) { // From the node Dec get the Array Type.
-    Type* ret_type;
-    Array* arr;
+    struct Type* ret_type = (struct Type*) malloc(sizeof(struct Type));
+    struct Array* arr = (struct Array*) malloc(sizeof(struct Array));
     ret_type->category = ARRAY;
     generateArr(node, arr, tp);
     ret_type->array = arr;
@@ -692,9 +692,9 @@ void generateArr(Node* node, Array* arr, Type* tot_tp) {
         arr->base = tot_tp;
     } else {
         arr->size = node->child_list[2]->int_value;
-        Type* tp;
+        struct Type* tp = (struct Type*) malloc(sizeof(struct Type));
         tp->category = ARRAY;
-        Array* new_arr;
+        struct Array* new_arr = (struct Type*) malloc(sizeof(struct Type));
         tp->array = new_arr;
         generateArr(node->child_list[0], new_arr, tot_tp);
     }
