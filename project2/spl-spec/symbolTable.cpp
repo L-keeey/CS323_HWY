@@ -562,7 +562,7 @@ private:
         } else if (type1->category == Type::ARRAY) {
             return checkTwoArrayEquv(type1->array, type2->array);
         } else if (type1->category == Type::STRUCTURE) { // There are all Struct type, first try to use simply compare the name of the both struct.
-        // TODO: try to solve the structure equivence.
+        // try to solve the structure equivence.
             return isSameStruct(type1, type2);
         } else
             return false;
@@ -674,10 +674,6 @@ private:
         return struct_hash_table[type1->name] == struct_hash_table[type2->name];
     }
 
-    void calStructHash(std::string tname, Type* type) {
-        struct_hash_table[tname] = calStructHash(type);
-    }
-
     ll calStructHash(Type* type) {
         FieldList* list = type->structure;
         ll res = 0;
@@ -689,6 +685,10 @@ private:
         res = res + calFieldListHash(list);
         res = res % MOD;
         return res;
+    }
+
+    void calStructHash(std::string tname, Type* type) {
+        struct_hash_table[tname] = calStructHash(type);
     }
 
     ll calFieldListHash(FieldList* fieldList) {
