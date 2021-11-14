@@ -1,8 +1,9 @@
-struct st {
+struct myStruct {
     float val;
-    struct _ { char c[2]; } charr;
+    struct _ {char c[2]; } charr;
     int arr2[3][2];
-}
+};
 
 st myst;
 myst.val = 3;
+
