@@ -1,64 +1,92 @@
 in def var
+varb map:
+var map end
 in def var
+varb map:
+name
+
+var map end
 def struct
 start field list.
 generate field list.
 non-empty structure
 get field list from node
-0x56407e8e7ce0
-0x56407e8e59e0
-0x56407e8e58b0
-0x56407e8e5650
-0x56407e8e5190
-0x56407e8e4cd0
-0x56407e8e4810
-success get name from declist
-friends
-prim/array type list node
-Generate a array
-Dec
-initial
-4
-14
-rec gen arr
-4
-13
-rec gen arr
-4
-10
-rec gen arr
-complete gen arr
-0x56407e8e83b0
-get field list from node
-0x56407e8e7bb0
-0x56407e8e7660
-0x56407e8e7530
-0x56407e8e72d0
+0x563402c53360
+0x563402c50ba0
+0x563402c50a70
+0x563402c50810
 success get name from declist
 name
 prim/array type list node
 Generate a prim type
+get field list from node
+0x563402c53230
+0x563402c52ce0
+0x563402c52bb0
+0x563402c52950
+0x563402c52490
+success get name from declist
+friends
+prim/array type list node
+Generate a array
+int
+creat prim arr
+4
+10
+rec gen arr
+complete gen arr
+0x563402c53ad0
 add a field list
 field list size
 2
-0x56407e8e82d0
+0x563402c53950
 def complete, then cal hash
 cal field list hash
-cal array hash
-0x56407e8e83b0
-foo1
-foo1
-foo1
-******
 cal field list hash
-816743588
+cal array hash
+0x563402c53ad0
+foo1
+639688970
 struct def complete
+struct map:
+name:
+Person
+Person
+struct:
+name
+0
+friends
+1
+
+struct map end.
 in def var
+varb map:
+
+
+name
+
+var map end
 in def var
+varb map:
+
+
+name
+
+tom
+Person
+var map end
 Error type 3 at Line 9: variable is redefined.
 in def var
+varb map:
+
+
+name
+
+tom
+Person
+var map end
 checking value
-0x56407e8eb2b0
+0x563402c56870
 check is same type
 0
 0
@@ -67,3 +95,5 @@ foo
 0
 1
 Error type 1 at Line 13: variable is used without a definition.
+
+ref not found
