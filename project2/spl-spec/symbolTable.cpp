@@ -12,7 +12,7 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
-#define sout(msg) std::cout << msg << std::endl
+#define sout(msg) //std::cout << msg << std::endl
 
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
@@ -395,6 +395,8 @@ void determineExpType(Node* expLeft, Node* exp1, int line){
     else    
         sout("ref not found");
     if(expType->category == ARRAY){
+        sout("******");
+        sout(expType->array->base->primitive);
         expLeft->type_value = expType->array->base;
     }else
         printType10Error(line);
@@ -448,7 +450,6 @@ Type* checkStructMember(Node* exp, Node* id, int line){
             fl = fl->next;
         }
         if (flag) {
-            sout("********");
             sout(tp->primitive);
             sout(tp->category);
 
@@ -758,17 +759,19 @@ FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
     res->next = nullptr;
     strcpy(res->name, getNameFromDecList(base_node->child_list[1]));
     // The base node is the node of Def
-    sout(res->name);
-    if (base_node->child_list[0]->child_num==1) {
+    sout(base_node->child_list[0]->child_list[0]->token);
+    if (strcmp(base_node->child_list[0]->child_list[0]->token, "TYPE")==0) {
         // It means that it is shown like TYPE:float
         // This is the type of Array or prim type.
         sout("prim/array type list node");
         res->type = getArrayOrPrimTypeFromDefList(base_node);
+
     } else {
         // It is a struct type, just search it in the struct table, since if it exist, if must be in it.
         sout("struct type list node");
-        std::string s_name = base_node->child_list[0]->child_list[0]->child_list[0]->string_value;
+        std::string s_name = base_node->child_list[0]->child_list[0]->child_list[1]->string_value;
         res->type = searchStructType(s_name);
+        sout(s_name);
     }
     return res;
 }
@@ -790,7 +793,7 @@ Type* getArrayOrPrimTypeFromDefList(Node* node) { // From DefList node get the t
             type = struct_table[node->child_list[0]->child_list[0]->child_list[1]->string_value];
         } else {
             sout("creat prim arr");
-            type = new_prim_type(node->child_list[0]->string_value);
+            type = new_prim_type(node->child_list[0]->child_list[0]->string_value);
         }
         return createArrayType(node->child_list[1]->child_list[0], type);
     }
@@ -818,15 +821,20 @@ Type* createArrayType(Node* node, Type* tp) { // From the node Dec get the Array
 }
 
 void generateArr(Node* node, Array* arr, Type* tot_tp) {
-    if (node->child_list[0]->child_num == 1) {
-        // It is the 'getting out recusive' state.
-        arr->size = node->child_list[2]->int_value;
+    // if (node->child_list[0]->child_num == 1) {
+    //     // It is the 'getting out recusive' state.
+    //     arr->size = node->child_list[2]->int_value;
+    //     arr->base = tot_tp;
+    //     sout(tot_tp->primitive);
+    //     sout("complete gen arr");
+    // } else {
+    sout(node->child_list[0]->child_num);
+    sout(node->child_list[0]->child_list[2]->int_value);
+    arr->size = node->child_list[0]->child_list[2]->int_value;
+    if (node->child_list[0]->child_list[0]->child_num == 1) {
         arr->base = tot_tp;
-        sout("complete gen arr");
+        sout("complete gen array");
     } else {
-        sout(node->child_list[0]->child_num);
-        sout(node->child_list[0]->child_list[2]->int_value);
-        arr->size = node->child_list[0]->child_list[2]->int_value;
         struct Type* tp = (struct Type*) malloc(sizeof(struct Type));
         tp->category = ARRAY;
         struct Array* new_arr = (struct Array*) malloc(sizeof(struct Array));
@@ -835,6 +843,8 @@ void generateArr(Node* node, Array* arr, Type* tot_tp) {
         generateArr(node->child_list[0], new_arr, tot_tp);
         arr->base = tp;
     }
+        
+    
 }
 
 bool checkTwoArrayEquv(Array* arr1, Array* arr2){
@@ -872,6 +882,7 @@ void calStructHash(std::string tname, Type* type) {
 
 ll calFieldListHash(FieldList* fieldList) {
     sout("cal field list hash");
+    sout(fieldList->type);
     if (fieldList->type->category==PRIMITIVE) {
         if (fieldList->type->primitive == 0) {
             return INT_BASE;
@@ -909,6 +920,7 @@ ll calFieldListHash(FieldList* fieldList) {
         }
         return res;
     } else {
+        sout("cal struct type hash");
         ll s_hash = struct_hash_table[fieldList->name] * STRU_PROM;
         s_hash = s_hash % MOD;
         return s_hash % MOD;
@@ -1050,6 +1062,7 @@ void showMap(int type) {
                     sout(list->type->primitive);
                 } else if (list->type->category == ARRAY) {
                     sout("array");
+                    sout(list->type->array->base->primitive);
                 } else {
                     sout("struct");   
                 }
