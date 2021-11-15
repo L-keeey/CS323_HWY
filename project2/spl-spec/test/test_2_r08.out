@@ -8,23 +8,18 @@ start check return
 7
 0
 push two stmt
-2
 7
 0
 push two stmt
-3
-1
-4
-stack push CompSt
-2
 1
 4
 stack push CompSt
 1
+4
+stack push CompSt
 1
 4
 stack push CompSt
-0
 stmtList childNum
 0
 stack size
@@ -33,7 +28,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -46,7 +40,6 @@ check return
 prim
 0
 0
-0
 stmtList childNum
 0
 stack size
@@ -55,7 +48,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -72,19 +64,15 @@ start check return
 5
 0
 1
-1
 4
 stack push CompSt
-0
 stmtList childNum
 2
 5
 0
 1
-1
 4
 stack push CompSt
-0
 stmtList childNum
 2
 3
@@ -93,7 +81,6 @@ check return
 prim
 1
 1
-0
 stmtList childNum
 0
 stack size
@@ -104,7 +91,6 @@ check return
 prim
 1
 1
-0
 stmtList childNum
 0
 stack size
@@ -115,7 +101,6 @@ check return
 prim
 1
 1
-0
 stmtList childNum
 0
 stack size
@@ -151,15 +136,12 @@ start check return
 7
 0
 push two stmt
-2
 1
 4
 stack push CompSt
 1
-1
 4
 stack push CompSt
-0
 stmtList childNum
 0
 stack size
@@ -168,7 +150,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -182,7 +163,6 @@ prim
 0
 1
 Error type 8 at Line 21: function return type and the declared type mismatch.
-0
 stmtList childNum
 0
 stack size

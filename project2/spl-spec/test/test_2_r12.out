@@ -1,0 +1,79 @@
+in def var
+in def var
+in def var
+checking value
+0x55f3777b5130
+prim
+1
+1
+in def var
+checking value
+0x55f3777b5f10
+prim
+0
+0
+cheking rvalue
+prim
+1
+1
+cheking rvalue
+prim
+1
+1
+cheking rvalue
+prim
+0
+0
+Error type 12 at Line 15: array indexing with a non-integer type expression.
+cheking rvalue
+prim
+1
+1
+start defFun
+param and return total size
+1
+start check return
+5
+0
+1
+4
+stack push CompSt
+stmtList childNum
+2
+2
+3
+stmtList childNum
+2
+5
+0
+1
+4
+stack push CompSt
+stmtList childNum
+2
+3
+0
+check return
+prim
+0
+0
+stmtList childNum
+0
+stack size
+2
+2
+3
+stmtList childNum
+0
+stack size
+1
+2
+3
+stmtList childNum
+2
+2
+3
+stmtList childNum
+0
+stack size
+0

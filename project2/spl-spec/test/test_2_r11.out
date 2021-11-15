@@ -8,23 +8,18 @@ start check return
 7
 0
 push two stmt
-2
 7
 0
 push two stmt
-3
-1
-4
-stack push CompSt
-2
 1
 4
 stack push CompSt
 1
+4
+stack push CompSt
 1
 4
 stack push CompSt
-0
 stmtList childNum
 0
 stack size
@@ -33,7 +28,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -46,7 +40,6 @@ check return
 prim
 0
 0
-0
 stmtList childNum
 0
 stack size
@@ -55,7 +48,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -68,7 +60,7 @@ adding argument to map
 adding argument to map
 in def var
 checking value
-0x55b9e5adf510
+0x5620fc577510
 prim
 0
 0
@@ -91,15 +83,12 @@ start check return
 7
 0
 push two stmt
-2
 1
 4
 stack push CompSt
 1
-1
 4
 stack push CompSt
-0
 stmtList childNum
 0
 stack size
@@ -110,7 +99,6 @@ check return
 prim
 0
 0
-0
 stmtList childNum
 0
 stack size
@@ -118,7 +106,6 @@ stack size
 3
 0
 check return
-0
 stmtList childNum
 0
 stack size

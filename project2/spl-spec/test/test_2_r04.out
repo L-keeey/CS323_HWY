@@ -8,23 +8,18 @@ start check return
 7
 0
 push two stmt
-2
 7
 0
 push two stmt
-3
-1
-4
-stack push CompSt
-2
 1
 4
 stack push CompSt
 1
+4
+stack push CompSt
 1
 4
 stack push CompSt
-0
 stmtList childNum
 0
 stack size
@@ -33,7 +28,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -46,7 +40,6 @@ check return
 prim
 0
 0
-0
 stmtList childNum
 0
 stack size
@@ -55,7 +48,6 @@ stack size
 0
 check return
 prim
-0
 0
 0
 stmtList childNum
@@ -85,7 +77,6 @@ start check return
 0
 check return
 prim
-0
 0
 0
 stmtList childNum

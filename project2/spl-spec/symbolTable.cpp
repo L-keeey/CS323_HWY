@@ -643,14 +643,13 @@ void checkReturnType(Type* define, Node* compSt, int line){
                     list.push_back(stmt->child_list[4]);
                 }
                 // Stmt -> IF LP Exp RP Stmt ELSE Stmt 
-                else if(stmtNum = 7){
+                else if (stmtNum == 7){
                     list.push_back(stmt->child_list[4]);
                     list.push_back(stmt->child_list[6]);
                     sout("push two stmt");
                 }
                 // Stmt -> Exp SEMI
-
-                sout(list.size());
+         
             }
                         
             stmtList = stmtList->child_list[1];
