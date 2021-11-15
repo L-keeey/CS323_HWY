@@ -156,7 +156,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
             }else{
                 Type* type = specifierNodeType(specifier);
                 Node* VarDec=iter;
-                while(childNum == 3){
+                while(childNum == 4){
                     int size = VarDec->child_list[2]->int_value;
 
                     Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -171,10 +171,10 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     VarDec = VarDec->child_list[0];
                     childNum = VarDec->child_num;
                 }
-                if(variable_table.count(VarDec->string_value)>0){
+                if(variable_table.count(VarDec->child_list[0]->string_value)>0){
                     printType3Error(line);
                 }else{
-                    variable_table[VarDec->string_value]=type;
+                    variable_table[VarDec->child_list[0]->string_value]=type;
                 }
             }
         }else{
