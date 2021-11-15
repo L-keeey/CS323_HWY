@@ -1,1 +1,2 @@
 Error type 7 at Line 10: unmantching operands,such as adding an integer to a structure variable
+Error type 5 at Line 10: the type of the operands at both sides of assignment operator should match.

@@ -12,7 +12,7 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
-#define sout(msg) //std::cout << msg << std::endl
+#define sout(msg) // std::cout << msg << std::endl
 
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
@@ -32,7 +32,7 @@ Type* createArrayType(Node* node, Type* tp);
 char* getNameFromDecList(Node* node);
 Type* getArrayOrPrimTypeFromDefList(Node* node);
 FieldList* getFieldListFromNode(Node *node);
-FieldList* generateFieldList(Node* node);
+FieldList* generateFieldList(Node* node, int line);
 bool isSameTypes(Type* type1, Type* type2);
 void checkReturnType(Type* define, Node* compSt, int line);
 Type* paramDecNodeType(Node* paramDec, int line);
@@ -115,7 +115,7 @@ void defStructure(Node* node, int line) {
     } else {
         // define a new structure
         sout("start field list.");
-        FieldList* field_list = generateFieldList(node->child_list[0]);
+        FieldList* field_list = generateFieldList(node->child_list[0], line);
         struct Type* type = (struct Type*) malloc(sizeof(struct Type));
         type->category = STRUCTURE;
         strcpy(type->name, tname);
@@ -379,12 +379,22 @@ Type* findID(std::string name,int line){
 }
 
 void checkAssignOperand(Node* exp1, Node* exp2, int line){
-    if (exp1->type_value == NULL || exp2->type_value == NULL) {
-        // Do nothing;
-        return;
+    int flag = 0;
+    if (exp1->type_value == NULL) {
+        flag += 1;
     }
-    if (!isSameTypes(exp1->type_value, exp2->type_value))
-        printType5Error(line);        
+    if (exp2->type_value == NULL) {
+        flag += 1;
+    }
+    if (flag == 0) {
+        if (!isSameTypes(exp1->type_value, exp2->type_value)) {
+            printType5Error(line);  
+        }
+    } else if (flag == 1) {
+        printType5Error(line);
+    } else {
+        // do nothing.
+    } 
 }
 
 void determineExpType(Node* expLeft, Node* exp1, int line){
@@ -395,7 +405,6 @@ void determineExpType(Node* expLeft, Node* exp1, int line){
     else    
         sout("ref not found");
     if(expType->category == ARRAY){
-        sout("******");
         sout(expType->array->base->primitive);
         expLeft->type_value = expType->array->base;
     }else
@@ -712,7 +721,7 @@ bool isSameTypes(Type* type1, Type* type2){
      ->DefList (2)
         Def (2)
 * */
-FieldList* generateFieldList(Node* node) {
+FieldList* generateFieldList(Node* node, int line) {
     sout("generate field list.");
     if(node->child_num <= 4) {
         sout("empty structure");
@@ -726,8 +735,9 @@ FieldList* generateFieldList(Node* node) {
         field_list_v.push_back(getFieldListFromNode(field_node));
         field_node = field_node->child_list[1];
         while (field_node != nullptr && strcmp(field_node->token, "DefList") == 0) {
-            field_list_v.push_back(getFieldListFromNode(field_node));
-
+            FieldList* fl_temp = getFieldListFromNode(field_node);
+            sout(fl_temp->name);
+            field_list_v.push_back(fl_temp);
             sout("add a field list");
             // sout(field_node->token);
             // sout(field_node->child_list[0]->token);
@@ -758,6 +768,8 @@ FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
     struct FieldList* res = (struct FieldList*) malloc(sizeof(struct FieldList));
     res->next = nullptr;
     strcpy(res->name, getNameFromDecList(base_node->child_list[1]));
+    sout("*******");
+    sout(res->name);
     // The base node is the node of Def
     sout(base_node->child_list[0]->child_list[0]->token);
     if (strcmp(base_node->child_list[0]->child_list[0]->token, "TYPE")==0) {
