@@ -21,7 +21,7 @@ static std::map<std::string, Type*>struct_table;
 
 static std::map<std::string, ll> struct_hash_table;
 
-
+void showMap(int type);
 ll calFieldListHash(FieldList* fieldList);
 void calStructHash(std::string tname, Type* type);
 ll calStructHash(Type* type);
@@ -30,7 +30,7 @@ bool checkTwoArrayEquv(Array* arr1, Array* arr2);
 void generateArr(Node* node, Array* arr, Type* tot_tp);
 Type* createArrayType(Node* node, Type* tp);
 char* getNameFromDecList(Node* node);
-Type* getArrayOrPrimTypeFromDecList(Node* node);
+Type* getArrayOrPrimTypeFromDefList(Node* node);
 FieldList* getFieldListFromNode(Node *node);
 FieldList* generateFieldList(Node* node);
 bool isSameTypes(Type* type1, Type* type2);
@@ -71,10 +71,12 @@ void addarg(Node* varList,int line);
 Type* searchVariable(std::string varName){
     std::map<std::string, Type*>::iterator iter;
     iter = variable_table.find(varName);
-    if (iter != variable_table.end())
+    if (iter != variable_table.end()) {
+        // sout("has such value");
         return iter->second;
-    else
+    } else {
         return NULL;
+    }
 }
 
 std::vector<Type*>* searchFunction(std::string funName){
@@ -112,15 +114,22 @@ void defStructure(Node* node, int line) {
         printType15Error(line);
     } else {
         // define a new structure
-        FieldList* field_list = generateFieldList(node->child_list[0]->child_list[3]);
+        sout("start field list.");
+        FieldList* field_list = generateFieldList(node->child_list[0]);
         struct Type* type = (struct Type*) malloc(sizeof(struct Type));
         type->category = STRUCTURE;
         strcpy(type->name, tname);
         type->structure = field_list;
+        sout(field_list);
         struct_table[tname] = type;
+        sout("def complete, then cal hash");
+        FieldList* list_tmp = field_list;
+
         calStructHash(tname, type);
+        sout(struct_hash_table[tname]);
     }
     sout("struct def complete");
+    showMap(1);
 }
 
 //ExtDef->Specifier ExtDecList SEMI
@@ -129,6 +138,7 @@ void defStructure(Node* node, int line) {
 void defVar(Node* specifier,Node* ExtDecList,int line){
     //Type* vartype=specifierNodeType(specifier);
     sout("in def var");
+    showMap(0);
     std::stack<Node*> namestack;
     namestack.push(ExtDecList);
     while(!namestack.empty()){
@@ -379,6 +389,11 @@ void checkAssignOperand(Node* exp1, Node* exp2, int line){
 
 void determineExpType(Node* expLeft, Node* exp1, int line){
     Type* expType = exp1->type_value;
+    sout(expLeft->string_value);
+    if(expType != NULL)
+        sout("find array reference");
+    else    
+        sout("ref not found");
     if(expType->category == ARRAY){
         expLeft->type_value = expType->array->base;
     }else
@@ -412,8 +427,11 @@ Type* checkStructMember(Node* exp, Node* id, int line){
     //TODO: 1. return the type of the structure member
     //2. throw type 13 error when the exp is not a structure with line number
     //3. throw type 14 error when id is not a valid structure member line number
+    sout("visit check struct member");
     std::string id_str = id->string_value;
-    Type* s_type = searchStructType(exp->string_value);
+    sout(id_str);
+    sout(exp->type_value->name);
+    Type* s_type = searchStructType(exp->type_value->name);
     if (s_type == NULL) {
         printType13Error(line);
     } else {
@@ -421,7 +439,7 @@ Type* checkStructMember(Node* exp, Node* id, int line){
         bool flag = false;
         char* mem_name = id->string_value;
         Type* tp = nullptr;
-        while (fl->next != nullptr) {
+        while (fl != nullptr) {
             if (strcmp(mem_name, fl->name) == 0) {
                 flag = true;
                 tp = fl->type;
@@ -429,9 +447,11 @@ Type* checkStructMember(Node* exp, Node* id, int line){
             }
             fl = fl->next;
         }
-        if (!flag) 
-            flag |= strcmp(mem_name, fl->name) == 0;
         if (flag) {
+            sout("********");
+            sout(tp->primitive);
+            sout(tp->category);
+
             return tp;
         } else {
             printType14Error(line);
@@ -531,7 +551,7 @@ void printType15Error(int line){
 } 
 
 void printType14Error(int line){
-    std::cout << "Error type 14 at Line " << line << ": the structure should be defined before access." << std::endl;
+    std::cout << "Error type 14 at Line " << line << ": accessing an undefined structure member." << std::endl;
 } 
 
 void printType13Error(int line){
@@ -692,21 +712,33 @@ bool isSameTypes(Type* type1, Type* type2){
         Def (2)
 * */
 FieldList* generateFieldList(Node* node) {
+    sout("generate field list.");
     if(node->child_num <= 4) {
+        sout("empty structure");
         return nullptr;
         // This is an empty structure, just return from the function.
     } else {
+        sout("non-empty structure");
+        node = node->child_list[3];// it is def list now.
         std::vector<FieldList*> field_list_v;
-        Node *field_node = node->child_list[3];
+        Node *field_node = node;
         field_list_v.push_back(getFieldListFromNode(field_node));
         field_node = field_node->child_list[1];
-        while (field_node != nullptr && strcmp(field_node->string_value, "DefList") == 0) {
+        while (field_node != nullptr && strcmp(field_node->token, "DefList") == 0) {
             field_list_v.push_back(getFieldListFromNode(field_node));
+
+            sout("add a field list");
+            // sout(field_node->token);
+            // sout(field_node->child_list[0]->token);
+            // sout(field_node->child_list[1]->token);
+            
+            field_node = field_node->child_list[1];
             if (field_node->child_num <= 1) {
                 break;
             }
-            field_node = field_node->child_list[1];
         }
+        sout("field list size");
+        sout(field_list_v.size());
         for (int i = 0; i < field_list_v.size() - 1; i ++) {
             field_list_v[i]->next = field_list_v[i+1];
         }            
@@ -719,38 +751,58 @@ FieldList* generateFieldList(Node* node) {
         Def (2)
 */
 FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
+    sout("get field list from node");
+    sout(node);
     Node *base_node = node->child_list[0];
     struct FieldList* res = (struct FieldList*) malloc(sizeof(struct FieldList));
     res->next = nullptr;
     strcpy(res->name, getNameFromDecList(base_node->child_list[1]));
     // The base node is the node of Def
-    if (base_node->child_list[0]->child_num==0) {
+    sout(res->name);
+    if (base_node->child_list[0]->child_num==1) {
         // It means that it is shown like TYPE:float
         // This is the type of Array or prim type.
-        res->type = getArrayOrPrimTypeFromDecList(base_node->child_list[1]);
+        sout("prim/array type list node");
+        res->type = getArrayOrPrimTypeFromDefList(base_node);
     } else {
         // It is a struct type, just search it in the struct table, since if it exist, if must be in it.
+        sout("struct type list node");
         std::string s_name = base_node->child_list[0]->child_list[0]->child_list[0]->string_value;
         res->type = searchStructType(s_name);
     }
     return res;
 }
 
-Type* getArrayOrPrimTypeFromDecList(Node* node) { // From DecList node get the type of the var, it may be prim type or array type
-    if (node->child_list[0]->child_num == 0 && node->child_list[0]->token=="TYPE") {
+Type* getArrayOrPrimTypeFromDefList(Node* node) { // From DefList node get the type of the var, it may be prim type or array type
+    if (node->child_list[1]->child_list[0]->child_list[0]->child_num == 1) {
         // This is a prim type, just return it.
-        return new_prim_type(node->child_list[0]->string_value);
+        sout("Generate a prim type");
+        // sout(node->child_list[0]->child_list[0]->string_value);
+        return new_prim_type(node->child_list[0]->child_list[0]->string_value);
     } else {
         // This is a array type. Create it.
-        return createArrayType(node->child_list[1]->child_list[0], new_prim_type(node->child_list[0]->string_value));
+        sout("Generate a array");
+        // sout(node->child_list[1]->child_list[0]->token);
+        Type* type;
+        sout(node->child_list[0]->child_list[0]->string_value);
+        if (strcmp(node->child_list[0]->child_list[0]->token, "StructSpecifier") == 0) {
+            sout("creat struct arr");
+            type = struct_table[node->child_list[0]->child_list[0]->child_list[1]->string_value];
+        } else {
+            sout("creat prim arr");
+            type = new_prim_type(node->child_list[0]->string_value);
+        }
+        return createArrayType(node->child_list[1]->child_list[0], type);
     }
 }
 
 char* getNameFromDecList(Node* node) { // From DecList node get the id of the type.
     // node is a DecList
-    while (node->child_list != 0) {
+    while (node->child_num != 0) {
+        sout(node);
         node = node->child_list[0];
     }
+    sout("success get name from declist");
     return node->string_value;
 }
 
@@ -758,23 +810,30 @@ Type* createArrayType(Node* node, Type* tp) { // From the node Dec get the Array
     struct Type* ret_type = (struct Type*) malloc(sizeof(struct Type));
     struct Array* arr = (struct Array*) malloc(sizeof(struct Array));
     ret_type->category = ARRAY;
+    
     generateArr(node, arr, tp);
     ret_type->array = arr;
+    sout(arr->base);
     return ret_type;
 }
 
 void generateArr(Node* node, Array* arr, Type* tot_tp) {
-    if (node->child_list[0]->child_num == 0) {
+    if (node->child_list[0]->child_num == 1) {
         // It is the 'getting out recusive' state.
         arr->size = node->child_list[2]->int_value;
         arr->base = tot_tp;
+        sout("complete gen arr");
     } else {
-        arr->size = node->child_list[2]->int_value;
+        sout(node->child_list[0]->child_num);
+        sout(node->child_list[0]->child_list[2]->int_value);
+        arr->size = node->child_list[0]->child_list[2]->int_value;
         struct Type* tp = (struct Type*) malloc(sizeof(struct Type));
         tp->category = ARRAY;
         struct Array* new_arr = (struct Array*) malloc(sizeof(struct Array));
         tp->array = new_arr;
+        sout("rec gen arr");
         generateArr(node->child_list[0], new_arr, tot_tp);
+        arr->base = tp;
     }
 }
 
@@ -799,13 +858,11 @@ bool isSameStruct(Type* type1, Type* type2) {
 ll calStructHash(Type* type) {
     FieldList* list = type->structure;
     ll res = 0;
-    while (list->next != nullptr) {
+    while (list!=nullptr) {
         res = res + calFieldListHash(list);
         res = res % MOD;
         list = list->next;
     }
-    res = res + calFieldListHash(list);
-    res = res % MOD;
     return res;
 }
 
@@ -814,6 +871,7 @@ void calStructHash(std::string tname, Type* type) {
 }
 
 ll calFieldListHash(FieldList* fieldList) {
+    sout("cal field list hash");
     if (fieldList->type->category==PRIMITIVE) {
         if (fieldList->type->primitive == 0) {
             return INT_BASE;
@@ -824,13 +882,21 @@ ll calFieldListHash(FieldList* fieldList) {
         }
     } else if (fieldList->type->category==ARRAY) {
         ll res = 1;
+        sout("cal array hash");
         Type* tp = fieldList->type;
-        while (tp->array->base->category != PRIMITIVE) {
+        sout(tp->array->base);
+        while (tp->array->base->category != 0) {
             res = res * ARRAY_PROM;
             res = res % MOD;
             tp = tp->array->base;
+            sout("foo1");
         }
         tp = tp->array->base;
+        if (tp->category == STRUCTURE) {
+            res = res * struct_hash_table[tp->name];
+            res = res % MOD;
+            return res;   
+        }
         if (tp->primitive == 0) {
             res = res * INT_BASE;
             res = res % MOD;
@@ -951,4 +1017,46 @@ void addarg(Node* varList,int line){
         }
 
     }    
+}
+
+void showMap(int type) {
+    if (type == 0) {            
+        sout("varb map:");
+        for (auto it=variable_table.begin(); it!=variable_table.end(); it++){
+            sout(it->first);
+            if (it->second->category == PRIMITIVE) {
+                sout(it->second->primitive);
+            } else if (it->second->category == STRUCTURE) {
+                sout(it->second->name);
+            } else {
+                sout("array");
+            }
+        }
+        sout("var map end");
+    } else if (type==1) {
+        // show struct that has constructed;
+        sout("struct map:");
+        for (auto it=struct_table.begin();it != struct_table.end(); it ++) {
+            sout("name:");
+            sout(it->first);
+            sout(it->second->name);
+            sout("struct:");
+            Type* type = it->second;
+            FieldList* list = type->structure;
+            while (list!=nullptr) {
+                sout(list->name);
+                 if (list->type->category == PRIMITIVE) {
+                    sout("prim");
+                    sout(list->type->primitive);
+                } else if (list->type->category == ARRAY) {
+                    sout("array");
+                } else {
+                    sout("struct");   
+                }
+                list = list->next;
+            } 
+            sout("");
+        }
+        sout("struct map end.");
+    }
 }

@@ -1,6 +1,6 @@
 struct Person
 {
-  int name;
+  int name;  
   int friends[10];
 };
 int test_2_r10()
