@@ -241,12 +241,10 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
 
 // ExtDef -> Specifier FunDec CompSt
 void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
+    sout("start defFun");
     // fetch return type
     std::vector<Type*> types;
     types.push_back(specifierNodeType(specifier));
-
-    // check return type
-    checkReturnType(types[0], compSt, line);
 
     // fetch function name as key
     // FunDec -> ID LP VarList RP | ID LP RP  
@@ -278,11 +276,11 @@ void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
     }
 
     function_table[funName] = types;
-    for (size_t i = 0; i < types.size(); i++)
-    {
-        sout(types[i]);
-    }
-    
+    sout("param and return total size");
+    sout(types.size());  
+
+    // check return type
+    checkReturnType(types[0], compSt, line);
 }
 
 // Exp -> ID LP Args RP
@@ -301,6 +299,7 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
         std::vector<Type*> funTypes = *typesPtr;
         exp->type_value = funTypes[0];
         sout("setting exp type");
+
         int paramSize = funTypes.size()-1;
         if (args == NULL){
             if(paramSize > 0)
@@ -311,44 +310,51 @@ void invokeFun(Node* exp, Node* ID, Node* args, int line){
         else{
             int index = 1;
 
+            sout(paramSize);
+
             //Args -> Exp COMMA Args | Exp
             int childNum = args->child_num;
             while (childNum == 3){
-                Node* exp = args->child_list[0];
-                Type* type = exp->type_value;
-                
                 // args more that defined params
                 if (index > paramSize){
-                    printType8Error(line);
+                    sout("more args");
+                    printType9Error(line);
                     return;
-                }else{
-                    Type* define = funTypes[index++];
-                    sout("ready to judge is same type");
-                    if (!isSameTypes(type, define)){
-                        printType8Error(line);
-                        return;
-                    }
-                    sout("is same type end");
                 }
-        
+                
+                Node* exp = args->child_list[0];
+                Type* type = exp->type_value;
+                Type* define = funTypes[index++];
+                if (!isSameTypes(type, define)){
+                    sout("not match");
+                    printType9Error(line);
+                    return;
+                }
+                
+                args = args->child_list[2];
+                childNum = args->child_num;
+            }
+
+            if (index > paramSize){
+                sout("more args");
+                printType9Error(line);
+                return;
             }
 
             Node* exp = args->child_list[0];
             Type* type = exp->type_value;
             Type* define = funTypes[index++];
-            if (index > paramSize){
-                printType8Error(line);
+            if (!isSameTypes(type, define)){
+                sout("not match");
+                printType9Error(line);
                 return;
-            }else{
-                Type* define = funTypes[index++];
-                if (!isSameTypes(type, define)){
-                    printType8Error(line);
-                    return;
-                }
             }
 
-            if (index <= paramSize)
+            if (index <= paramSize){
+                sout("less args");
                 printType9Error(line); 
+            }
+                
             sout("The invoke fun is end.");
         }
     }
@@ -505,7 +511,7 @@ void printType8Error(int line){
 }
 
 void printType9Error(int line){
-    std::cout << "Error type 9 at Line " << line << ": function argument type and the declared type mismatch." << std::endl;
+    std::cout << "Error type 9 at Line " << line << ": the type or num of the function argument and the declared parameter mismatch." << std::endl;
 }
 
 void printType11Error(int line){
@@ -586,60 +592,96 @@ Type* paramDecNodeType(Node* paramDec,int line){
 
 void checkReturnType(Type* define, Node* compSt, int line){
     std::vector<Node*> stack;
+    std::vector<Node*> list;
+    sout("start check return");
 
-    // CompSt -> LC DefList StmtList RC
-    Node* stmtList = compSt->child_list[2];
-    int childNum = stmtList->child_num;
+    stack.push_back(compSt);
+    while (!stack.empty())
+    {
+        compSt = stack.back();
+        stack.pop_back();
 
-    // StmtList: empty | Stmt StmtList
-    while (childNum == 2){
-        Node* stmt = stmtList->child_list[0];
-        stmtList = stmtList->child_list[1];
-        childNum = stmtList->child_num;
+        // CompSt -> LC DefList StmtList RC
+        Node* stmtList = compSt->child_list[2];
+        int childNum = stmtList->child_num;
 
-        // Stmt -> CompSt
-        if (stmt->child_num == 1){
-            stack.push_back(stmtList);
-            stmtList = stmt->child_list[0]->child_list[2];
+        // StmtList: empty | Stmt StmtList
+        while (childNum == 2){
+            Node* stmt = stmtList->child_list[0];
+            list.push_back(stmt);
+
+            while (!list.empty())
+            {
+                stmt = list.back();
+                list.pop_back();
+
+                int stmtNum = stmt->child_num;
+
+                sout(stmtNum);
+                sout(stmt->child_list[0]->child_num);
+                // for(Node* n : stmt->child_list){
+                //     sout(n->token);
+                // }
+
+                // Stmt -> CompSt  
+                if (stmtNum == 1){
+                    stack.push_back(stmt->child_list[0]);
+                    sout("stack push CompSt");
+                }
+                // Stmt -> RETURN Exp SEMI    
+                else if (stmtNum == 3){
+                    Node* exp = stmt->child_list[1];
+                    Type* type = exp->type_value;
+                    sout("check return");
+                    if (type != NULL and !isSameTypes(define, type)){
+                        printType8Error(exp->line_No);
+                    }           
+                }
+                // Stmt -> IF LP Exp RP Stmt
+                // Stmt -> WHILE LP Exp RP Stmt 
+                else if (stmtNum == 5){
+                    list.push_back(stmt->child_list[4]);
+                }
+                // Stmt -> IF LP Exp RP Stmt ELSE Stmt 
+                else if(stmtNum = 7){
+                    list.push_back(stmt->child_list[4]);
+                    list.push_back(stmt->child_list[6]);
+                    sout("push two stmt");
+                }
+                // Stmt -> Exp SEMI
+
+                sout(list.size());
+            }
+                        
+            stmtList = stmtList->child_list[1];
             childNum = stmtList->child_num;
+            sout("stmtList childNum");
+            sout(childNum);
         }
-
-        // Stmt -> RETURN Exp SEMI    
-        if (stmt->child_num == 3){
-            Node* exp = stmt->child_list[1];
-            Type* type = exp->type_value;
-            if (!isSameTypes(define, type)){
-                printType8Error(line);
-                return;
-            }else if (!stack.empty()){
-                stmtList = stack.back();
-                childNum = stmtList->child_num;
-                stack.pop_back();
-            }else 
-                break;                
-        }
-
+        sout("stack size");
+        sout(stack.size());
     }
+    
 }
 
 //please throw error type here
 // NO, the function is recusively called here, the error must be thrown outer
 bool isSameTypes(Type* type1, Type* type2){
-    sout("check is same type");
-    sout(type1->category);
-    sout(type2->category);
     if (type1->category != type2->category) {
+        sout("unsame");
         return false; // The main struct are not the same.
     } else if (type1->category == PRIMITIVE) {
-        sout("foo");
+        sout("prim");
         sout(type1->primitive);
         sout(type2->primitive);
-        sout((type2->primitive==type1->primitive));
         return (type1->primitive == type2->primitive);
     } else if (type1->category == ARRAY) {
+        sout("array");
         return checkTwoArrayEquv(type1->array, type2->array);
-    } else if (type1->category == STRUCTURE) { // There are all Struct type, first try to use simply compare the name of the both struct.
-    // try to solve the structure equivence.
+    } else if (type1->category == STRUCTURE) { 
+        // There are all Struct type, first try to use simply compare the name of the both struct.
+        // try to solve the structure equivence.
+        sout("struct");
         return isSameStruct(type1, type2);
     } else
         return false;
