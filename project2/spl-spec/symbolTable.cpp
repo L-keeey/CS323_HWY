@@ -978,7 +978,13 @@ void showMap(int type) {
         sout("varb map:");
         for (auto it=variable_table.begin(); it!=variable_table.end(); it++){
             sout(it->first);
-            sout(it->second->name);
+            if (it->second->category == PRIMITIVE) {
+                sout(it->second->primitive);
+            } else if (it->second->category == STRUCTURE) {
+                sout(it->second->name);
+            } else {
+                sout("array");
+            }
         }
         sout("var map end");
     } else if (type==1) {

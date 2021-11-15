@@ -4,27 +4,27 @@ var map end
 in def var
 varb map:
 name
-
+0
 var map end
 def struct
 start field list.
 generate field list.
 non-empty structure
 get field list from node
-0x563402c53360
-0x563402c50ba0
-0x563402c50a70
-0x563402c50810
+0x559ef572f360
+0x559ef572cba0
+0x559ef572ca70
+0x559ef572c810
 success get name from declist
 name
 prim/array type list node
 Generate a prim type
 get field list from node
-0x563402c53230
-0x563402c52ce0
-0x563402c52bb0
-0x563402c52950
-0x563402c52490
+0x559ef572f230
+0x559ef572ece0
+0x559ef572ebb0
+0x559ef572e950
+0x559ef572e490
 success get name from declist
 friends
 prim/array type list node
@@ -35,16 +35,16 @@ creat prim arr
 10
 rec gen arr
 complete gen arr
-0x563402c53ad0
+0x559ef572fad0
 add a field list
 field list size
 2
-0x563402c53950
+0x559ef572f950
 def complete, then cal hash
 cal field list hash
 cal field list hash
 cal array hash
-0x563402c53ad0
+0x559ef572fad0
 foo1
 639688970
 struct def complete
@@ -62,16 +62,16 @@ struct map end.
 in def var
 varb map:
 
-
+0
 name
-
+0
 var map end
 in def var
 varb map:
 
-
+0
 name
-
+0
 tom
 Person
 var map end
@@ -79,14 +79,14 @@ Error type 3 at Line 9: variable is redefined.
 in def var
 varb map:
 
-
+0
 name
-
+0
 tom
 Person
 var map end
 checking value
-0x563402c56870
+0x559ef5732870
 check is same type
 0
 0
