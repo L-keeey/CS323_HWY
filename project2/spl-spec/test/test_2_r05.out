@@ -1,0 +1,38 @@
+in def var
+varb map:
+var map end
+checking value
+0x55ceb1b0c060
+prim
+1
+1
+in def var
+varb map:
+iii
+1
+var map end
+checking value
+0x55ceb1b0e0b0
+prim
+1
+1
+in def var
+varb map:
+iii
+1
+kkk
+1
+var map end
+cheking rvalue
+prim
+0
+1
+Error type 5 at Line 6: the type of the operands at both sides of assignment operator should match.
+start defFun
+param and return total size
+1
+start check return
+2
+3
+push two stmt
+2

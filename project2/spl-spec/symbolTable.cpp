@@ -429,7 +429,9 @@ Type* checkStructMember(Node* exp, Node* id, int line){
     //3. throw type 14 error when id is not a valid structure member line number
     sout("visit check struct member");
     std::string id_str = id->string_value;
-    Type* s_type = searchStructType(exp->string_value);
+    sout(id_str);
+    sout(exp->type_value->name);
+    Type* s_type = searchStructType(exp->type_value->name);
     if (s_type == NULL) {
         printType13Error(line);
     } else {
@@ -437,7 +439,7 @@ Type* checkStructMember(Node* exp, Node* id, int line){
         bool flag = false;
         char* mem_name = id->string_value;
         Type* tp = nullptr;
-        while (fl->next != nullptr) {
+        while (fl != nullptr) {
             if (strcmp(mem_name, fl->name) == 0) {
                 flag = true;
                 tp = fl->type;
@@ -445,9 +447,11 @@ Type* checkStructMember(Node* exp, Node* id, int line){
             }
             fl = fl->next;
         }
-        if (!flag) 
-            flag |= strcmp(mem_name, fl->name) == 0;
         if (flag) {
+            sout("********");
+            sout(tp->primitive);
+            sout(tp->category);
+
             return tp;
         } else {
             printType14Error(line);
@@ -547,7 +551,7 @@ void printType15Error(int line){
 } 
 
 void printType14Error(int line){
-    std::cout << "Error type 14 at Line " << line << ": the structure should be defined before access." << std::endl;
+    std::cout << "Error type 14 at Line " << line << ": accessing an undefined structure member." << std::endl;
 } 
 
 void printType13Error(int line){
@@ -774,7 +778,8 @@ Type* getArrayOrPrimTypeFromDefList(Node* node) { // From DefList node get the t
     if (node->child_list[1]->child_list[0]->child_list[0]->child_num == 1) {
         // This is a prim type, just return it.
         sout("Generate a prim type");
-        return new_prim_type(node->child_list[0]->string_value);
+        // sout(node->child_list[0]->child_list[0]->string_value);
+        return new_prim_type(node->child_list[0]->child_list[0]->string_value);
     } else {
         // This is a array type. Create it.
         sout("Generate a array");
@@ -1041,7 +1046,14 @@ void showMap(int type) {
             FieldList* list = type->structure;
             while (list!=nullptr) {
                 sout(list->name);
-                sout(list->type->category);
+                 if (list->type->category == PRIMITIVE) {
+                    sout("prim");
+                    sout(list->type->primitive);
+                } else if (list->type->category == ARRAY) {
+                    sout("array");
+                } else {
+                    sout("struct");   
+                }
                 list = list->next;
             } 
             sout("");

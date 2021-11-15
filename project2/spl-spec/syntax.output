@@ -1,4 +1,4 @@
-Grammar
+语法
 
     0 $accept: Program $end
 
@@ -104,7 +104,7 @@ Grammar
    82     | Exp
 
 
-Terminals, with rules where they appear
+终结语词，附有它们出现处的规则
 
     $end (0) 0
     error (256) 7 10 15 18 21 22 24 36 37 38 39 43 44 47 64 68 70 72 81
@@ -147,7 +147,7 @@ Terminals, with rules where they appear
     RC <Node_value> (294) 13 27
 
 
-Nonterminals, with rules where they appear
+非终结语词，附有它们出现处的规则
 
     $accept (40)
         on left: 0
@@ -210,115 +210,115 @@ Nonterminals, with rules where they appear
         on right: 67 68 80 81
 
 
-State 0
+状态 0
 
     0 $accept: . Program $end
 
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
 
-    $default  reduce using rule 2 (ExtDefList)
+    $default  使用规则 2 以归约 (ExtDefList)
 
-    Program          go to state 3
-    ExtDefList       go to state 4
-    ExtDef           go to state 5
-    Specifier        go to state 6
-    StructSpecifier  go to state 7
+    Program          转到状态 3
+    ExtDefList       转到状态 4
+    ExtDef           转到状态 5
+    Specifier        转到状态 6
+    StructSpecifier  转到状态 7
 
 
-State 1
+状态 1
 
    11 Specifier: TYPE .
 
-    $default  reduce using rule 11 (Specifier)
+    $default  使用规则 11 以归约 (Specifier)
 
 
-State 2
+状态 2
 
    13 StructSpecifier: STRUCT . ID LC DefList RC
    14                | STRUCT . ID
    15                | STRUCT . ID LC DecList error
 
-    ID  shift, and go to state 8
+    ID  偏移，并进入状态 8
 
 
-State 3
+状态 3
 
     0 $accept: Program . $end
 
-    $end  shift, and go to state 9
+    $end  偏移，并进入状态 9
 
 
-State 4
+状态 4
 
     1 Program: ExtDefList .
 
-    $default  reduce using rule 1 (Program)
+    $default  使用规则 1 以归约 (Program)
 
 
-State 5
+状态 5
 
     3 ExtDefList: ExtDef . ExtDefList
 
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
 
-    $default  reduce using rule 2 (ExtDefList)
+    $default  使用规则 2 以归约 (ExtDefList)
 
-    ExtDefList       go to state 10
-    ExtDef           go to state 5
-    Specifier        go to state 6
-    StructSpecifier  go to state 7
+    ExtDefList       转到状态 10
+    ExtDef           转到状态 5
+    Specifier        转到状态 6
+    StructSpecifier  转到状态 7
 
 
-State 6
+状态 6
 
     4 ExtDef: Specifier . ExtDecList SEMI
     5       | Specifier . SEMI
     6       | Specifier . FunDec CompSt
     7       | Specifier . ExtDecList error
 
-    ID    shift, and go to state 11
-    SEMI  shift, and go to state 12
+    ID    偏移，并进入状态 11
+    SEMI  偏移，并进入状态 12
 
-    ExtDecList  go to state 13
-    VarDec      go to state 14
-    FunDec      go to state 15
+    ExtDecList  转到状态 13
+    VarDec      转到状态 14
+    FunDec      转到状态 15
 
 
-State 7
+状态 7
 
    12 Specifier: StructSpecifier .
 
-    $default  reduce using rule 12 (Specifier)
+    $default  使用规则 12 以归约 (Specifier)
 
 
-State 8
+状态 8
 
    13 StructSpecifier: STRUCT ID . LC DefList RC
    14                | STRUCT ID .
    15                | STRUCT ID . LC DecList error
 
-    LC  shift, and go to state 16
+    LC  偏移，并进入状态 16
 
-    $default  reduce using rule 14 (StructSpecifier)
+    $default  使用规则 14 以归约 (StructSpecifier)
 
 
-State 9
+状态 9
 
     0 $accept: Program $end .
 
-    $default  accept
+    $default  接受
 
 
-State 10
+状态 10
 
     3 ExtDefList: ExtDef ExtDefList .
 
-    $default  reduce using rule 3 (ExtDefList)
+    $default  使用规则 3 以归约 (ExtDefList)
 
 
-State 11
+状态 11
 
    16 VarDec: ID .
    19 FunDec: ID . LP VarList RP
@@ -326,28 +326,28 @@ State 11
    21       | ID . LP VarList error
    22       | ID . LP error
 
-    LP  shift, and go to state 17
+    LP  偏移，并进入状态 17
 
-    $default  reduce using rule 16 (VarDec)
+    $default  使用规则 16 以归约 (VarDec)
 
 
-State 12
+状态 12
 
     5 ExtDef: Specifier SEMI .
 
-    $default  reduce using rule 5 (ExtDef)
+    $default  使用规则 5 以归约 (ExtDef)
 
 
-State 13
+状态 13
 
     4 ExtDef: Specifier ExtDecList . SEMI
     7       | Specifier ExtDecList . error
 
-    error  shift, and go to state 18
-    SEMI   shift, and go to state 19
+    error  偏移，并进入状态 18
+    SEMI   偏移，并进入状态 19
 
 
-State 14
+状态 14
 
     8 ExtDecList: VarDec .
     9           | VarDec . COMMA ExtDecList
@@ -355,530 +355,530 @@ State 14
    17 VarDec: VarDec . LB INT RB
    18       | VarDec . LB INT error
 
-    ID     shift, and go to state 20
-    LB     shift, and go to state 21
-    COMMA  shift, and go to state 22
+    ID     偏移，并进入状态 20
+    LB     偏移，并进入状态 21
+    COMMA  偏移，并进入状态 22
 
-    $default  reduce using rule 8 (ExtDecList)
+    $default  使用规则 8 以归约 (ExtDecList)
 
-    ExtDecList  go to state 23
-    VarDec      go to state 14
+    ExtDecList  转到状态 23
+    VarDec      转到状态 14
 
 
-State 15
+状态 15
 
     6 ExtDef: Specifier FunDec . CompSt
 
-    LC  shift, and go to state 24
+    LC  偏移，并进入状态 24
 
-    CompSt  go to state 25
+    CompSt  转到状态 25
 
 
-State 16
+状态 16
 
    13 StructSpecifier: STRUCT ID LC . DefList RC
    15                | STRUCT ID LC . DecList error
 
-    error   shift, and go to state 26
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
-    ID      shift, and go to state 20
+    error   偏移，并进入状态 26
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
+    ID      偏移，并进入状态 20
 
-    RC  reduce using rule 40 (DefList)
+    RC  使用规则 40 以归约 (DefList)
 
-    Specifier        go to state 27
-    StructSpecifier  go to state 7
-    VarDec           go to state 28
-    DefList          go to state 29
-    Def              go to state 30
-    DecList          go to state 31
-    Dec              go to state 32
+    Specifier        转到状态 27
+    StructSpecifier  转到状态 7
+    VarDec           转到状态 28
+    DefList          转到状态 29
+    Def              转到状态 30
+    DecList          转到状态 31
+    Dec              转到状态 32
 
 
-State 17
+状态 17
 
    19 FunDec: ID LP . VarList RP
    20       | ID LP . RP
    21       | ID LP . VarList error
    22       | ID LP . error
 
-    error   shift, and go to state 33
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
-    RP      shift, and go to state 34
+    error   偏移，并进入状态 33
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
+    RP      偏移，并进入状态 34
 
-    Specifier        go to state 35
-    StructSpecifier  go to state 7
-    VarList          go to state 36
-    ParamDec         go to state 37
+    Specifier        转到状态 35
+    StructSpecifier  转到状态 7
+    VarList          转到状态 36
+    ParamDec         转到状态 37
 
 
-State 18
+状态 18
 
     7 ExtDef: Specifier ExtDecList error .
 
-    $default  reduce using rule 7 (ExtDef)
+    $default  使用规则 7 以归约 (ExtDef)
 
 
-State 19
+状态 19
 
     4 ExtDef: Specifier ExtDecList SEMI .
 
-    $default  reduce using rule 4 (ExtDef)
+    $default  使用规则 4 以归约 (ExtDef)
 
 
-State 20
+状态 20
 
    16 VarDec: ID .
 
-    $default  reduce using rule 16 (VarDec)
+    $default  使用规则 16 以归约 (VarDec)
 
 
-State 21
+状态 21
 
    17 VarDec: VarDec LB . INT RB
    18       | VarDec LB . INT error
 
-    INT  shift, and go to state 38
+    INT  偏移，并进入状态 38
 
 
-State 22
+状态 22
 
     9 ExtDecList: VarDec COMMA . ExtDecList
 
-    ID  shift, and go to state 20
+    ID  偏移，并进入状态 20
 
-    ExtDecList  go to state 39
-    VarDec      go to state 14
+    ExtDecList  转到状态 39
+    VarDec      转到状态 14
 
 
-State 23
+状态 23
 
    10 ExtDecList: VarDec ExtDecList . error
 
-    error  shift, and go to state 40
+    error  偏移，并进入状态 40
 
 
-State 24
+状态 24
 
    27 CompSt: LC . DefList StmtList RC
 
-    error   shift, and go to state 26
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
+    error   偏移，并进入状态 26
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
 
-    ERROR   reduce using rule 40 (DefList)
-    IF      reduce using rule 40 (DefList)
-    WHILE   reduce using rule 40 (DefList)
-    RETURN  reduce using rule 40 (DefList)
-    INT     reduce using rule 40 (DefList)
-    FLOAT   reduce using rule 40 (DefList)
-    CHAR    reduce using rule 40 (DefList)
-    ID      reduce using rule 40 (DefList)
-    MINUS   reduce using rule 40 (DefList)
-    NOT     reduce using rule 40 (DefList)
-    LP      reduce using rule 40 (DefList)
-    LC      reduce using rule 40 (DefList)
-    RC      reduce using rule 40 (DefList)
+    ERROR   使用规则 40 以归约 (DefList)
+    IF      使用规则 40 以归约 (DefList)
+    WHILE   使用规则 40 以归约 (DefList)
+    RETURN  使用规则 40 以归约 (DefList)
+    INT     使用规则 40 以归约 (DefList)
+    FLOAT   使用规则 40 以归约 (DefList)
+    CHAR    使用规则 40 以归约 (DefList)
+    ID      使用规则 40 以归约 (DefList)
+    MINUS   使用规则 40 以归约 (DefList)
+    NOT     使用规则 40 以归约 (DefList)
+    LP      使用规则 40 以归约 (DefList)
+    LC      使用规则 40 以归约 (DefList)
+    RC      使用规则 40 以归约 (DefList)
 
-    Specifier        go to state 27
-    StructSpecifier  go to state 7
-    DefList          go to state 41
-    Def              go to state 30
+    Specifier        转到状态 27
+    StructSpecifier  转到状态 7
+    DefList          转到状态 41
+    Def              转到状态 30
 
 
-State 25
+状态 25
 
     6 ExtDef: Specifier FunDec CompSt .
 
-    $default  reduce using rule 6 (ExtDef)
+    $default  使用规则 6 以归约 (ExtDef)
 
 
-State 26
+状态 26
 
    44 Def: error . DecList SEMI
 
-    ID  shift, and go to state 20
+    ID  偏移，并进入状态 20
 
-    VarDec   go to state 28
-    DecList  go to state 42
-    Dec      go to state 32
+    VarDec   转到状态 28
+    DecList  转到状态 42
+    Dec      转到状态 32
 
 
-State 27
+状态 27
 
    42 Def: Specifier . DecList SEMI
    43    | Specifier . DecList error
 
-    ID  shift, and go to state 20
+    ID  偏移，并进入状态 20
 
-    VarDec   go to state 28
-    DecList  go to state 43
-    Dec      go to state 32
+    VarDec   转到状态 28
+    DecList  转到状态 43
+    Dec      转到状态 32
 
 
-State 28
+状态 28
 
    17 VarDec: VarDec . LB INT RB
    18       | VarDec . LB INT error
    48 Dec: VarDec .
    49    | VarDec . ASSIGN Exp
 
-    ASSIGN  shift, and go to state 44
-    LB      shift, and go to state 21
+    ASSIGN  偏移，并进入状态 44
+    LB      偏移，并进入状态 21
 
-    $default  reduce using rule 48 (Dec)
+    $default  使用规则 48 以归约 (Dec)
 
 
-State 29
+状态 29
 
    13 StructSpecifier: STRUCT ID LC DefList . RC
 
-    RC  shift, and go to state 45
+    RC  偏移，并进入状态 45
 
 
-State 30
+状态 30
 
    41 DefList: Def . DefList
 
-    error   shift, and go to state 26
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
+    error   偏移，并进入状态 26
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
 
-    ERROR   reduce using rule 40 (DefList)
-    IF      reduce using rule 40 (DefList)
-    WHILE   reduce using rule 40 (DefList)
-    RETURN  reduce using rule 40 (DefList)
-    INT     reduce using rule 40 (DefList)
-    FLOAT   reduce using rule 40 (DefList)
-    CHAR    reduce using rule 40 (DefList)
-    ID      reduce using rule 40 (DefList)
-    MINUS   reduce using rule 40 (DefList)
-    NOT     reduce using rule 40 (DefList)
-    LP      reduce using rule 40 (DefList)
-    LC      reduce using rule 40 (DefList)
-    RC      reduce using rule 40 (DefList)
+    ERROR   使用规则 40 以归约 (DefList)
+    IF      使用规则 40 以归约 (DefList)
+    WHILE   使用规则 40 以归约 (DefList)
+    RETURN  使用规则 40 以归约 (DefList)
+    INT     使用规则 40 以归约 (DefList)
+    FLOAT   使用规则 40 以归约 (DefList)
+    CHAR    使用规则 40 以归约 (DefList)
+    ID      使用规则 40 以归约 (DefList)
+    MINUS   使用规则 40 以归约 (DefList)
+    NOT     使用规则 40 以归约 (DefList)
+    LP      使用规则 40 以归约 (DefList)
+    LC      使用规则 40 以归约 (DefList)
+    RC      使用规则 40 以归约 (DefList)
 
-    Specifier        go to state 27
-    StructSpecifier  go to state 7
-    DefList          go to state 46
-    Def              go to state 30
+    Specifier        转到状态 27
+    StructSpecifier  转到状态 7
+    DefList          转到状态 46
+    Def              转到状态 30
 
 
-State 31
+状态 31
 
    15 StructSpecifier: STRUCT ID LC DecList . error
 
-    error  shift, and go to state 47
+    error  偏移，并进入状态 47
 
 
-State 32
+状态 32
 
    45 DecList: Dec .
    46        | Dec . COMMA DecList
    47        | Dec . DecList error
 
-    ID     shift, and go to state 20
-    COMMA  shift, and go to state 48
+    ID     偏移，并进入状态 20
+    COMMA  偏移，并进入状态 48
 
-    $default  reduce using rule 45 (DecList)
+    $default  使用规则 45 以归约 (DecList)
 
-    VarDec   go to state 28
-    DecList  go to state 49
-    Dec      go to state 32
+    VarDec   转到状态 28
+    DecList  转到状态 49
+    Dec      转到状态 32
 
 
-State 33
+状态 33
 
    22 FunDec: ID LP error .
 
-    $default  reduce using rule 22 (FunDec)
+    $default  使用规则 22 以归约 (FunDec)
 
 
-State 34
+状态 34
 
    20 FunDec: ID LP RP .
 
-    $default  reduce using rule 20 (FunDec)
+    $default  使用规则 20 以归约 (FunDec)
 
 
-State 35
+状态 35
 
    26 ParamDec: Specifier . VarDec
 
-    ID  shift, and go to state 20
+    ID  偏移，并进入状态 20
 
-    VarDec  go to state 50
+    VarDec  转到状态 50
 
 
-State 36
+状态 36
 
    19 FunDec: ID LP VarList . RP
    21       | ID LP VarList . error
 
-    error  shift, and go to state 51
-    RP     shift, and go to state 52
+    error  偏移，并进入状态 51
+    RP     偏移，并进入状态 52
 
 
-State 37
+状态 37
 
    23 VarList: ParamDec . COMMA VarList
    24        | ParamDec . VarList error
    25        | ParamDec .
 
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
-    COMMA   shift, and go to state 53
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
+    COMMA   偏移，并进入状态 53
 
-    $default  reduce using rule 25 (VarList)
+    $default  使用规则 25 以归约 (VarList)
 
-    Specifier        go to state 35
-    StructSpecifier  go to state 7
-    VarList          go to state 54
-    ParamDec         go to state 37
+    Specifier        转到状态 35
+    StructSpecifier  转到状态 7
+    VarList          转到状态 54
+    ParamDec         转到状态 37
 
 
-State 38
+状态 38
 
    17 VarDec: VarDec LB INT . RB
    18       | VarDec LB INT . error
 
-    error  shift, and go to state 55
-    RB     shift, and go to state 56
+    error  偏移，并进入状态 55
+    RB     偏移，并进入状态 56
 
 
-State 39
+状态 39
 
     9 ExtDecList: VarDec COMMA ExtDecList .
 
-    $default  reduce using rule 9 (ExtDecList)
+    $default  使用规则 9 以归约 (ExtDecList)
 
 
-State 40
+状态 40
 
    10 ExtDecList: VarDec ExtDecList error .
 
-    $default  reduce using rule 10 (ExtDecList)
+    $default  使用规则 10 以归约 (ExtDecList)
 
 
-State 41
+状态 41
 
    27 CompSt: LC DefList . StmtList RC
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    $default  reduce using rule 28 (StmtList)
+    $default  使用规则 28 以归约 (StmtList)
 
-    CompSt    go to state 68
-    StmtList  go to state 69
-    Stmt      go to state 70
-    Exp       go to state 71
+    CompSt    转到状态 68
+    StmtList  转到状态 69
+    Stmt      转到状态 70
+    Exp       转到状态 71
 
 
-State 42
+状态 42
 
    44 Def: error DecList . SEMI
 
-    SEMI  shift, and go to state 72
+    SEMI  偏移，并进入状态 72
 
 
-State 43
+状态 43
 
    42 Def: Specifier DecList . SEMI
    43    | Specifier DecList . error
 
-    error  shift, and go to state 73
-    SEMI   shift, and go to state 74
+    error  偏移，并进入状态 73
+    SEMI   偏移，并进入状态 74
 
 
-State 44
+状态 44
 
    49 Dec: VarDec ASSIGN . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 75
+    Exp  转到状态 75
 
 
-State 45
+状态 45
 
    13 StructSpecifier: STRUCT ID LC DefList RC .
 
-    $default  reduce using rule 13 (StructSpecifier)
+    $default  使用规则 13 以归约 (StructSpecifier)
 
 
-State 46
+状态 46
 
    41 DefList: Def DefList .
 
-    $default  reduce using rule 41 (DefList)
+    $default  使用规则 41 以归约 (DefList)
 
 
-State 47
+状态 47
 
    15 StructSpecifier: STRUCT ID LC DecList error .
 
-    $default  reduce using rule 15 (StructSpecifier)
+    $default  使用规则 15 以归约 (StructSpecifier)
 
 
-State 48
+状态 48
 
    46 DecList: Dec COMMA . DecList
 
-    ID  shift, and go to state 20
+    ID  偏移，并进入状态 20
 
-    VarDec   go to state 28
-    DecList  go to state 76
-    Dec      go to state 32
+    VarDec   转到状态 28
+    DecList  转到状态 76
+    Dec      转到状态 32
 
 
-State 49
+状态 49
 
    47 DecList: Dec DecList . error
 
-    error  shift, and go to state 77
+    error  偏移，并进入状态 77
 
 
-State 50
+状态 50
 
    17 VarDec: VarDec . LB INT RB
    18       | VarDec . LB INT error
    26 ParamDec: Specifier VarDec .
 
-    LB  shift, and go to state 21
+    LB  偏移，并进入状态 21
 
-    $default  reduce using rule 26 (ParamDec)
+    $default  使用规则 26 以归约 (ParamDec)
 
 
-State 51
+状态 51
 
    21 FunDec: ID LP VarList error .
 
-    $default  reduce using rule 21 (FunDec)
+    $default  使用规则 21 以归约 (FunDec)
 
 
-State 52
+状态 52
 
    19 FunDec: ID LP VarList RP .
 
-    $default  reduce using rule 19 (FunDec)
+    $default  使用规则 19 以归约 (FunDec)
 
 
-State 53
+状态 53
 
    23 VarList: ParamDec COMMA . VarList
 
-    TYPE    shift, and go to state 1
-    STRUCT  shift, and go to state 2
+    TYPE    偏移，并进入状态 1
+    STRUCT  偏移，并进入状态 2
 
-    Specifier        go to state 35
-    StructSpecifier  go to state 7
-    VarList          go to state 78
-    ParamDec         go to state 37
+    Specifier        转到状态 35
+    StructSpecifier  转到状态 7
+    VarList          转到状态 78
+    ParamDec         转到状态 37
 
 
-State 54
+状态 54
 
    24 VarList: ParamDec VarList . error
 
-    error  shift, and go to state 79
+    error  偏移，并进入状态 79
 
 
-State 55
+状态 55
 
    18 VarDec: VarDec LB INT error .
 
-    $default  reduce using rule 18 (VarDec)
+    $default  使用规则 18 以归约 (VarDec)
 
 
-State 56
+状态 56
 
    17 VarDec: VarDec LB INT RB .
 
-    $default  reduce using rule 17 (VarDec)
+    $default  使用规则 17 以归约 (VarDec)
 
 
-State 57
+状态 57
 
    79 Exp: ERROR .
 
-    $default  reduce using rule 79 (Exp)
+    $default  使用规则 79 以归约 (Exp)
 
 
-State 58
+状态 58
 
    33 Stmt: IF . LP Exp RP Stmt
    34     | IF . LP Exp RP Stmt ELSE Stmt
    39     | IF . LP Exp error Stmt
 
-    LP  shift, and go to state 80
+    LP  偏移，并进入状态 80
 
 
-State 59
+状态 59
 
    35 Stmt: WHILE . LP Exp RP Stmt
    36     | WHILE . LP Exp error Stmt
 
-    LP  shift, and go to state 81
+    LP  偏移，并进入状态 81
 
 
-State 60
+状态 60
 
    32 Stmt: RETURN . Exp SEMI
    38     | RETURN . Exp error
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 82
+    Exp  转到状态 82
 
 
-State 61
+状态 61
 
    75 Exp: INT .
 
-    $default  reduce using rule 75 (Exp)
+    $default  使用规则 75 以归约 (Exp)
 
 
-State 62
+状态 62
 
    76 Exp: FLOAT .
 
-    $default  reduce using rule 76 (Exp)
+    $default  使用规则 76 以归约 (Exp)
 
 
-State 63
+状态 63
 
    77 Exp: CHAR .
 
-    $default  reduce using rule 77 (Exp)
+    $default  使用规则 77 以归约 (Exp)
 
 
-State 64
+状态 64
 
    67 Exp: ID . LP Args RP
    68    | ID . LP Args error
@@ -886,100 +886,100 @@ State 64
    70    | ID . LP error
    74    | ID .
 
-    LP  shift, and go to state 83
+    LP  偏移，并进入状态 83
 
-    $default  reduce using rule 74 (Exp)
+    $default  使用规则 74 以归约 (Exp)
 
 
-State 65
+状态 65
 
    65 Exp: MINUS . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 84
+    Exp  转到状态 84
 
 
-State 66
+状态 66
 
    66 Exp: NOT . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 85
+    Exp  转到状态 85
 
 
-State 67
+状态 67
 
    63 Exp: LP . Exp RP
    64    | LP . Exp error
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 86
+    Exp  转到状态 86
 
 
-State 68
+状态 68
 
    31 Stmt: CompSt .
 
-    $default  reduce using rule 31 (Stmt)
+    $default  使用规则 31 以归约 (Stmt)
 
 
-State 69
+状态 69
 
    27 CompSt: LC DefList StmtList . RC
 
-    RC  shift, and go to state 87
+    RC  偏移，并进入状态 87
 
 
-State 70
+状态 70
 
    29 StmtList: Stmt . StmtList
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    $default  reduce using rule 28 (StmtList)
+    $default  使用规则 28 以归约 (StmtList)
 
-    CompSt    go to state 68
-    StmtList  go to state 88
-    Stmt      go to state 70
-    Exp       go to state 71
+    CompSt    转到状态 68
+    StmtList  转到状态 88
+    Stmt      转到状态 70
+    Exp       转到状态 71
 
 
-State 71
+状态 71
 
    30 Stmt: Exp . SEMI
    37     | Exp . error
@@ -1001,48 +1001,48 @@ State 71
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 89
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
-    SEMI    shift, and go to state 106
+    error   偏移，并进入状态 89
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
+    SEMI    偏移，并进入状态 106
 
 
-State 72
+状态 72
 
    44 Def: error DecList SEMI .
 
-    $default  reduce using rule 44 (Def)
+    $default  使用规则 44 以归约 (Def)
 
 
-State 73
+状态 73
 
    43 Def: Specifier DecList error .
 
-    $default  reduce using rule 43 (Def)
+    $default  使用规则 43 以归约 (Def)
 
 
-State 74
+状态 74
 
    42 Def: Specifier DecList SEMI .
 
-    $default  reduce using rule 42 (Def)
+    $default  使用规则 42 以归约 (Def)
 
 
-State 75
+状态 75
 
    49 Dec: VarDec ASSIGN Exp .
    50 Exp: Exp . ASSIGN Exp
@@ -1063,90 +1063,90 @@ State 75
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
-    $default  reduce using rule 49 (Dec)
+    $default  使用规则 49 以归约 (Dec)
 
 
-State 76
+状态 76
 
    46 DecList: Dec COMMA DecList .
 
-    $default  reduce using rule 46 (DecList)
+    $default  使用规则 46 以归约 (DecList)
 
 
-State 77
+状态 77
 
    47 DecList: Dec DecList error .
 
-    $default  reduce using rule 47 (DecList)
+    $default  使用规则 47 以归约 (DecList)
 
 
-State 78
+状态 78
 
    23 VarList: ParamDec COMMA VarList .
 
-    $default  reduce using rule 23 (VarList)
+    $default  使用规则 23 以归约 (VarList)
 
 
-State 79
+状态 79
 
    24 VarList: ParamDec VarList error .
 
-    $default  reduce using rule 24 (VarList)
+    $default  使用规则 24 以归约 (VarList)
 
 
-State 80
+状态 80
 
    33 Stmt: IF LP . Exp RP Stmt
    34     | IF LP . Exp RP Stmt ELSE Stmt
    39     | IF LP . Exp error Stmt
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 107
+    Exp  转到状态 107
 
 
-State 81
+状态 81
 
    35 Stmt: WHILE LP . Exp RP Stmt
    36     | WHILE LP . Exp error Stmt
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 108
+    Exp  转到状态 108
 
 
-State 82
+状态 82
 
    32 Stmt: RETURN Exp . SEMI
    38     | RETURN Exp . error
@@ -1168,49 +1168,49 @@ State 82
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 109
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
-    SEMI    shift, and go to state 110
+    error   偏移，并进入状态 109
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
+    SEMI    偏移，并进入状态 110
 
 
-State 83
+状态 83
 
    67 Exp: ID LP . Args RP
    68    | ID LP . Args error
    69    | ID LP . RP
    70    | ID LP . error
 
-    error  shift, and go to state 111
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
-    RP     shift, and go to state 112
+    error  偏移，并进入状态 111
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
+    RP     偏移，并进入状态 112
 
-    Exp   go to state 113
-    Args  go to state 114
+    Exp   转到状态 113
+    Args  转到状态 114
 
 
-State 84
+状态 84
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1231,17 +1231,17 @@ State 84
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 65 (Exp)
+    $default  使用规则 65 以归约 (Exp)
 
 
-State 85
+状态 85
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1262,13 +1262,13 @@ State 85
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    LB   shift, and go to state 104
-    DOT  shift, and go to state 105
+    LB   偏移，并进入状态 104
+    DOT  偏移，并进入状态 105
 
-    $default  reduce using rule 66 (Exp)
+    $default  使用规则 66 以归约 (Exp)
 
 
-State 86
+状态 86
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1290,303 +1290,303 @@ State 86
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 115
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    RP      shift, and go to state 116
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    error   偏移，并进入状态 115
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    RP      偏移，并进入状态 116
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
 
-State 87
+状态 87
 
    27 CompSt: LC DefList StmtList RC .
 
-    $default  reduce using rule 27 (CompSt)
+    $default  使用规则 27 以归约 (CompSt)
 
 
-State 88
+状态 88
 
    29 StmtList: Stmt StmtList .
 
-    $default  reduce using rule 29 (StmtList)
+    $default  使用规则 29 以归约 (StmtList)
 
 
-State 89
+状态 89
 
    37 Stmt: Exp error .
 
-    $default  reduce using rule 37 (Stmt)
+    $default  使用规则 37 以归约 (Stmt)
 
 
-State 90
+状态 90
 
    78 Exp: Exp ERROR . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 117
+    Exp  转到状态 117
 
 
-State 91
+状态 91
 
    50 Exp: Exp ASSIGN . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 118
+    Exp  转到状态 118
 
 
-State 92
+状态 92
 
    52 Exp: Exp OR . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 119
+    Exp  转到状态 119
 
 
-State 93
+状态 93
 
    51 Exp: Exp AND . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 120
+    Exp  转到状态 120
 
 
-State 94
+状态 94
 
    53 Exp: Exp LT . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 121
+    Exp  转到状态 121
 
 
-State 95
+状态 95
 
    54 Exp: Exp LE . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 122
+    Exp  转到状态 122
 
 
-State 96
+状态 96
 
    55 Exp: Exp GT . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 123
+    Exp  转到状态 123
 
 
-State 97
+状态 97
 
    56 Exp: Exp GE . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 124
+    Exp  转到状态 124
 
 
-State 98
+状态 98
 
    57 Exp: Exp NE . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 125
+    Exp  转到状态 125
 
 
-State 99
+状态 99
 
    58 Exp: Exp EQ . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 126
+    Exp  转到状态 126
 
 
-State 100
+状态 100
 
    59 Exp: Exp PLUS . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 127
+    Exp  转到状态 127
 
 
-State 101
+状态 101
 
    60 Exp: Exp MINUS . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 128
+    Exp  转到状态 128
 
 
-State 102
+状态 102
 
    61 Exp: Exp MUL . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 129
+    Exp  转到状态 129
 
 
-State 103
+状态 103
 
    62 Exp: Exp DIV . Exp
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 130
+    Exp  转到状态 130
 
 
-State 104
+状态 104
 
    71 Exp: Exp LB . Exp RB
    72    | Exp LB . Exp error
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp  go to state 131
+    Exp  转到状态 131
 
 
-State 105
+状态 105
 
    73 Exp: Exp DOT . ID
 
-    ID  shift, and go to state 132
+    ID  偏移，并进入状态 132
 
 
-State 106
+状态 106
 
    30 Stmt: Exp SEMI .
 
-    $default  reduce using rule 30 (Stmt)
+    $default  使用规则 30 以归约 (Stmt)
 
 
-State 107
+状态 107
 
    33 Stmt: IF LP Exp . RP Stmt
    34     | IF LP Exp . RP Stmt ELSE Stmt
@@ -1609,27 +1609,27 @@ State 107
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 133
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    RP      shift, and go to state 134
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    error   偏移，并进入状态 133
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    RP      偏移，并进入状态 134
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
 
-State 108
+状态 108
 
    35 Stmt: WHILE LP Exp . RP Stmt
    36     | WHILE LP Exp . error Stmt
@@ -1651,55 +1651,55 @@ State 108
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 135
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    RP      shift, and go to state 136
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    error   偏移，并进入状态 135
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    RP      偏移，并进入状态 136
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
 
-State 109
+状态 109
 
    38 Stmt: RETURN Exp error .
 
-    $default  reduce using rule 38 (Stmt)
+    $default  使用规则 38 以归约 (Stmt)
 
 
-State 110
+状态 110
 
    32 Stmt: RETURN Exp SEMI .
 
-    $default  reduce using rule 32 (Stmt)
+    $default  使用规则 32 以归约 (Stmt)
 
 
-State 111
+状态 111
 
    70 Exp: ID LP error .
 
-    $default  reduce using rule 70 (Exp)
+    $default  使用规则 70 以归约 (Exp)
 
 
-State 112
+状态 112
 
    69 Exp: ID LP RP .
 
-    $default  reduce using rule 69 (Exp)
+    $default  使用规则 69 以归约 (Exp)
 
 
-State 113
+状态 113
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1722,51 +1722,51 @@ State 113
    81     | Exp . COMMA COMMA Args error
    82     | Exp .
 
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
-    COMMA   shift, and go to state 137
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
+    COMMA   偏移，并进入状态 137
 
-    $default  reduce using rule 82 (Args)
+    $default  使用规则 82 以归约 (Args)
 
 
-State 114
+状态 114
 
    67 Exp: ID LP Args . RP
    68    | ID LP Args . error
 
-    error  shift, and go to state 138
-    RP     shift, and go to state 139
+    error  偏移，并进入状态 138
+    RP     偏移，并进入状态 139
 
 
-State 115
+状态 115
 
    64 Exp: LP Exp error .
 
-    $default  reduce using rule 64 (Exp)
+    $default  使用规则 64 以归约 (Exp)
 
 
-State 116
+状态 116
 
    63 Exp: LP Exp RP .
 
-    $default  reduce using rule 63 (Exp)
+    $default  使用规则 63 以归约 (Exp)
 
 
-State 117
+状态 117
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1787,28 +1787,28 @@ State 117
    78    | Exp . ERROR Exp
    78    | Exp ERROR Exp .
 
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
-    ERROR  error (nonassociative)
+    ERROR  错误 (非相联的)
 
-    $default  reduce using rule 78 (Exp)
+    $default  使用规则 78 以归约 (Exp)
 
 
-State 118
+状态 118
 
    50 Exp: Exp . ASSIGN Exp
    50    | Exp ASSIGN Exp .
@@ -1829,26 +1829,26 @@ State 118
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    DOT     shift, and go to state 105
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    DOT     偏移，并进入状态 105
 
-    $default  reduce using rule 50 (Exp)
+    $default  使用规则 50 以归约 (Exp)
 
 
-State 119
+状态 119
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1869,24 +1869,24 @@ State 119
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    AND    shift, and go to state 93
-    LT     shift, and go to state 94
-    LE     shift, and go to state 95
-    GT     shift, and go to state 96
-    GE     shift, and go to state 97
-    NE     shift, and go to state 98
-    EQ     shift, and go to state 99
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    AND    偏移，并进入状态 93
+    LT     偏移，并进入状态 94
+    LE     偏移，并进入状态 95
+    GT     偏移，并进入状态 96
+    GE     偏移，并进入状态 97
+    NE     偏移，并进入状态 98
+    EQ     偏移，并进入状态 99
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 52 (Exp)
+    $default  使用规则 52 以归约 (Exp)
 
 
-State 120
+状态 120
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1907,23 +1907,23 @@ State 120
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    LT     shift, and go to state 94
-    LE     shift, and go to state 95
-    GT     shift, and go to state 96
-    GE     shift, and go to state 97
-    NE     shift, and go to state 98
-    EQ     shift, and go to state 99
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    LT     偏移，并进入状态 94
+    LE     偏移，并进入状态 95
+    GT     偏移，并进入状态 96
+    GE     偏移，并进入状态 97
+    NE     偏移，并进入状态 98
+    EQ     偏移，并进入状态 99
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 51 (Exp)
+    $default  使用规则 51 以归约 (Exp)
 
 
-State 121
+状态 121
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1944,17 +1944,17 @@ State 121
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 53 (Exp)
+    $default  使用规则 53 以归约 (Exp)
 
 
-State 122
+状态 122
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -1975,17 +1975,17 @@ State 122
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 54 (Exp)
+    $default  使用规则 54 以归约 (Exp)
 
 
-State 123
+状态 123
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2006,17 +2006,17 @@ State 123
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 55 (Exp)
+    $default  使用规则 55 以归约 (Exp)
 
 
-State 124
+状态 124
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2037,17 +2037,17 @@ State 124
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 56 (Exp)
+    $default  使用规则 56 以归约 (Exp)
 
 
-State 125
+状态 125
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2068,17 +2068,17 @@ State 125
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 57 (Exp)
+    $default  使用规则 57 以归约 (Exp)
 
 
-State 126
+状态 126
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2099,17 +2099,17 @@ State 126
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    PLUS   shift, and go to state 100
-    MINUS  shift, and go to state 101
-    MUL    shift, and go to state 102
-    DIV    shift, and go to state 103
-    LB     shift, and go to state 104
-    DOT    shift, and go to state 105
+    PLUS   偏移，并进入状态 100
+    MINUS  偏移，并进入状态 101
+    MUL    偏移，并进入状态 102
+    DIV    偏移，并进入状态 103
+    LB     偏移，并进入状态 104
+    DOT    偏移，并进入状态 105
 
-    $default  reduce using rule 58 (Exp)
+    $default  使用规则 58 以归约 (Exp)
 
 
-State 127
+状态 127
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2130,15 +2130,15 @@ State 127
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    MUL  shift, and go to state 102
-    DIV  shift, and go to state 103
-    LB   shift, and go to state 104
-    DOT  shift, and go to state 105
+    MUL  偏移，并进入状态 102
+    DIV  偏移，并进入状态 103
+    LB   偏移，并进入状态 104
+    DOT  偏移，并进入状态 105
 
-    $default  reduce using rule 59 (Exp)
+    $default  使用规则 59 以归约 (Exp)
 
 
-State 128
+状态 128
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2159,15 +2159,15 @@ State 128
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    MUL  shift, and go to state 102
-    DIV  shift, and go to state 103
-    LB   shift, and go to state 104
-    DOT  shift, and go to state 105
+    MUL  偏移，并进入状态 102
+    DIV  偏移，并进入状态 103
+    LB   偏移，并进入状态 104
+    DOT  偏移，并进入状态 105
 
-    $default  reduce using rule 60 (Exp)
+    $default  使用规则 60 以归约 (Exp)
 
 
-State 129
+状态 129
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2188,13 +2188,13 @@ State 129
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    LB   shift, and go to state 104
-    DOT  shift, and go to state 105
+    LB   偏移，并进入状态 104
+    DOT  偏移，并进入状态 105
 
-    $default  reduce using rule 61 (Exp)
+    $default  使用规则 61 以归约 (Exp)
 
 
-State 130
+状态 130
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2215,13 +2215,13 @@ State 130
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    LB   shift, and go to state 104
-    DOT  shift, and go to state 105
+    LB   偏移，并进入状态 104
+    DOT  偏移，并进入状态 105
 
-    $default  reduce using rule 62 (Exp)
+    $default  使用规则 62 以归约 (Exp)
 
 
-State 131
+状态 131
 
    50 Exp: Exp . ASSIGN Exp
    51    | Exp . AND Exp
@@ -2243,262 +2243,262 @@ State 131
    73    | Exp . DOT ID
    78    | Exp . ERROR Exp
 
-    error   shift, and go to state 140
-    ERROR   shift, and go to state 90
-    ASSIGN  shift, and go to state 91
-    OR      shift, and go to state 92
-    AND     shift, and go to state 93
-    LT      shift, and go to state 94
-    LE      shift, and go to state 95
-    GT      shift, and go to state 96
-    GE      shift, and go to state 97
-    NE      shift, and go to state 98
-    EQ      shift, and go to state 99
-    PLUS    shift, and go to state 100
-    MINUS   shift, and go to state 101
-    MUL     shift, and go to state 102
-    DIV     shift, and go to state 103
-    LB      shift, and go to state 104
-    RB      shift, and go to state 141
-    DOT     shift, and go to state 105
+    error   偏移，并进入状态 140
+    ERROR   偏移，并进入状态 90
+    ASSIGN  偏移，并进入状态 91
+    OR      偏移，并进入状态 92
+    AND     偏移，并进入状态 93
+    LT      偏移，并进入状态 94
+    LE      偏移，并进入状态 95
+    GT      偏移，并进入状态 96
+    GE      偏移，并进入状态 97
+    NE      偏移，并进入状态 98
+    EQ      偏移，并进入状态 99
+    PLUS    偏移，并进入状态 100
+    MINUS   偏移，并进入状态 101
+    MUL     偏移，并进入状态 102
+    DIV     偏移，并进入状态 103
+    LB      偏移，并进入状态 104
+    RB      偏移，并进入状态 141
+    DOT     偏移，并进入状态 105
 
 
-State 132
+状态 132
 
    73 Exp: Exp DOT ID .
 
-    $default  reduce using rule 73 (Exp)
+    $default  使用规则 73 以归约 (Exp)
 
 
-State 133
+状态 133
 
    39 Stmt: IF LP Exp error . Stmt
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    CompSt  go to state 68
-    Stmt    go to state 142
-    Exp     go to state 71
+    CompSt  转到状态 68
+    Stmt    转到状态 142
+    Exp     转到状态 71
 
 
-State 134
+状态 134
 
    33 Stmt: IF LP Exp RP . Stmt
    34     | IF LP Exp RP . Stmt ELSE Stmt
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    CompSt  go to state 68
-    Stmt    go to state 143
-    Exp     go to state 71
+    CompSt  转到状态 68
+    Stmt    转到状态 143
+    Exp     转到状态 71
 
 
-State 135
+状态 135
 
    36 Stmt: WHILE LP Exp error . Stmt
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    CompSt  go to state 68
-    Stmt    go to state 144
-    Exp     go to state 71
+    CompSt  转到状态 68
+    Stmt    转到状态 144
+    Exp     转到状态 71
 
 
-State 136
+状态 136
 
    35 Stmt: WHILE LP Exp RP . Stmt
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    CompSt  go to state 68
-    Stmt    go to state 145
-    Exp     go to state 71
+    CompSt  转到状态 68
+    Stmt    转到状态 145
+    Exp     转到状态 71
 
 
-State 137
+状态 137
 
    80 Args: Exp COMMA . Args
    81     | Exp COMMA . COMMA Args error
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
-    COMMA  shift, and go to state 146
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
+    COMMA  偏移，并进入状态 146
 
-    Exp   go to state 113
-    Args  go to state 147
+    Exp   转到状态 113
+    Args  转到状态 147
 
 
-State 138
+状态 138
 
    68 Exp: ID LP Args error .
 
-    $default  reduce using rule 68 (Exp)
+    $default  使用规则 68 以归约 (Exp)
 
 
-State 139
+状态 139
 
    67 Exp: ID LP Args RP .
 
-    $default  reduce using rule 67 (Exp)
+    $default  使用规则 67 以归约 (Exp)
 
 
-State 140
+状态 140
 
    72 Exp: Exp LB Exp error .
 
-    $default  reduce using rule 72 (Exp)
+    $default  使用规则 72 以归约 (Exp)
 
 
-State 141
+状态 141
 
    71 Exp: Exp LB Exp RB .
 
-    $default  reduce using rule 71 (Exp)
+    $default  使用规则 71 以归约 (Exp)
 
 
-State 142
+状态 142
 
    39 Stmt: IF LP Exp error Stmt .
 
-    $default  reduce using rule 39 (Stmt)
+    $default  使用规则 39 以归约 (Stmt)
 
 
-State 143
+状态 143
 
    33 Stmt: IF LP Exp RP Stmt .
    34     | IF LP Exp RP Stmt . ELSE Stmt
 
-    ELSE  shift, and go to state 148
+    ELSE  偏移，并进入状态 148
 
-    $default  reduce using rule 33 (Stmt)
+    $default  使用规则 33 以归约 (Stmt)
 
 
-State 144
+状态 144
 
    36 Stmt: WHILE LP Exp error Stmt .
 
-    $default  reduce using rule 36 (Stmt)
+    $default  使用规则 36 以归约 (Stmt)
 
 
-State 145
+状态 145
 
    35 Stmt: WHILE LP Exp RP Stmt .
 
-    $default  reduce using rule 35 (Stmt)
+    $default  使用规则 35 以归约 (Stmt)
 
 
-State 146
+状态 146
 
    81 Args: Exp COMMA COMMA . Args error
 
-    ERROR  shift, and go to state 57
-    INT    shift, and go to state 61
-    FLOAT  shift, and go to state 62
-    CHAR   shift, and go to state 63
-    ID     shift, and go to state 64
-    MINUS  shift, and go to state 65
-    NOT    shift, and go to state 66
-    LP     shift, and go to state 67
+    ERROR  偏移，并进入状态 57
+    INT    偏移，并进入状态 61
+    FLOAT  偏移，并进入状态 62
+    CHAR   偏移，并进入状态 63
+    ID     偏移，并进入状态 64
+    MINUS  偏移，并进入状态 65
+    NOT    偏移，并进入状态 66
+    LP     偏移，并进入状态 67
 
-    Exp   go to state 113
-    Args  go to state 149
+    Exp   转到状态 113
+    Args  转到状态 149
 
 
-State 147
+状态 147
 
    80 Args: Exp COMMA Args .
 
-    $default  reduce using rule 80 (Args)
+    $default  使用规则 80 以归约 (Args)
 
 
-State 148
+状态 148
 
    34 Stmt: IF LP Exp RP Stmt ELSE . Stmt
 
-    ERROR   shift, and go to state 57
-    IF      shift, and go to state 58
-    WHILE   shift, and go to state 59
-    RETURN  shift, and go to state 60
-    INT     shift, and go to state 61
-    FLOAT   shift, and go to state 62
-    CHAR    shift, and go to state 63
-    ID      shift, and go to state 64
-    MINUS   shift, and go to state 65
-    NOT     shift, and go to state 66
-    LP      shift, and go to state 67
-    LC      shift, and go to state 24
+    ERROR   偏移，并进入状态 57
+    IF      偏移，并进入状态 58
+    WHILE   偏移，并进入状态 59
+    RETURN  偏移，并进入状态 60
+    INT     偏移，并进入状态 61
+    FLOAT   偏移，并进入状态 62
+    CHAR    偏移，并进入状态 63
+    ID      偏移，并进入状态 64
+    MINUS   偏移，并进入状态 65
+    NOT     偏移，并进入状态 66
+    LP      偏移，并进入状态 67
+    LC      偏移，并进入状态 24
 
-    CompSt  go to state 68
-    Stmt    go to state 150
-    Exp     go to state 71
+    CompSt  转到状态 68
+    Stmt    转到状态 150
+    Exp     转到状态 71
 
 
-State 149
+状态 149
 
    81 Args: Exp COMMA COMMA Args . error
 
-    error  shift, and go to state 151
+    error  偏移，并进入状态 151
 
 
-State 150
+状态 150
 
    34 Stmt: IF LP Exp RP Stmt ELSE Stmt .
 
-    $default  reduce using rule 34 (Stmt)
+    $default  使用规则 34 以归约 (Stmt)
 
 
-State 151
+状态 151
 
    81 Args: Exp COMMA COMMA Args error .
 
-    $default  reduce using rule 81 (Args)
+    $default  使用规则 81 以归约 (Args)
