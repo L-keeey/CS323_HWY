@@ -1,3 +1,99 @@
 in def var
+varb map:
+var map end
 in def var
+varb map:
+name
+0
+var map end
 def struct
+start field list.
+generate field list.
+non-empty structure
+get field list from node
+0x559ef572f360
+0x559ef572cba0
+0x559ef572ca70
+0x559ef572c810
+success get name from declist
+name
+prim/array type list node
+Generate a prim type
+get field list from node
+0x559ef572f230
+0x559ef572ece0
+0x559ef572ebb0
+0x559ef572e950
+0x559ef572e490
+success get name from declist
+friends
+prim/array type list node
+Generate a array
+int
+creat prim arr
+4
+10
+rec gen arr
+complete gen arr
+0x559ef572fad0
+add a field list
+field list size
+2
+0x559ef572f950
+def complete, then cal hash
+cal field list hash
+cal field list hash
+cal array hash
+0x559ef572fad0
+foo1
+639688970
+struct def complete
+struct map:
+name:
+Person
+Person
+struct:
+name
+0
+friends
+1
+
+struct map end.
+in def var
+varb map:
+
+0
+name
+0
+var map end
+in def var
+varb map:
+
+0
+name
+0
+tom
+Person
+var map end
+Error type 3 at Line 9: variable is redefined.
+in def var
+varb map:
+
+0
+name
+0
+tom
+Person
+var map end
+checking value
+0x559ef5732870
+check is same type
+0
+0
+foo
+0
+0
+1
+Error type 1 at Line 13: variable is used without a definition.
+
+ref not found

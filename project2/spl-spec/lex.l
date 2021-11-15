@@ -189,7 +189,11 @@ return  {
 
 {FLOAT} {
             float res = atof(yytext);
+<<<<<<< HEAD
+            if (res == 0.0 && yyleng >3){
+=======
             if (res == 0.0 && yyleng > 3){
+>>>>>>> main
                 printf("Error type A at Line %d: Value out of bounds \'%s\' \n", yylineno, yytext);
             } else {
                 yylval.Node_value = new_Node_f("FLOAT", res, yytext);
