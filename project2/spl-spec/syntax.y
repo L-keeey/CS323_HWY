@@ -120,7 +120,7 @@ DefList:
     | Def DefList                { $$ = new_Node_l("DefList", @$.first_line); addChild($$, $1); addChild($$, $2);}
     ;
 Def: 
-     Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
+      Specifier DecList SEMI { $$ = new_Node_l("Def", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
     | Specifier DecList error {show_yyerror(MISSING_SEMI);}
     | error DecList SEMI {show_yyerror(MISSING_SPEC);}
     ;

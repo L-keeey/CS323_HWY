@@ -1,0 +1,10 @@
+struct st addOne(int n)
+{
+  return n + 1;
+}
+int test_11912013_2()
+{
+  int k = 4;
+  int r = add(k);
+  return k;
+}

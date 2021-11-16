@@ -1,5 +1,6 @@
 make clean
 make 
+./bin/splc ./my_test/test_11912013_2.spl 
 ./bin/splc ./test/test_2_r01.spl 
 ./bin/splc ./test/test_2_r02.spl 
 ./bin/splc ./test/test_2_r03.spl 

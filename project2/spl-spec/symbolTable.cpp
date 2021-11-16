@@ -36,7 +36,7 @@ FieldList* generateFieldList(Node* node, int line);
 bool isSameTypes(Type* type1, Type* type2);
 void checkReturnType(Type* define, Node* compSt, int line);
 Type* paramDecNodeType(Node* paramDec, int line);
-Type* specifierNodeType(Node* specifier);
+Type* specifierNodeType(Node* specifier, int line);
 void printType1Error(int line);
 void printType2Error(int line);
 void printType3Error(int line);
@@ -52,6 +52,7 @@ void printType12Error(int line);
 void printType13Error(int line);
 void printType14Error(int line);
 void printType15Error(int line);
+void printType16Error(int line);
 int checkINTexp(Node* exp, int allowbool);
 Type* typeAfterCalc(Node* exp1,Node* exp2,int line);
 Type* checkStructMember(Node* exp, Node* id, int line);
@@ -155,7 +156,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
             int childNum = iter->child_num;
             // none array type
             if (childNum == 1){
-                Type* type = specifierNodeType(specifier);
+                Type* type = specifierNodeType(specifier, line);
                 Node* id = iter->child_list[0];
                 if(variable_table.count(id->string_value)>0){
                     printType3Error(line);
@@ -164,7 +165,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 }
             // VarDec -> VarDec LB INT RB | ID
             }else{
-                Type* type = specifierNodeType(specifier);
+                Type* type = specifierNodeType(specifier, line);
                 Node* VarDec=iter;
                 while(childNum == 4){
                     int size = VarDec->child_list[2]->int_value;
@@ -200,7 +201,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 //this part is copy from above
                 // none array type
                 if (childNum == 1){
-                    Type* type = specifierNodeType(specifier);
+                    Type* type = specifierNodeType(specifier, line);
                     Node* id = iter->child_list[0];
                     sout("checking value");
                     sout(exp);
@@ -216,7 +217,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     }
                 // VarDec -> VarDec LB INT RB | ID
                 }else{
-                    Type* type = specifierNodeType(specifier);
+                    Type* type = specifierNodeType(specifier, line);
                     Node* VarDec=iter;
                     while(childNum == 3){
                         int size = VarDec->child_list[2]->int_value;
@@ -254,7 +255,7 @@ void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
     sout("start defFun");
     // fetch return type
     std::vector<Type*> types;
-    types.push_back(specifierNodeType(specifier));
+    types.push_back(specifierNodeType(specifier, line));
 
     // fetch function name as key
     // FunDec -> ID LP VarList RP | ID LP RP  
@@ -290,7 +291,8 @@ void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
     sout(types.size());  
 
     // check return type
-    checkReturnType(types[0], compSt, line);
+    if (types[0] != NULL)
+        checkReturnType(types[0], compSt, line);
 }
 
 // Exp -> ID LP Args RP
@@ -441,6 +443,9 @@ Type* checkStructMember(Node* exp, Node* id, int line){
     sout("visit check struct member");
     std::string id_str = id->string_value;
     sout(id_str);
+    if(exp->type_value == NULL){
+        return NULL;
+    }
     sout(exp->type_value->name);
     Type* s_type = searchStructType(exp->type_value->name);
     if (s_type == NULL) {
@@ -557,7 +562,7 @@ void printType5Error(int line){
 }    
 
 void printType15Error(int line){
-    std::cout << "Error type 15 at Line " << line << ": the structure should not be redfined." << std::endl;
+    std::cout << "Error type 15 at Line " << line << ": the structure should not be redefined." << std::endl;
 } 
 
 void printType14Error(int line){
@@ -568,7 +573,11 @@ void printType13Error(int line){
     std::cout << "Error type 13 at Line " << line << ": non-structure type variable could not apply dot operator." << std::endl;
 } 
 
-Type* specifierNodeType(Node* specifier){
+void printType16Error(int line){
+    std::cout << "Error type 16 at Line " << line << ": the structure should be defined first." << std::endl;
+}
+
+Type* specifierNodeType(Node* specifier, int line){
     Node* child = specifier->child_list[0];
     // Specifier -> Type
     if (strcmp(child->token, "TYPE") == 0){
@@ -580,11 +589,15 @@ Type* specifierNodeType(Node* specifier){
         // StructSpecifier -> STRUCT ID
         Node* ID = child->child_list[1];
         std::string structName = ID->string_value;
-        return searchStructType(structName);
+        Type* type = searchStructType(structName);
+        if (type == NULL) {
+            printType16Error(line);
+        }
+        return type;
     }   
 }
 
-Type* paramDecNodeType(Node* paramDec,int line){
+Type* paramDecNodeType(Node* paramDec, int line){
     // ParamDec -> Specifier VarDec 
     Node* specifier = paramDec->child_list[0];
     Node* varDec = paramDec->child_list[1];
@@ -592,12 +605,12 @@ Type* paramDecNodeType(Node* paramDec,int line){
     int childNum = varDec->child_num;
     // none array type
     if (childNum == 1){
-        return specifierNodeType(specifier);
+        return specifierNodeType(specifier, line);
     }
         
     // VarDec -> VarDec LB INT RB | ID
     else{
-        Type* type = specifierNodeType(specifier);
+        Type* type = specifierNodeType(specifier, line);
 
         while(childNum == 3){
             int size = varDec->child_list[2]->int_value;
@@ -952,7 +965,7 @@ void addarg(Node* varList,int line){
         // ParamDec -> Specifier VarDec 
         Node* specifier = paramDec->child_list[0];
         Node* varDec = paramDec->child_list[1];        
-        Type* type = specifierNodeType(specifier);
+        Type* type = specifierNodeType(specifier, line);
 
         childNum = varDec->child_num;
         if (childNum == 1){ 
@@ -966,7 +979,7 @@ void addarg(Node* varList,int line){
         }
         //array part
         else{
-            Type* type = specifierNodeType(specifier);
+            Type* type = specifierNodeType(specifier, line);
 
             while(childNum == 3){
                 int size = varDec->child_list[2]->int_value;
@@ -1001,7 +1014,7 @@ void addarg(Node* varList,int line){
     // ParamDec -> Specifier VarDec 
     Node* specifier = paramDec->child_list[0];
     Node* varDec = paramDec->child_list[1];        
-    Type* type = specifierNodeType(specifier);
+    Type* type = specifierNodeType(specifier, line);
 
     childNum = varDec->child_num;
     if (childNum == 1){ 
@@ -1015,7 +1028,7 @@ void addarg(Node* varList,int line){
     }
     //array part
     else{
-        Type* type = specifierNodeType(specifier);
+        Type* type = specifierNodeType(specifier, line);
 
         while(childNum == 3){
             int size = varDec->child_list[2]->int_value;
