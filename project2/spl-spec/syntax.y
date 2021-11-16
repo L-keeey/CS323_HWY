@@ -157,7 +157,7 @@ Exp:
     | ID LP Args error      {show_yyerror(MISSING_RP);}
     | ID LP RP              { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); invokeFun($$,$1,NULL,@$.first_line);}
     | ID LP error           {show_yyerror(MISSING_RP);}
-    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);if(!checkINTexp($3,0)){printType12Error(@$.first_line);} determineExpType($$,$1,@$.first_line);}
+    | Exp LB Exp RB         { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); addChild($$, $4);if(!checkINTexp($3,0)){printType12Error(@$.first_line);}else{ determineExpType($$,$1,@$.first_line);}}
     | Exp LB Exp error      {show_yyerror(MISSING_RB);}
     | Exp DOT ID            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);$$->type_value=checkStructMember($1,$3,@$.first_line);}
     | ID                    { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1);$$->type_value=findID($1->string_value,@$.first_line);}

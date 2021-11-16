@@ -1,1 +1,2 @@
 Error type 12 at Line 15: array indexing with a non-integer type expression.
+Error type 5 at Line 15: the type of the operands at both sides of assignment operator should match.
