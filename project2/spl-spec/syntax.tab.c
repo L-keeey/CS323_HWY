@@ -1873,7 +1873,7 @@ yyreduce:
 
   case 43:
 #line 123 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Def", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));defVar((yyvsp[-2].Node_value),(yyvsp[-1].Node_value),(yyloc).first_line);}
+                             { (yyval.Node_value) = new_Node_l("Def", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));defVar((yyvsp[-2].Node_value),(yyvsp[-1].Node_value),(yyloc).first_line);}
 #line 1878 "syntax.tab.c"
     break;
 

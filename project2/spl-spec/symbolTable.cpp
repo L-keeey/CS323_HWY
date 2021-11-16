@@ -716,6 +716,13 @@ bool isSameTypes(Type* type1, Type* type2){
         sout("prim");
         sout(type1->primitive);
         sout(type2->primitive);
+
+        if (strcmp("bool", type1->name) == 0 || strcmp("bool", type2->name) == 0){
+            sout(strcmp("bool", type1->name));
+            sout(strcmp("bool", type2->name));
+            return false;
+        }
+            
         return (type1->primitive == type2->primitive);
     } else if (type1->category == ARRAY) {
         sout("array");
