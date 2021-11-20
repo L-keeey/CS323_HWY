@@ -441,6 +441,9 @@ Type* checkStructMember(Node* exp, Node* id, int line){
     sout("visit check struct member");
     std::string id_str = id->string_value;
     sout(id_str);
+    if (exp->type_value == 0) {
+        return NULL;
+    }
     sout(exp->type_value->name);
     Type* s_type = searchStructType(exp->type_value->name);
     if (s_type == NULL) {
@@ -782,6 +785,9 @@ FieldList* getFieldListFromNode(Node *node) { // From The DefList Node!
         // It is a struct type, just search it in the struct table, since if it exist, if must be in it.
         sout("struct type list node");
         std::string s_name = base_node->child_list[0]->child_list[0]->child_list[1]->string_value;
+        if (base_node->child_list[0]->child_list[0]->child_num >= 4) {
+            defStructure(base_node->child_list[0], base_node->line_No);
+        }
         res->type = searchStructType(s_name);
         sout(s_name);
     }

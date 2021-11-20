@@ -1,0 +1,27 @@
+in def var
+varb map:
+var map end
+def struct
+start field list.
+generate field list.
+non-empty structure
+get field list from node
+0x55f5db15e880
+0x55f5db15d060
+0x55f5db15cf30
+0x55f5db15ccd0
+0x55f5db15c810
+success get name from declist
+*******
+cc
+TYPE
+prim/array type list node
+Generate a array
+char
+creat prim arr
+4
+5
+complete gen array
+0x55f5db15eeb0
+get field list from node
+0x55f5db15e750

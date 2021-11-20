@@ -1,0 +1,18 @@
+struct st {
+    int a;
+    float b[10];
+    char c;
+};
+
+int test_11912013_01() {
+    int t = 10;
+    struct st mySt;
+    while (t > 0) {
+        t = t - 1;
+        mySt.a = mySt.a + 1;
+        // May happen a kind of segament error.
+        // Need to solve.
+        mySt.b[t] = mySt.b[t] + 0.1;
+    }
+    return 0;
+}

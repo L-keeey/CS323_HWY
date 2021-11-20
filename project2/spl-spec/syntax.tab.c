@@ -2047,7 +2047,7 @@ yyreduce:
 
   case 72:
 #line 160 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!checkINTexp((yyvsp[-1].Node_value),0)){printType12Error((yyloc).first_line);} determineExpType((yyval.Node_value),(yyvsp[-3].Node_value),(yyloc).first_line);}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-3].Node_value)); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!checkINTexp((yyvsp[-1].Node_value),0)){printType12Error((yyloc).first_line);}else{ determineExpType((yyval.Node_value),(yyvsp[-3].Node_value),(yyloc).first_line);}}
 #line 2052 "syntax.tab.c"
     break;
 
