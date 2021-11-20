@@ -8,49 +8,41 @@ non-empty structure
 get field list from node
 success get name from declist
 ************
-cc
+next
 TYPE
 prim/array type list node
-Generate a array
-char
-creat prim arr
-4
-5
-complete gen array
-0x556113993eb0
-cc
+Generate a prim type
+next
 add a field list complete
 field list size:
 1
-0x556113993e70
+0x55ab26b61950
 def complete, then cal hash
 cal field list hash
-0x556113993ef0
-cal array hash
-0x556113993eb0
-1560217
+0x55ab26b61990
+3
 struct def complete
 struct map:
 name:
-_
-_
+run
+run
 struct:
-cc
-array
-2
+next
+prim
+0
 
 struct map end.
 in def var
 varb map:
-cc
-array
+next
+0
 var map end
 in def var
 varb map:
-cc
-array
-val
-1
+next
+0
+spinlock
+0
 var map end
 def struct
 start field list.
@@ -59,49 +51,87 @@ non-empty structure
 get field list from node
 success get name from declist
 ************
-val
+spinlock
 TYPE
 prim/array type list node
 Generate a prim type
-val
+spinlock
 add a field list complete
 get field list from node
 success get name from declist
 ************
-charr
+freelist
 StructSpecifier
 struct type list node
-_
-charr
+run
+freelist
 add a field list complete
 field list size:
 2
-0x5561139963a0
+0x55ab26b63e20
 def complete, then cal hash
 cal field list hash
-0x5561139963e0
+0x55ab26b63e60
 cal field list hash
-0x556113993f70
+0x55ab26b619f0
 cal struct type hash
-4001
+3
 struct def complete
 struct map:
 name:
-_
-_
+kmem
+kmem
 struct:
-cc
-array
-2
-
-name:
-st
-st
-struct:
-val
+spinlock
 prim
-1
-charr
+0
+freelist
 struct
 
+name:
+run
+run
+struct:
+next
+prim
+0
+
 struct map end.
+in def var
+varb map:
+freelist
+run
+next
+0
+spinlock
+0
+var map end
+Error type 1 at Line 11: variable is used without a definition.
+Error type 7 at Line 11: unmantching operands,such as adding an integer to a structure variable
+in def var
+varb map:
+end
+0
+freelist
+run
+next
+0
+spinlock
+0
+var map end
+checking value
+0x55ab26b65e70
+start defFun
+param and return total size
+1
+start check return
+3
+0
+check return
+prim
+0
+0
+stmtList childNum
+0
+stack size
+0

@@ -1,0 +1,10 @@
+int add(int n)
+{
+  return (n + 1 == n);
+}
+int test_11912013_4()
+{
+  int k = 4;
+  int r = add(k) + add(k) + add(k);
+  return r;
+}

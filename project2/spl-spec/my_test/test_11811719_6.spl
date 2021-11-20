@@ -1,0 +1,8 @@
+struct run {
+  int next;
+};
+int freerange(int pa_start, int pa_end)
+{
+  char p;
+  p=run;
+}
