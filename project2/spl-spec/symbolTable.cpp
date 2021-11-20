@@ -12,7 +12,7 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
-#define sout(msg) // std::cout << msg << std::endl
+#define sout(msg)  std::cout << msg << std::endl
 
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
@@ -212,6 +212,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                     }else if(!isSameTypes(exp->type_value,type)){
                         //ASSIGN with not equal type
                         printType5Error(line);
+                        variable_table[id->string_value]=type;
                     }else{
                         variable_table[id->string_value]=type;
                     }

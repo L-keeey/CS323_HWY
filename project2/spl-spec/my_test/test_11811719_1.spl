@@ -1,0 +1,14 @@
+struct run {
+  int next;
+};
+
+struct kmem{
+  int spinlock;
+  run freelist;
+};
+int end;
+int kinit()
+{
+  int freerange=end+PHYSTOP;
+  return freerange;
+}
