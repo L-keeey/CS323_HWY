@@ -12,7 +12,7 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
-#define sout(msg)  std::cout << msg << std::endl
+#define sout(msg)  //std::cout << msg << std::endl
 
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
@@ -744,7 +744,8 @@ bool isSameTypes(Type* type1, Type* type2){
 * */
 FieldList* generateFieldList(Node* node, int line) {
     sout("generate field list.");
-    if(node->child_num <= 4) {
+    sout(node->child_list[3]->child_num);
+    if(node->child_list[3]->child_num == 0) {
         sout("empty structure");
         return nullptr;
         // This is an empty structure, just return from the function.
