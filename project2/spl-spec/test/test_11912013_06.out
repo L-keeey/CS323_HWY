@@ -1,0 +1,4 @@
+Error type 8 at Line 3: function return type and the declared type mismatch.
+Error type 3 at Line 5: variable is redefined.
+Error type 4 at Line 5: function should only be defined once.
+Error type 5 at Line 12: the type of the operands at both sides of assignment operator should match.
