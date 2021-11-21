@@ -744,6 +744,7 @@ bool isSameTypes(Type* type1, Type* type2){
 * */
 FieldList* generateFieldList(Node* node, int line) {
     sout("generate field list.");
+    sout(node->child_list[3]->child_num);
     if(node->child_list[3]->child_num == 0) {
         sout("empty structure");
         return nullptr;
