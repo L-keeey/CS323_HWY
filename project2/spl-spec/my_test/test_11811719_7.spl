@@ -1,8 +1,0 @@
-struct lock{
-    int val;
-}
-int main(){
-    lock.val=lock.val+1;
-    lock.val=lock+1;
-    return 0;
-}

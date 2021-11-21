@@ -1,6 +1,0 @@
-struct _ { char cc[5]; };
-
-struct st {
-    float val;
-    struct _ charr;
-};

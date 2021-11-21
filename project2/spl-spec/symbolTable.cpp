@@ -12,7 +12,7 @@
 #define FLOAT_BASE 4001;
 #define STRU_PROM 80207;
 #define CHAR_BASE 1560217;
-#define sout(msg)  std::cout << msg << std::endl
+#define sout(msg) // std::cout << msg << std::endl
 
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
@@ -482,11 +482,11 @@ Type* typeAfterCalc(Node* exp1,Node* exp2,int line){
         printType7Error(line);
         return NULL;
     }
-    if(exp1->type_value->primitive==_FLOAT&&(checkINTexp(exp2,0)||exp2->type_value->primitive==_FLOAT)){
+    if(exp1->type_value->primitive==_FLOAT&&(checkINTexp(exp2,1)||exp2->type_value->primitive==_FLOAT)){
         return new_prim_type("float");
-    }else if(checkINTexp(exp1,0)&&exp2->type_value->primitive==_FLOAT){
+    }else if(checkINTexp(exp1,1)&&exp2->type_value->primitive==_FLOAT){
         return new_prim_type("float");
-    }else if(checkINTexp(exp1,0)&&checkINTexp(exp2,0)){
+    }else if(checkINTexp(exp1,1)&&checkINTexp(exp2,1)){
         return new_prim_type("int");
     }else{
         printType7Error(line);
@@ -744,7 +744,7 @@ bool isSameTypes(Type* type1, Type* type2){
 * */
 FieldList* generateFieldList(Node* node, int line) {
     sout("generate field list.");
-    if(node->child_num <= 4) {
+    if(node->child_list[3]->child_num == 0) {
         sout("empty structure");
         return nullptr;
         // This is an empty structure, just return from the function.
