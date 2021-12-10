@@ -259,7 +259,7 @@ void translate_Stmt(struct Node* in){
         output.push_back(code1);
 
         translate_Stmt(in->child_list[4]);
-        code2->target = lb3;
+        code2->target[0] = lb3;
         code2->id = 10;
         output.push_back(code2);
 
@@ -269,7 +269,7 @@ void translate_Stmt(struct Node* in){
 
         translate_Stmt(in->child_list[6]);
         code4->id = 0;
-        code4->target = lb3;
+        code4->target[0] = lb3;
         output.push_back(code4);
     } else {
         // Something wrong happen since the else branch won't be access.
