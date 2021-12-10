@@ -128,10 +128,19 @@ void translate_ExtDefList(struct Node* in){
     }
 }
 void translate_ExtDef(struct Node* in){
-
+    if(strcmp(in->child_list[2]->token,"ExtDecList")==0){
+        //Specifier ExtDecList SEMI # variable definition
+        translate_ExtDecList(in->child_list[1]);
+    }else if(in->child_num==2){
+        //Specifier SEMI # structure definition
+    }else{
+        //Specifier FunDec CompSt  # function definition
+        translate_FunDec(in->child_list[1]);
+        translate_CompSt(in->child_list[2]);
+    }
 }
 void translate_ExtDecList(struct Node* in){
-    translate_VarDec(in->child_list[0]);
+    translate_VarDec(in->child_list[0],13);
     if(in->child_num==3){
         translate_ExtDecList(in->child_list[2]);
     }
@@ -144,17 +153,39 @@ void translate_StructSpecifier(struct Node* in){
 
 }
 */
-void translate_VarDec(struct Node* in){
+//!! haven't deal with array
+//TACid=14 PARAM x
+//TACid=13 DEC x
+void translate_VarDec(struct Node* in,int TACid){
     //translate the staff in var map 
     if(in->child_num == 1){
         Node* ID = in->child_list[0];
         std::string id = ID->string_value;
-        if(id_address_map.count(id) == 0)
-            id_address_map[id] = new_var();
+        if(id_address_map.count(id) == 0){
+            std::string varname=new_var();
+            id_address_map[id] = varname;
+            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+            code->target[0] = varname;
+            code->id = TACid;
+            code->size=8;
+            output.push_back(code);
+        }
+            
+
     }
 }
 void translate_FunDec(struct Node* in){
-//translate the staff in function map
+    //translate the staff in function map
+    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+    code->target[0] = in->child_list[0]->string_value;
+    code->id = 1;
+    output.push_back(code);
+    if(in->child_num==4){
+        //ID LP VarList RP # with parameter
+        translate_VarList(in->child_list[2]);
+    }else{
+        //ID LP RP # without parameter
+    }
 }
 void translate_VarList(struct Node* in){
     translate_ParamDec(in->child_list[0]);
@@ -162,8 +193,13 @@ void translate_VarList(struct Node* in){
         translate_VarList(in->child_list[2]);
     }
 }
+//haven't deal with array
 void translate_ParamDec(struct Node* in){
-//generate PARAM x
+    //generate PARAM x
+    //give the function the parameter
+    //Specifier VarDec
+    struct Node* VarDec=in->child_list[1];
+    translate_VarDec(VarDec,14);
 }
 void translate_CompSt(struct Node* in){
     translate_DefList(in->child_list[1]);
@@ -194,7 +230,36 @@ void translate_DecList(struct Node* in){
     }
 }
 void translate_Dec(struct Node* in){
-//call vardec, assign value to address
+    //call vardec, assign value to address
+    
+    if(in->child_num==0){
+        //VarDec
+        translate_VarDec(in->child_list[0],13);
+    }else{
+        //VarDec ASSIGN Exp
+        std::string varname;
+        if(in->child_num == 1){
+            Node* ID = in->child_list[0];
+            std::string id = ID->string_value;
+            if(id_address_map.count(id) == 0){
+                varname=new_var();
+                id_address_map[id] = varname;
+                TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                code->target[0] = varname;
+                code->id = 13;
+                code->size=8;
+                output.push_back(code);
+            }
+        }
+        std::string t1=new_place();
+        translate_Exp(in->child_list[2],t1);
+        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+        code->target[0]=varname;
+        code->target[1]=t1;
+        code->id=2;
+        output.push_back(code);
+
+    }
 }
 void translate_Exp(struct Node* in, std::string place){
     if (in->child_num == 1){
