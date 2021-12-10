@@ -175,9 +175,69 @@ void translate_StmtList(struct Node* in){
         translate_StmtList(in->child_list[1]);
     }
 }
+
 void translate_Stmt(struct Node* in){
-//copy && add
+    if (in->child_num == 1) {
+        translate_CompSt(in->child_list[0]);
+    } else if (in->child_num== 2) {
+        // Exp SEMI
+    } else if (in->child_num == 3) { // meaningful statements.
+        // Return Exp SEMI
+        std::string tp = new_place();
+        translate_Exp(in->child_list[1], tp);
+        TAC* return_tac = (struct TAC*) malloc(sizeof(struct TAC));
+        // Modify the tac;
+        return_tac->id = 12;
+        return_tac->target[0] = tp;
+        output.push_back(return_tac);
+    } else if (in->child_num == 5) {
+        // There may be two conditions
+        // WHILE LP Exp RP Stmt
+        // IF LP Exp RP Stmt ... (The things agter the translation is ignore)
+        if (strcmp(in->child_list[0]->token, "WHILE")) {
+            std::string lb1 = new_label();
+            std::string lb2 = new_label();
+            std::string lb3 = new_label();
+            TAC* code1 = (struct TAC*) malloc(sizeof(struct TAC));
+            TAC* code2 = (struct TAC*) malloc(sizeof(struct TAC));
+            TAC* code3 = (struct TAC*) malloc(sizeof(struct TAC));
+            TAC* code4 = (struct TAC*) malloc(sizeof(struct TAC));
+            code1->id = 0;
+            code1->target[0] = lb1;
+            output.push_back(code1);
+
+            translate_cond_Exp(in->child_list[2], lb2, lb3);
+
+            code2->id = 0;
+            code2->target[0] = lb2;
+            output.push_back(code2);
+
+            translate_Stmt(in->child_list[4]);
+
+            code3->id = 10;
+            code3->target[0] = lb1;
+
+            code4->id = 0;
+            code4->target[0] = lb3;
+
+            output.push_back(code3);
+            output.push_back(code4);
+
+        } else if (in->child_list[0]->token, "IF") {
+
+        } else {
+            // Something wrong happen since the else branch won't be access.
+            // debug part.
+        }
+    } else if (in->child_num == 7) {
+        // IF LP Exp RP Stmt ELSE Stmt
+
+    } else {
+        // Something wrong happen since the else branch won't be access.
+        // debug part.
+    }
 }
+
 void translate_DefList(struct Node* in){
     if(in->child_num>0){
         translate_Def(in->child_list[0]);
