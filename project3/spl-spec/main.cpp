@@ -54,7 +54,6 @@ int main(int argc, char **argv){
     write.push_back(NULL);
     write.push_back(inttype);
     read.push_back(inttype);
-    read.push_back(NULL);
     function_table["read"] = read;
     function_table["write"] = write;
     if(argc != 2) {
@@ -256,10 +255,14 @@ void translate_StmtList(struct Node* in){
 void translate_Stmt(struct Node* in){
     if (in->child_num == 1) {
         translate_CompSt(in->child_list[0]);
+        std::cout << "COMP STMT" << std::endl;
     } else if (in->child_num== 2) {
-        // Exp SEMI
+        std::cout << "EXP SEMI" << std::endl;
+        std::string tp = new_place();
+        translate_Exp(in->child_list[0], tp);
     } else if (in->child_num == 3) { // meaningful statements.
         // Return Exp SEMI
+        std::cout << "RETURN STMT" << std::endl;
         std::string tp = new_place();
         translate_Exp(in->child_list[1], tp);
         TAC* return_tac = (struct TAC*) malloc(sizeof(struct TAC));
@@ -272,6 +275,7 @@ void translate_Stmt(struct Node* in){
         // WHILE LP Exp RP Stmt
         // IF LP Exp RP Stmt ... (The things agter the translation is ignore)
         if (strcmp(in->child_list[0]->token, "WHILE")) {
+            std::cout << "WHILE STMT" << std::endl;
             std::string lb1 = new_label();
             std::string lb2 = new_label();
             std::string lb3 = new_label();
@@ -301,6 +305,7 @@ void translate_Stmt(struct Node* in){
             output.push_back(code4);
 
         } else if (in->child_list[0]->token, "IF") {
+            std::cout << "IF STMT" << std::endl;
             std::string lb1 = new_label();
             std::string lb2 = new_label();
 
@@ -321,6 +326,7 @@ void translate_Stmt(struct Node* in){
             // debug part.
         }
     } else if (in->child_num == 7) {
+        std::cout << "IF-ELSE STMT" << std::endl;
         // IF LP Exp RP Stmt ELSE Stmt
         std::string lb1 = new_label();
         std::string lb2 = new_label();
