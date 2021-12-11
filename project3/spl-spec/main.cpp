@@ -77,10 +77,11 @@ int main(int argc, char **argv){
     // if(error_num == 0){
     //     pre_order_traversal(root, 0);
     // }
-    fclose(stdout);
 
     translate_Program(root);
     printOutput();
+    fclose(stdout);
+
     return 0;
 }
 
