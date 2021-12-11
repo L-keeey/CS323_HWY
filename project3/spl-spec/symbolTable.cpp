@@ -503,7 +503,7 @@ int checkINTexp(Node* exp, int allowbool){
             return 1;
         }else{
             if(strcmp(exp->type_value->name,"bool")==0){
-                std::cout<<"is bool"<<std::endl;
+                //std::cout<<"is bool"<<std::endl;
                 return 0;
             }else{
                 return 1;
