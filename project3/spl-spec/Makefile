@@ -21,4 +21,6 @@ clean:
 	@rm -f syntax.tab.*
 	@rm -rf bin/
 	@rm -f a.out
+	@rm -f test/*.ir
+	@rm -f sample/*.ir
 .PHONY: splc

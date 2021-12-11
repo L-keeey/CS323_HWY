@@ -1,6 +1,6 @@
 #include "syntax.tab.c"
 #include <sstream>
-#define sout(msg)  std::cout << msg << std::endl
+#define sout(msg)  //std::cout << msg << std::endl
 
 int var_num = 0;
 int label_num = 0;
@@ -80,16 +80,16 @@ int main(int argc, char **argv){
         output_dir[i] = '\0';
     }
     strncpy(output_dir, argv[1], strlen(argv[1])-4);
-    strcat(output_dir,".out");
+    strcat(output_dir,".ir");
     freopen(output_dir,"w",stdout);
 
     yyparse();
-    if(error_num == 0){
-        pre_order_traversal(root, 0);
-    }
+    // if(error_num == 0){
+    //     pre_order_traversal(root, 0);
+    // }
 
     translate_Program(root);
-    printOutput();
+    // printOutput();
 
     fclose(stdout);
 
@@ -435,11 +435,13 @@ void translate_Dec(struct Node* in){
         std::string varname;
         Node* VarDec=in->child_list[0];
         if(VarDec->child_num == 1){
-            Node* ID = in->child_list[0];
+            Node* ID = VarDec->child_list[0];
             std::string id = ID->string_value;
             if(id_address_map.count(id) == 0){
                 varname=new_var();
+                sout(varname);
                 id_address_map[id] = varname;
+                sout(id_address_map[id]);
                 /*
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 std::cout<<"Dec newvar"<<std::endl;
@@ -473,6 +475,8 @@ void translate_Exp(struct Node* in, std::string place){
         // variable access:        
         // ID (declared) 
         if (strcmp(child->token, "ID")==0){
+            sout(place);
+            sout("id");
             std::string id = child->string_value;
             std::string var = id_address_map[id];
 
@@ -705,6 +709,8 @@ void translate_Exp(struct Node* in, std::string place){
                 if (Exp1->child_num == 1){
                     std::string id = ID->string_value;
                     left = id_address_map[id];
+                    sout(id);
+                    sout(id_address_map.count(id));
                 }else if (Exp1->child_num == 4){
                     indexes.clear();
                     Node* Exp = in;
@@ -976,7 +982,7 @@ void translate_Args(struct Node* in){
     translate_Exp(in->child_list[0], tp);
     args.insert(args.begin(), tp);
 
-    if(in->child_num > 0){
+    if(in->child_num > 1){
         translate_Args(in->child_list[2]);
     }
 }

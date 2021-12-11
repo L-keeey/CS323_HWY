@@ -1927,49 +1927,49 @@ yyreduce:
 
   case 52:
 #line 140 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),0)&&checkINTexp((yyvsp[0].Node_value),0))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1932 "syntax.tab.c"
     break;
 
   case 53:
 #line 141 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),0)&&checkINTexp((yyvsp[0].Node_value),0))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1938 "syntax.tab.c"
     break;
 
   case 54:
 #line 142 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1944 "syntax.tab.c"
     break;
 
   case 55:
 #line 143 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1950 "syntax.tab.c"
     break;
 
   case 56:
 #line 144 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1956 "syntax.tab.c"
     break;
 
   case 57:
 #line 145 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1962 "syntax.tab.c"
     break;
 
   case 58:
 #line 146 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1968 "syntax.tab.c"
     break;
 
   case 59:
 #line 147 "syntax.y"
-                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));if(!(checkINTexp((yyvsp[-2].Node_value),1)&&checkINTexp((yyvsp[0].Node_value),1))){printType7Error((yyloc).first_line);}(yyval.Node_value)->type_value=new_prim_type("bool");}
+                            { (yyval.Node_value) = new_Node_l("Exp", (yyloc).first_line); addChild((yyval.Node_value), (yyvsp[-2].Node_value)); addChild((yyval.Node_value), (yyvsp[-1].Node_value)); addChild((yyval.Node_value), (yyvsp[0].Node_value));typeAfterCalc((yyvsp[-2].Node_value),(yyvsp[0].Node_value),(yyloc).first_line);(yyval.Node_value)->type_value=new_prim_type("bool");}
 #line 1974 "syntax.tab.c"
     break;
 

@@ -1,11 +1,5 @@
 make clean
 make  
-./bin/splc ./sample/test01.spl 
-./bin/splc ./sample/test02.spl 
-./bin/splc ./sample/test03.spl 
-./bin/splc ./sample/test04.spl 
-
-
 ./bin/splc ./test/test_3_r01.spl 
 ./bin/splc ./test/test_3_r02.spl 
 ./bin/splc ./test/test_3_r03.spl 
