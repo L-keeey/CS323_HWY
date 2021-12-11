@@ -200,12 +200,15 @@ void translate_VarDec(struct Node* in, int TACid){
         if(id_address_map.count(id) == 0){
             std::string varname=new_var();
             id_address_map[id] = varname;
-            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-            std::cout<<"VarDec"<<std::endl;
-            code->target[0] = varname;
-            code->id = TACid;
-            code->size=8;
-            output.push_back(code);
+            if(TACid==14){
+                TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                std::cout<<"VarDec"<<std::endl;
+                code->target[0] = varname;
+                code->id = TACid;
+                code->size=8;
+                output.push_back(code);
+            }
+            
         }
             
 
@@ -395,12 +398,14 @@ void translate_Dec(struct Node* in){
             if(id_address_map.count(id) == 0){
                 varname=new_var();
                 id_address_map[id] = varname;
+                /*
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 std::cout<<"Dec newvar"<<std::endl;
                 code->target[0] = varname;
                 code->id = 13;
                 code->size=8;
                 output.push_back(code);
+                */
             }
         }
         std::string t1=new_place();
