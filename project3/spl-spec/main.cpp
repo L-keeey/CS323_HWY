@@ -202,6 +202,7 @@ void translate_VarDec(struct Node* in, int TACid){
             std::string varname=new_var();
             id_address_map[id] = varname;
             TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+            std::cout<<"VarDec"<<std::endl;
             code->target[0] = varname;
             code->id = TACid;
             code->size=8;
@@ -214,6 +215,7 @@ void translate_VarDec(struct Node* in, int TACid){
 void translate_FunDec(struct Node* in){
     //translate the staff in function map
     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+    std::cout<<"FunDec"<<std::endl;
     code->target[0] = in->child_list[0]->string_value;
     code->id = 1;
     output.push_back(code);
@@ -388,6 +390,7 @@ void translate_Dec(struct Node* in){
                 varname=new_var();
                 id_address_map[id] = varname;
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                std::cout<<"Dec newvar"<<std::endl;
                 code->target[0] = varname;
                 code->id = 13;
                 code->size=8;
@@ -397,6 +400,7 @@ void translate_Dec(struct Node* in){
         std::string t1=new_place();
         translate_Exp(in->child_list[2],t1);
         TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+        std::cout<<"Dec assign"<<std::endl;
         code->target[0]=varname;
         code->target[1]=t1;
         code->id=2;
