@@ -5,7 +5,7 @@ CPP=g++
 
 .comp:
 	$(CPP) -c symbolTable.cpp -o symbolTable.o
-	$(CPP) main.cpp -lfl -ly -o splc
+	$(CPP) main.cpp -lfl -o splc
 .bison:
 	$(BISON) -t -d -v syntax.y
 
