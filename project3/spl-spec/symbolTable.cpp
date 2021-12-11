@@ -220,7 +220,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 }else{
                     Type* type = specifierNodeType(specifier, line);
                     Node* VarDec=iter;
-                    while(childNum == 3){
+                    while(childNum == 4){
                         int size = VarDec->child_list[2]->int_value;
 
                         Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -503,6 +503,7 @@ int checkINTexp(Node* exp, int allowbool){
             return 1;
         }else{
             if(strcmp(exp->type_value->name,"bool")==0){
+                std::cout<<"is bool"<<std::endl;
                 return 0;
             }else{
                 return 1;
@@ -613,7 +614,7 @@ Type* paramDecNodeType(Node* paramDec, int line){
     else{
         Type* type = specifierNodeType(specifier, line);
 
-        while(childNum == 3){
+        while(childNum == 4){
             int size = varDec->child_list[2]->int_value;
 
             Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -966,12 +967,14 @@ void addarg(Node* varList,int line){
    
     int childNum = varList->child_num;
     Node* paramDec;
-
+    //std::cout<<"into add arg"<<std::endl;
+    //std::cout<<childNum<<std::endl;
     // VarList -> ParamDec COMMA VarList
     while (childNum == 3){
         paramDec = varList->child_list[0];
         
         // ParamDec -> Specifier VarDec 
+        //std::cout<<"add param to table"<<std::endl;
         Node* specifier = paramDec->child_list[0];
         Node* varDec = paramDec->child_list[1];        
         Type* type = specifierNodeType(specifier, line);
@@ -990,7 +993,7 @@ void addarg(Node* varList,int line){
         else{
             Type* type = specifierNodeType(specifier, line);
 
-            while(childNum == 3){
+            while(childNum == 4){
                 int size = varDec->child_list[2]->int_value;
 
                 Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -1010,6 +1013,7 @@ void addarg(Node* varList,int line){
             if(variable_table.count(ID->string_value)>0){
                 printType3Error(line);
             }else{
+                //std::cout<<"add array to table"<<std::endl;
                 variable_table[ID->string_value]=type;
             }
 
@@ -1037,9 +1041,10 @@ void addarg(Node* varList,int line){
     }
     //array part
     else{
+        //std::cout<<"into array"<<std::endl;
         Type* type = specifierNodeType(specifier, line);
-
-        while(childNum == 3){
+        //std::cout<<childNum<<std::endl;
+        while(childNum == 4){
             int size = varDec->child_list[2]->int_value;
 
             Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -1054,11 +1059,13 @@ void addarg(Node* varList,int line){
             varDec = varDec->child_list[0];
             childNum = varDec->child_num;
         }
-
         Node* ID = varDec->child_list[0];
+        //std::cout<<ID->token<<std::endl;
         if(variable_table.count(ID->string_value)>0){
             printType3Error(line);
         }else{
+            //std::cout<<"add param to table"<<std::endl;
+            //std::cout<<ID->string_value<<std::endl;
             variable_table[ID->string_value]=type;
         }
 

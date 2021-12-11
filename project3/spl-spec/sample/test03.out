@@ -1,0 +1,172 @@
+Program (1)
+  ExtDefList (1)
+    ExtDef (1)
+      Specifier (1)
+        StructSpecifier (1)
+          STRUCT
+          ID: Operands
+          LC
+          DefList (3)
+            Def (3)
+              Specifier (3)
+                TYPE: int
+              DecList (3)
+                Dec (3)
+                  VarDec (3)
+                    ID: o1
+              SEMI
+            DefList (4)
+              Def (4)
+                Specifier (4)
+                  TYPE: int
+                DecList (4)
+                  Dec (4)
+                    VarDec (4)
+                      ID: o2
+                SEMI
+          RC
+      SEMI
+    ExtDefList (7)
+      ExtDef (7)
+        Specifier (7)
+          TYPE: int
+        FunDec (7)
+          ID: add
+          LP
+          VarList (7)
+            ParamDec (7)
+              Specifier (7)
+                StructSpecifier (7)
+                  STRUCT
+                  ID: Operands
+              VarDec (7)
+                ID: temp
+          RP
+        CompSt (8)
+          LC
+          StmtList (9)
+            Stmt (9)
+              RETURN
+              Exp (9)
+                LP
+                Exp (9)
+                  Exp (9)
+                    Exp (9)
+                      ID: temp
+                    DOT
+                    ID: o1
+                  PLUS
+                  Exp (9)
+                    Exp (9)
+                      ID: temp
+                    DOT
+                    ID: o2
+                RP
+              SEMI
+          RC
+      ExtDefList (12)
+        ExtDef (12)
+          Specifier (12)
+            TYPE: int
+          FunDec (12)
+            ID: main
+            LP
+            RP
+          CompSt (13)
+            LC
+            DefList (14)
+              Def (14)
+                Specifier (14)
+                  TYPE: int
+                DecList (14)
+                  Dec (14)
+                    VarDec (14)
+                      ID: n
+                SEMI
+              DefList (15)
+                Def (15)
+                  Specifier (15)
+                    StructSpecifier (15)
+                      STRUCT
+                      ID: Operands
+                  DecList (15)
+                    Dec (15)
+                      VarDec (15)
+                        ID: op
+                  SEMI
+            StmtList (16)
+              Stmt (16)
+                Exp (16)
+                  Exp (16)
+                    Exp (16)
+                      ID: op
+                    DOT
+                    ID: o1
+                  ASSIGN
+                  Exp (16)
+                    INT: 1
+                SEMI
+              StmtList (17)
+                Stmt (17)
+                  Exp (17)
+                    Exp (17)
+                      Exp (17)
+                        ID: op
+                      DOT
+                      ID: o2
+                    ASSIGN
+                    Exp (17)
+                      INT: 2
+                  SEMI
+                StmtList (18)
+                  Stmt (18)
+                    Exp (18)
+                      Exp (18)
+                        ID: n
+                      ASSIGN
+                      Exp (18)
+                        ID: add
+                        LP
+                        Args (18)
+                          Exp (18)
+                            ID: op
+                        RP
+                    SEMI
+                  StmtList (19)
+                    Stmt (19)
+                      Exp (19)
+                        ID: write
+                        LP
+                        Args (19)
+                          Exp (19)
+                            ID: n
+                        RP
+                      SEMI
+                    StmtList (20)
+                      Stmt (20)
+                        RETURN
+                        Exp (20)
+                          INT: 0
+                        SEMI
+            RC
+Program
+ExtDefList
+ExtDef
+ExtDefList
+ExtDef
+FunDec
+FUNCTION add :
+VarList
+ParamDec
+VarDec
+PARAM v1
+ComSt
+DefList
+StmtList
+Stmt
+Exp
+Exp
+Exp
+Exp
+t4 := v1
+Exp

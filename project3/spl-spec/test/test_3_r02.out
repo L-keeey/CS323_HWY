@@ -1,0 +1,1152 @@
+Program (1)
+  ExtDefList (1)
+    ExtDef (1)
+      Specifier (1)
+        TYPE: int
+      FunDec (1)
+        ID: main
+        LP
+        RP
+      CompSt (2)
+        LC
+        DefList (3)
+          Def (3)
+            Specifier (3)
+              TYPE: int
+            DecList (3)
+              Dec (3)
+                VarDec (3)
+                  ID: month
+              COMMA
+              DecList (3)
+                Dec (3)
+                  VarDec (3)
+                    ID: year
+            SEMI
+        StmtList (4)
+          Stmt (4)
+            Exp (4)
+              Exp (4)
+                ID: year
+              ASSIGN
+              Exp (4)
+                ID: read
+                LP
+                RP
+            SEMI
+          StmtList (5)
+            Stmt (5)
+              Exp (5)
+                Exp (5)
+                  ID: month
+                ASSIGN
+                Exp (5)
+                  ID: read
+                  LP
+                  RP
+              SEMI
+            StmtList (6)
+              Stmt (6)
+                IF
+                LP
+                Exp (6)
+                  Exp (6)
+                    ID: year
+                  EQ
+                  Exp (6)
+                    LP
+                    Exp (6)
+                      Exp (6)
+                        Exp (6)
+                          ID: year
+                        DIV
+                        Exp (6)
+                          INT: 100
+                      MUL
+                      Exp (6)
+                        INT: 100
+                    RP
+                RP
+                Stmt (6)
+                  CompSt (6)
+                    LC
+                    StmtList (7)
+                      Stmt (7)
+                        IF
+                        LP
+                        Exp (7)
+                          Exp (7)
+                            ID: year
+                          EQ
+                          Exp (7)
+                            LP
+                            Exp (7)
+                              Exp (7)
+                                Exp (7)
+                                  ID: year
+                                DIV
+                                Exp (7)
+                                  INT: 400
+                              MUL
+                              Exp (7)
+                                INT: 400
+                            RP
+                        RP
+                        Stmt (7)
+                          CompSt (7)
+                            LC
+                            StmtList (8)
+                              Stmt (8)
+                                IF
+                                LP
+                                Exp (8)
+                                  Exp (8)
+                                    ID: month
+                                  EQ
+                                  Exp (8)
+                                    INT: 2
+                                RP
+                                Stmt (8)
+                                  CompSt (8)
+                                    LC
+                                    StmtList (9)
+                                      Stmt (9)
+                                        Exp (9)
+                                          ID: write
+                                          LP
+                                          Args (9)
+                                            Exp (9)
+                                              INT: 29
+                                          RP
+                                        SEMI
+                                    RC
+                                ELSE
+                                Stmt (11)
+                                  IF
+                                  LP
+                                  Exp (11)
+                                    Exp (11)
+                                      ID: month
+                                    EQ
+                                    Exp (11)
+                                      LP
+                                      Exp (11)
+                                        Exp (11)
+                                          Exp (11)
+                                            ID: month
+                                          DIV
+                                          Exp (11)
+                                            INT: 2
+                                        MUL
+                                        Exp (11)
+                                          INT: 2
+                                      RP
+                                  RP
+                                  Stmt (11)
+                                    CompSt (11)
+                                      LC
+                                      StmtList (12)
+                                        Stmt (12)
+                                          Exp (12)
+                                            ID: write
+                                            LP
+                                            Args (12)
+                                              Exp (12)
+                                                INT: 30
+                                            RP
+                                          SEMI
+                                      RC
+                                  ELSE
+                                  Stmt (15)
+                                    Exp (15)
+                                      ID: write
+                                      LP
+                                      Args (15)
+                                        Exp (15)
+                                          INT: 31
+                                      RP
+                                    SEMI
+                            RC
+                        ELSE
+                        Stmt (16)
+                          CompSt (16)
+                            LC
+                            StmtList (17)
+                              Stmt (17)
+                                IF
+                                LP
+                                Exp (17)
+                                  Exp (17)
+                                    ID: month
+                                  EQ
+                                  Exp (17)
+                                    INT: 2
+                                RP
+                                Stmt (17)
+                                  CompSt (17)
+                                    LC
+                                    StmtList (18)
+                                      Stmt (18)
+                                        Exp (18)
+                                          ID: write
+                                          LP
+                                          Args (18)
+                                            Exp (18)
+                                              INT: 28
+                                          RP
+                                        SEMI
+                                    RC
+                                ELSE
+                                Stmt (20)
+                                  IF
+                                  LP
+                                  Exp (20)
+                                    Exp (20)
+                                      ID: month
+                                    EQ
+                                    Exp (20)
+                                      LP
+                                      Exp (20)
+                                        Exp (20)
+                                          Exp (20)
+                                            ID: month
+                                          DIV
+                                          Exp (20)
+                                            INT: 2
+                                        MUL
+                                        Exp (20)
+                                          INT: 2
+                                      RP
+                                  RP
+                                  Stmt (20)
+                                    CompSt (20)
+                                      LC
+                                      StmtList (21)
+                                        Stmt (21)
+                                          Exp (21)
+                                            ID: write
+                                            LP
+                                            Args (21)
+                                              Exp (21)
+                                                INT: 30
+                                            RP
+                                          SEMI
+                                      RC
+                                  ELSE
+                                  Stmt (23)
+                                    CompSt (23)
+                                      LC
+                                      StmtList (24)
+                                        Stmt (24)
+                                          Exp (24)
+                                            ID: write
+                                            LP
+                                            Args (24)
+                                              Exp (24)
+                                                INT: 31
+                                            RP
+                                          SEMI
+                                      RC
+                            RC
+                    RC
+                ELSE
+                Stmt (28)
+                  IF
+                  LP
+                  Exp (28)
+                    Exp (28)
+                      ID: year
+                    EQ
+                    Exp (28)
+                      LP
+                      Exp (28)
+                        Exp (28)
+                          Exp (28)
+                            ID: year
+                          DIV
+                          Exp (28)
+                            INT: 4
+                        MUL
+                        Exp (28)
+                          INT: 4
+                      RP
+                  RP
+                  Stmt (28)
+                    CompSt (28)
+                      LC
+                      StmtList (29)
+                        Stmt (29)
+                          IF
+                          LP
+                          Exp (29)
+                            Exp (29)
+                              ID: month
+                            EQ
+                            Exp (29)
+                              INT: 2
+                          RP
+                          Stmt (29)
+                            CompSt (29)
+                              LC
+                              StmtList (30)
+                                Stmt (30)
+                                  Exp (30)
+                                    ID: write
+                                    LP
+                                    Args (30)
+                                      Exp (30)
+                                        INT: 29
+                                    RP
+                                  SEMI
+                              RC
+                          ELSE
+                          Stmt (32)
+                            IF
+                            LP
+                            Exp (32)
+                              Exp (32)
+                                ID: month
+                              EQ
+                              Exp (32)
+                                LP
+                                Exp (32)
+                                  Exp (32)
+                                    Exp (32)
+                                      ID: month
+                                    DIV
+                                    Exp (32)
+                                      INT: 2
+                                  MUL
+                                  Exp (32)
+                                    INT: 2
+                                RP
+                            RP
+                            Stmt (32)
+                              CompSt (32)
+                                LC
+                                StmtList (33)
+                                  Stmt (33)
+                                    Exp (33)
+                                      ID: write
+                                      LP
+                                      Args (33)
+                                        Exp (33)
+                                          INT: 30
+                                      RP
+                                    SEMI
+                                RC
+                            ELSE
+                            Stmt (35)
+                              CompSt (35)
+                                LC
+                                StmtList (36)
+                                  Stmt (36)
+                                    Exp (36)
+                                      ID: write
+                                      LP
+                                      Args (36)
+                                        Exp (36)
+                                          INT: 31
+                                      RP
+                                    SEMI
+                                RC
+                      RC
+                  ELSE
+                  Stmt (39)
+                    CompSt (39)
+                      LC
+                      StmtList (40)
+                        Stmt (40)
+                          IF
+                          LP
+                          Exp (40)
+                            Exp (40)
+                              ID: month
+                            EQ
+                            Exp (40)
+                              INT: 2
+                          RP
+                          Stmt (40)
+                            CompSt (40)
+                              LC
+                              StmtList (41)
+                                Stmt (41)
+                                  Exp (41)
+                                    ID: write
+                                    LP
+                                    Args (41)
+                                      Exp (41)
+                                        INT: 28
+                                    RP
+                                  SEMI
+                              RC
+                          ELSE
+                          Stmt (43)
+                            IF
+                            LP
+                            Exp (43)
+                              Exp (43)
+                                ID: month
+                              EQ
+                              Exp (43)
+                                LP
+                                Exp (43)
+                                  Exp (43)
+                                    Exp (43)
+                                      ID: month
+                                    DIV
+                                    Exp (43)
+                                      INT: 2
+                                  MUL
+                                  Exp (43)
+                                    INT: 2
+                                RP
+                            RP
+                            Stmt (43)
+                              CompSt (43)
+                                LC
+                                StmtList (44)
+                                  Stmt (44)
+                                    Exp (44)
+                                      ID: write
+                                      LP
+                                      Args (44)
+                                        Exp (44)
+                                          INT: 30
+                                      RP
+                                    SEMI
+                                RC
+                            ELSE
+                            Stmt (46)
+                              CompSt (46)
+                                LC
+                                StmtList (47)
+                                  Stmt (47)
+                                    Exp (47)
+                                      ID: write
+                                      LP
+                                      Args (47)
+                                        Exp (47)
+                                          INT: 31
+                                      RP
+                                    SEMI
+                                RC
+                      RC
+              StmtList (50)
+                Stmt (50)
+                  RETURN
+                  Exp (50)
+                    INT: 0
+                  SEMI
+        RC
+Program
+ExtDefList
+ExtDef
+FunDec
+FUNCTION main :
+ComSt
+DefList
+Def
+DecList
+Dec
+VarDec
+DecList
+Dec
+VarDec
+DefList
+StmtList
+Stmt
+*******
+Exp
+ASSIGN
+Exp
+*******
+Exp
+assign
+v2
+Exp
+read
+READ t2
+v2 := t2
+t1 := v2
+StmtList
+Stmt
+*******
+Exp
+ASSIGN
+Exp
+*******
+Exp
+assign
+v1
+Exp
+read
+READ t4
+v1 := t4
+t3 := v1
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t5 := v2
+Exp
+Exp
+Exp
+Exp
+t9 := v2
+Exp
+const
+INT
+0
+t10 := #100
+t7 := t9 / t10
+Exp
+const
+INT
+0
+t8 := #100
+t6 := t7 * t8
+IF t5 == t6 GOTO label1
+GOTO label2
+LABEL label1 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t11 := v2
+Exp
+Exp
+Exp
+Exp
+t15 := v2
+Exp
+const
+INT
+0
+t16 := #400
+t13 := t15 / t16
+Exp
+const
+INT
+0
+t14 := #400
+t12 := t13 * t14
+IF t11 == t12 GOTO label4
+GOTO label5
+LABEL label4 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t17 := v1
+Exp
+const
+INT
+0
+t18 := #2
+IF t17 == t18 GOTO label7
+GOTO label8
+LABEL label7 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t19 := #29
+WRITE t19
+StmtList
+GOTO label9
+LABEL label8 :
+Stmt
+cond_Exp
+3
+Exp
+t20 := v1
+Exp
+Exp
+Exp
+Exp
+t24 := v1
+Exp
+const
+INT
+0
+t25 := #2
+t22 := t24 / t25
+Exp
+const
+INT
+0
+t23 := #2
+t21 := t22 * t23
+IF t20 == t21 GOTO label10
+GOTO label11
+LABEL label10 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t26 := #30
+WRITE t26
+StmtList
+GOTO label12
+LABEL label11 :
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t27 := #31
+WRITE t27
+LABEL label12 :
+LABEL label9 :
+StmtList
+GOTO label6
+LABEL label5 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t28 := v1
+Exp
+const
+INT
+0
+t29 := #2
+IF t28 == t29 GOTO label13
+GOTO label14
+LABEL label13 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t30 := #28
+WRITE t30
+StmtList
+GOTO label15
+LABEL label14 :
+Stmt
+cond_Exp
+3
+Exp
+t31 := v1
+Exp
+Exp
+Exp
+Exp
+t35 := v1
+Exp
+const
+INT
+0
+t36 := #2
+t33 := t35 / t36
+Exp
+const
+INT
+0
+t34 := #2
+t32 := t33 * t34
+IF t31 == t32 GOTO label16
+GOTO label17
+LABEL label16 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t37 := #30
+WRITE t37
+StmtList
+GOTO label18
+LABEL label17 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t38 := #31
+WRITE t38
+StmtList
+LABEL label18 :
+LABEL label15 :
+StmtList
+LABEL label6 :
+StmtList
+GOTO label3
+LABEL label2 :
+Stmt
+cond_Exp
+3
+Exp
+t39 := v2
+Exp
+Exp
+Exp
+Exp
+t43 := v2
+Exp
+const
+INT
+0
+t44 := #4
+t41 := t43 / t44
+Exp
+const
+INT
+0
+t42 := #4
+t40 := t41 * t42
+IF t39 == t40 GOTO label19
+GOTO label20
+LABEL label19 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t45 := v1
+Exp
+const
+INT
+0
+t46 := #2
+IF t45 == t46 GOTO label22
+GOTO label23
+LABEL label22 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t47 := #29
+WRITE t47
+StmtList
+GOTO label24
+LABEL label23 :
+Stmt
+cond_Exp
+3
+Exp
+t48 := v1
+Exp
+Exp
+Exp
+Exp
+t52 := v1
+Exp
+const
+INT
+0
+t53 := #2
+t50 := t52 / t53
+Exp
+const
+INT
+0
+t51 := #2
+t49 := t50 * t51
+IF t48 == t49 GOTO label25
+GOTO label26
+LABEL label25 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t54 := #30
+WRITE t54
+StmtList
+GOTO label27
+LABEL label26 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t55 := #31
+WRITE t55
+StmtList
+LABEL label27 :
+LABEL label24 :
+StmtList
+GOTO label21
+LABEL label20 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+cond_Exp
+3
+Exp
+t56 := v1
+Exp
+const
+INT
+0
+t57 := #2
+IF t56 == t57 GOTO label28
+GOTO label29
+LABEL label28 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t58 := #28
+WRITE t58
+StmtList
+GOTO label30
+LABEL label29 :
+Stmt
+cond_Exp
+3
+Exp
+t59 := v1
+Exp
+Exp
+Exp
+Exp
+t63 := v1
+Exp
+const
+INT
+0
+t64 := #2
+t61 := t63 / t64
+Exp
+const
+INT
+0
+t62 := #2
+t60 := t61 * t62
+IF t59 == t60 GOTO label31
+GOTO label32
+LABEL label31 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t65 := #30
+WRITE t65
+StmtList
+GOTO label33
+LABEL label32 :
+Stmt
+ComSt
+DefList
+StmtList
+Stmt
+*******
+ID
+LP
+Args
+RP
+*******
+Exp
+Exp
+const
+INT
+0
+t66 := #31
+WRITE t66
+StmtList
+LABEL label33 :
+LABEL label30 :
+StmtList
+LABEL label21 :
+LABEL label3 :
+StmtList
+Stmt
+Exp
+const
+INT
+0
+t67 := #0
+RETURN t67
+StmtList
+ExtDefList
+FUNCTION main :
+READ t2
+v2 := t2
+t1 := v2
+READ t4
+t3 := v1
+t5 := v2
+t9 := v2
+t7 := t9 / t10
+t8 := #100
+t6 := t7 * t8
+IF t5 == t6 GOTO label1
+GOTO label2
+LABEL label1 :
+t11 := v2
+t15 := v2
+t16 := #400
+t13 := t15 / t16
+t14 := #400
+t12 := t13 * t14
+IF t11 == t12 GOTO label4
+GOTO label5
+LABEL label4 :
+t17 := v1
+t18 := #2
+IF t17 == t18 GOTO label7
+GOTO label8
+LABEL label7 :
+t19 := #29
+WRITE t19
+GOTO label9
+LABEL label8 :
+t20 := v1
+t24 := v1
+t25 := #2
+t22 := t24 / t25
+t23 := #2
+t21 := t22 * t23
+IF t20 == t21 GOTO label10
+GOTO label11
+LABEL label10 :
+t26 := #30
+WRITE t26
+GOTO label12
+LABEL label11 :
+t27 := #31
+WRITE t27
+LABEL label12 :
+LABEL label9 :
+GOTO label6
+LABEL label5 :
+t28 := v1
+t29 := #2
+IF t28 == t29 GOTO label13
+GOTO label14
+LABEL label13 :
+t30 := #28
+WRITE t30
+GOTO label15
+LABEL label14 :
+t31 := v1
+t35 := v1
+t36 := #2
+t33 := t35 / t36
+t34 := #2
+t32 := t33 * t34
+IF t31 == t32 GOTO label16
+GOTO label17
+LABEL label16 :
+t37 := #30
+WRITE t37
+GOTO label18
+LABEL label17 :
+t38 := #31
+WRITE t38
+LABEL label18 :
+LABEL label15 :
+LABEL label6 :
+GOTO label3
+LABEL label2 :
+t39 := v2
+t43 := v2
+t44 := #4
+t41 := t43 / t44
+t42 := #4
+t40 := t41 * t42
+IF t39 == t40 GOTO label19
+GOTO label20
+LABEL label19 :
+t45 := v1
+t46 := #2
+IF t45 == t46 GOTO label22
+GOTO label23
+LABEL label22 :
+t47 := #29
+WRITE t47
+GOTO label24
+LABEL label23 :
+t48 := v1
+t52 := v1
+t53 := #2
+t50 := t52 / t53
+t51 := #2
+t49 := t50 * t51
+IF t48 == t49 GOTO label25
+GOTO label26
+LABEL label25 :
+t54 := #30
+WRITE t54
+GOTO label27
+LABEL label26 :
+t55 := #31
+WRITE t55
+LABEL label27 :
+LABEL label24 :
+GOTO label21
+LABEL label20 :
+t56 := v1
+t57 := #2
+IF t56 == t57 GOTO label28
+GOTO label29
+LABEL label28 :
+t58 := #28
+WRITE t58
+GOTO label30
+LABEL label29 :
+t59 := v1
+t63 := v1
+t64 := #2
+t61 := t63 / t64
+t62 := #2
+t60 := t61 * t62
+IF t59 == t60 GOTO label31
+GOTO label32
+LABEL label31 :
+t65 := #30
+WRITE t65
+GOTO label33
+LABEL label32 :
+t66 := #31
+WRITE t66
+LABEL label33 :
+LABEL label30 :
+LABEL label21 :
+LABEL label3 :
+t67 := #0
+RETURN t67

@@ -1,5 +1,5 @@
-structure redefine/without definition?
+read() function
 
-update the type_value in expression when function or structure is called
+recursive call
 
-and / or judgement boolean construction
+project2 array 
