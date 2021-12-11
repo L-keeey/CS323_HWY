@@ -2362,7 +2362,7 @@ void yyerror(const char *s) {
     error_num += 1;
     fprintf(stdout, "Error type B at Line %d: ", yylloc.first_line - 1);
 }
-
+/*
 void pre_order_traversal(struct Node* root, int space)
 {
     if(root){
@@ -2372,6 +2372,7 @@ void pre_order_traversal(struct Node* root, int space)
         }
     }
 }
+*/
 void slice(const char *str,char *result, int start,int end ){
     
 }

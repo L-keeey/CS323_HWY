@@ -21,6 +21,33 @@ std::vector<std::string> args;
 std::vector<std::string> indexes;
 std::vector<int> sizes;
 
+void printOutput();
+void printTAC(struct TAC* input);
+void translate_Program(struct Node* root);
+void translate_ExtDefList(struct Node* in);
+void translate_ExtDef(struct Node* in);
+void translate_ExtDecList(struct Node* in);
+void translate_VarDec(struct Node* in, int TACid);
+void translate_FunDec(struct Node* in);
+void translate_VarList(struct Node* in);
+void translate_ParamDec(struct Node* in);
+void translate_CompSt(struct Node* in);
+void translate_StmtList(struct Node* in);
+void translate_Stmt(struct Node* in);
+void translate_DefList(struct Node* in);
+void translate_Def(struct Node* in);
+void translate_DecList(struct Node* in);
+void translate_Dec(struct Node* in);
+void translate_Exp(struct Node* in, std::string place);
+void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f);
+void translate_Args(struct Node* in);
+std::string new_place();
+std::string new_var();
+std::string new_label();
+
+template <typename T>
+std::string new_const(T c_value);
+
 int main(int argc, char **argv){
     std::vector<Type*> read, write;
     Type* inttype = new_prim_type("int");
@@ -48,12 +75,22 @@ int main(int argc, char **argv){
 
     yyparse();
 
-    if(error_num == 0){
-        pre_order_traversal(root, 0);
-    }
+    // if(error_num == 0){
+    //     pre_order_traversal(root, 0);
+    // }
     fclose(stdout);
+
+    translate_Program(root);
+    printOutput();
     return 0;
 }
+
+void printOutput(){
+    for (TAC* o : output){
+        printTAC(o);
+    }
+}
+
 void printTAC(struct TAC* input){
     switch (input->id)
     {
@@ -156,7 +193,7 @@ void translate_StructSpecifier(struct Node* in){
 //!! haven't deal with array
 //TACid=14 PARAM x
 //TACid=13 DEC x
-void translate_VarDec(struct Node* in,int TACid){
+void translate_VarDec(struct Node* in, int TACid){
     //translate the staff in var map 
     if(in->child_num == 1){
         Node* ID = in->child_list[0];
@@ -187,12 +224,14 @@ void translate_FunDec(struct Node* in){
         //ID LP RP # without parameter
     }
 }
+
 void translate_VarList(struct Node* in){
     translate_ParamDec(in->child_list[0]);
     if(in->child_num==3){
         translate_VarList(in->child_list[2]);
     }
 }
+
 //haven't deal with array
 void translate_ParamDec(struct Node* in){
     //generate PARAM x
@@ -201,10 +240,12 @@ void translate_ParamDec(struct Node* in){
     struct Node* VarDec=in->child_list[1];
     translate_VarDec(VarDec,14);
 }
+
 void translate_CompSt(struct Node* in){
     translate_DefList(in->child_list[1]);
     translate_StmtList(in->child_list[2]);
 }
+
 void translate_StmtList(struct Node* in){
     if(in->child_num>0){
         translate_Stmt(in->child_list[0]);
@@ -319,15 +360,18 @@ void translate_DefList(struct Node* in){
         translate_DefList(in->child_list[1]);
     }
 }
+
 void translate_Def(struct Node* in){
     translate_DecList(in->child_list[1]);
 }
+
 void translate_DecList(struct Node* in){
     translate_Dec(in->child_list[0]);
     if(in->child_num==3){
         translate_DecList(in->child_list[2]);
     }
 }
+
 void translate_Dec(struct Node* in){
     //call vardec, assign value to address
     
@@ -360,6 +404,7 @@ void translate_Dec(struct Node* in){
 
     }
 }
+
 void translate_Exp(struct Node* in, std::string place){
     if (in->child_num == 1){
         Node* child = in->child_list[0];
@@ -486,7 +531,7 @@ void translate_Exp(struct Node* in, std::string place){
         int base_size = arr->primitive == _CHAR ? 1 : 4;
 
         std::string t1 = new_place();
-        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+        code = (struct TAC*) malloc(sizeof(struct TAC));
         code->target[0] = t1;
         code->target[1] = indexes[0];
         code->target[2] = new_const(base_size);
@@ -506,7 +551,7 @@ void translate_Exp(struct Node* in, std::string place){
             base_size *= sizes[1];
 
             std::string t_sum = new_place();
-            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+            code = (struct TAC*) malloc(sizeof(struct TAC));
             code->target[0] = t_sum;
             code->target[1] = t1;
             code->target[2] = t2;
@@ -525,7 +570,7 @@ void translate_Exp(struct Node* in, std::string place){
 
                 std::string t_pre = t_sum;
                 std::string t_sum = new_place();
-                TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = t_sum;
                 code->target[1] = t_new;
                 code->target[2] = t_pre;
@@ -537,14 +582,14 @@ void translate_Exp(struct Node* in, std::string place){
         }
 
         std::string addr = new_place();
-        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+        code = (struct TAC*) malloc(sizeof(struct TAC));
         code->target[0] = addr;
         code->target[1] = t0;
         code->target[2] = offset;
         code->id = 3;
         output.push_back(code);
 
-        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+        code = (struct TAC*) malloc(sizeof(struct TAC));
         code->target[0] = place;
         code->target[1] = addr;
         code->id = 8;
@@ -583,7 +628,7 @@ void translate_Exp(struct Node* in, std::string place){
                 code->id = 2;
                 output.push_back(code);
 
-                TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = place;
                 code->target[1] = t1;
                 code->id = 2;
@@ -636,18 +681,18 @@ void translate_Exp(struct Node* in, std::string place){
 
                     translate_cond_Exp(in, lb1, lb2);
 
-                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = lb1;
                     code->id = 0;
                     output.push_back(code);
 
-                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = "#1";
                     code->id = 2;
                     output.push_back(code);
 
-                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = lb2;
                     code->id = 0;
                     output.push_back(code);
@@ -717,7 +762,7 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
             }
             output.push_back(code);
 
-            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+            code = (struct TAC*) malloc(sizeof(struct TAC));
             code->target[0] = lb_f;
             code->id = 10;
             output.push_back(code);
@@ -736,44 +781,45 @@ void translate_Args(struct Node* in){
     }
 }
 
-std::string &new_place(){
+std::string new_place(){
     std::stringstream sstream;
-    std::string new_place;
+    std::string result;
 
     place_num++;
     sstream << "t" << place_num;
-    sstream >> new_place;
+    sstream >> result;
 
-    return new_place;
+    return result;
 }
 
-std::string &new_var(){
+std::string new_var(){
     std::stringstream sstream;
-    std::string new_var;
+    std::string result;
 
     var_num++;
     sstream << "v" << var_num;
-    sstream >> new_var;
+    sstream >> result;
 
-    return new_var;
+    return result;
 }
 
-std::string &new_label(){
+std::string new_label(){
     std::stringstream sstream;
-    std::string new_label;
+    std::string result;
 
     label_num++;
     sstream << "label" << label_num;
-    sstream >> new_label;
+    sstream >> result;
 
-    return new_label;
+    return result;
 }
 
 template <typename T>
-std::string &new_const(T c_value){
+std::string new_const(T c_value){
     std::stringstream sstream;
-    std::string new_const;
-
+    std::string result;
     sstream << "#" << c_value;
-    sstream >> new_const;
+    sstream >> result;
+
+    return result;
 }
