@@ -24,6 +24,7 @@
 [INFO] 2021-12-11 21:50:16,581 (irsim.py 567): File loaded successfully
 [INFO] 2021-12-11 21:50:22,621 (irsim.py 567): Program has exited gracefully
 [INFO] 2021-12-11 21:50:22,624 (irsim.py 567): Total instructions = 69
+<<<<<<< HEAD
 [INFO] 2021-12-12 15:40:11,264 (irsim.py 567): KeyboardInterrupt raised, quit program
 [DEBUG] 2021-12-12 15:41:22,118 (irsim.py 620): Parsed arguments: {'irpath': '../../test/test_3_r05.ir', 'inputs': '5', 'logpath': 'irsim.log'}
 [INFO] 2021-12-12 15:41:22,122 (irsim.py 567): File loaded successfully
@@ -46,3 +47,21 @@
 [INFO] 2021-12-12 15:46:47,840 (irsim.py 567): Program has exited gracefully
 [INFO] 2021-12-12 15:46:47,841 (irsim.py 567): Total instructions = 109
 [INFO] 2021-12-12 15:51:36,692 (irsim.py 567): KeyboardInterrupt raised, quit program
+=======
+[DEBUG] 2021-12-11 12:00:30,064 (irsim.py 620): Parsed arguments: {'irpath': '../../test/test_3_r07.ir', 'inputs': '32,4', 'logpath': 'irsim.log'}
+[INFO] 2021-12-11 12:00:30,065 (irsim.py 567): File loaded successfully
+[INFO] 2021-12-11 12:00:33,414 (irsim.py 567): Program has exited gracefully
+[INFO] 2021-12-11 12:00:33,414 (irsim.py 567): Total instructions = 61
+[WARNING] 2021-12-11 12:00:40,050 (irsim.py 574): Program Counter goes out of bound. The running program will be terminated instantly
+[WARNING] 2021-12-11 12:00:41,613 (irsim.py 574): Program Counter goes out of bound. The running program will be terminated instantly
+[INFO] 2021-12-11 12:00:47,695 (irsim.py 567): KeyboardInterrupt raised, quit program
+[DEBUG] 2021-12-11 12:00:52,177 (irsim.py 620): Parsed arguments: {'irpath': '../../test/test_3_r07.ir', 'inputs': '7,13', 'logpath': 'irsim.log'}
+[INFO] 2021-12-11 12:00:52,178 (irsim.py 567): File loaded successfully
+[INFO] 2021-12-11 12:00:54,319 (irsim.py 567): Program has exited gracefully
+[INFO] 2021-12-11 12:00:54,319 (irsim.py 567): Total instructions = 171
+[INFO] 2021-12-11 12:00:57,504 (irsim.py 567): KeyboardInterrupt raised, quit program
+[DEBUG] 2021-12-11 12:01:26,911 (irsim.py 620): Parsed arguments: {'irpath': '../../test/test_3_r07.ir', 'inputs': '544,608', 'logpath': 'irsim.log'}
+[INFO] 2021-12-11 12:01:26,912 (irsim.py 567): File loaded successfully
+[INFO] 2021-12-11 12:01:28,927 (irsim.py 567): Program has exited gracefully
+[INFO] 2021-12-11 12:01:28,927 (irsim.py 567): Total instructions = 171
+>>>>>>> 800197b9cc6a0dbbf2976a3b6209f0778734b56e

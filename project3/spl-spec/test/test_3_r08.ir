@@ -1,5 +1,3 @@
-Error type 2 at Line 10: function should be invoked with a definition.
-Error type 7 at Line 10: unmantching operands,such as adding an integer to a structure variable
 FUNCTION mod :
 PARAM v1
 PARAM v2
