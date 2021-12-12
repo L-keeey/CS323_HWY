@@ -21,45 +21,35 @@ LABEL label2 :
 t10 := v1
 t11 := #1
 t9 := t10 - t11
-t12 := v2
-t13 := v4
-t14 := v3
-ARG t14
-ARG t13
-ARG t12
+ARG v3
+ARG v4
+ARG v2
 ARG t9
 t8 := CALL hanoi
-t18 := v2
-t19 := #1000000
-t16 := t18 * t19
-t17 := v4
-t15 := t16 + t17
-WRITE t15
-t22 := v1
-t23 := #1
-t21 := t22 - t23
-t24 := v3
-t25 := v2
-t26 := v4
-ARG t26
-ARG t25
-ARG t24
-ARG t21
-t20 := CALL hanoi
+t15 := v2
+t16 := #1000000
+t13 := t15 * t16
+t14 := v4
+t12 := t13 + t14
+WRITE t12
+t19 := v1
+t20 := #1
+t18 := t19 - t20
+ARG v4
+ARG v2
+ARG v3
+ARG t18
+t17 := CALL hanoi
 LABEL label3 :
-t27 := #0
-RETURN t27
+t21 := #0
+RETURN t21
 FUNCTION main :
-t28 := #3
-v5 := t28
-t30 := v5
-t31 := #1
-t32 := #2
-t33 := #3
-ARG t33
-ARG t32
-ARG t31
-ARG t30
-t29 := CALL hanoi
-t34 := #0
-RETURN t34
+t22 := #3
+v5 := t22
+ARG #3
+ARG #2
+ARG #1
+ARG v5
+t23 := CALL hanoi
+t24 := #0
+RETURN t24

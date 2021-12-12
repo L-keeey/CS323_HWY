@@ -18,19 +18,17 @@ v3 := t10
 t9 := v3
 t11 := v3
 WRITE t11
-t14 := v3
-ARG t14
+ARG v3
 t13 := CALL sqr
 v4 := t13
 t12 := v4
+t14 := v4
+WRITE t14
+ARG v3
+t16 := CALL cbc
+v4 := t16
 t15 := v4
-WRITE t15
-t18 := v3
-ARG t18
-t17 := CALL cbc
-v4 := t17
-t16 := v4
-t19 := v4
-WRITE t19
-t20 := #0
-RETURN t20
+t17 := v4
+WRITE t17
+t18 := #0
+RETURN t18

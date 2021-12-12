@@ -10,3 +10,6 @@ make
 ./bin/splc ./test/test_3_r08.spl 
 ./bin/splc ./test/test_3_r09.spl 
 ./bin/splc ./test/test_3_r10.spl 
+
+
+./bin/splc ./sample/test04.spl

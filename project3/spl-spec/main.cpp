@@ -593,16 +593,10 @@ void translate_Exp(struct Node* in, std::string place){
             Exp = Exp->child_list[0];
         }
 
-        std::string var = Exp->child_list[0]->string_value;
-        std::string t0 = new_place();
-        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-        code->target[0] = t0;
-        code->target[1] = var;
-        code->id = 7;
-        output.push_back(code);
-        printTAC(code);
+        std::string id = Exp->child_list[0]->string_value;
+        std::string t0 = id_address_map[id];
 
-        Type* arr = variable_table[var];
+        Type* arr = variable_table[id];
         sizes.clear();
         while (arr->category == ARRAY){
             sizes.insert(sizes.begin(), arr->array->size);
@@ -611,7 +605,7 @@ void translate_Exp(struct Node* in, std::string place){
         int base_size = arr->primitive == _CHAR ? 1 : 4;
 
         std::string t1 = new_place();
-        code = (struct TAC*) malloc(sizeof(struct TAC));
+        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
         code->target[0] = t1;
         code->target[1] = indexes[0];
         code->target[2] = new_const(base_size);
@@ -713,22 +707,16 @@ void translate_Exp(struct Node* in, std::string place){
                     sout(id_address_map.count(id));
                 }else if (Exp1->child_num == 4){
                     indexes.clear();
-                    Node* Exp = in;
+                    Node* Exp = Exp1;
                     while (Exp->child_num == 4){
                         indexes.push_back(Exp->child_list[2]->child_list[0]->string_value);
                         Exp = Exp->child_list[0];
                     }
 
-                    std::string var = Exp->child_list[0]->string_value;
-                    std::string t0 = new_place();
-                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-                    code->target[0] = t0;
-                    code->target[1] = var;
-                    code->id = 7;
-                    output.push_back(code);
-                    printTAC(code);
+                    std::string id = Exp->child_list[0]->string_value;
+                    std::string t0 = id_address_map[id];
 
-                    Type* arr = variable_table[var];
+                    Type* arr = variable_table[id];
                     sizes.clear();
                     while (arr->category == ARRAY){
                         sizes.insert(sizes.begin(), arr->array->size);
@@ -737,7 +725,7 @@ void translate_Exp(struct Node* in, std::string place){
                     int base_size = arr->primitive == _CHAR ? 1 : 4;
 
                     std::string t1 = new_place();
-                    code = (struct TAC*) malloc(sizeof(struct TAC));
+                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = t1;
                     code->target[1] = indexes[0];
                     code->target[2] = new_const(base_size);
@@ -976,11 +964,23 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
 }
 
 void translate_Args(struct Node* in){
-    //should add ARG x
     sout("Args");
-    std::string tp = new_place();
-    translate_Exp(in->child_list[0], tp);
-    args.insert(args.begin(), tp);
+    Node* Exp = in->child_list[0];
+    std::string arg;
+    if (Exp->child_num == 1){
+        Node* child = Exp->child_list[0];
+        if (strcmp(child->token, "ID")==0){
+            std::string id = child->string_value;
+            arg = id_address_map[id];
+        }else{
+            std::string value = child->string_value;
+            arg = new_const(value);
+        }
+    }else{
+        arg = new_place();
+        translate_Exp(in->child_list[0], arg);
+    }
+    args.insert(args.begin(), arg);
 
     if(in->child_num > 1){
         translate_Args(in->child_list[2]);

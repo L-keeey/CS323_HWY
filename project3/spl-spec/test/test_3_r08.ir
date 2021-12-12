@@ -21,36 +21,33 @@ LABEL label1 :
 t10 := #0
 RETURN t10
 LABEL label2 :
-t14 := v3
-t15 := #10
-ARG t15
-ARG t14
+ARG #10
+ARG v3
 t12 := CALL mod
-t17 := v3
-t18 := #10
-t16 := t17 / t18
-ARG t16
+t15 := v3
+t16 := #10
+t14 := t15 / t16
+ARG t14
 t13 := CALL DigitSum
 t11 := t12 + t13
 RETURN t11
 FUNCTION main :
-READ t20
-v4 := t20
+READ t18
+v4 := t18
+t17 := v4
 t19 := v4
-t21 := v4
-t22 := #0
-IF t21 < t22 GOTO label3
+t20 := #0
+IF t19 < t20 GOTO label3
 GOTO label4
 LABEL label3 :
-t24 := #1
-t23 := #0 - t24
-WRITE t23
+t22 := #1
+t21 := #0 - t22
+WRITE t21
 GOTO label5
 LABEL label4 :
-t26 := v4
-ARG t26
-t25 := CALL DigitSum
-WRITE t25
+ARG v4
+t23 := CALL DigitSum
+WRITE t23
 LABEL label5 :
-t27 := #0
-RETURN t27
+t24 := #0
+RETURN t24

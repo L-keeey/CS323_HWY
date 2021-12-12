@@ -123,77 +123,72 @@ t77 := #0
 IF t76 > t77 GOTO label10
 GOTO label11
 LABEL label10 :
-t80 := v13
-t81 := #10
-ARG t81
-ARG t80
+ARG #10
+ARG v13
 t79 := CALL mod
 v14 := t79
 t78 := v14
-t86 := v13
-t87 := v14
-t84 := t86 - t87
-t85 := #10
-t83 := t84 / t85
-v13 := t83
-t82 := v13
-t90 := v12
-t92 := v14
-t93 := v11
-ARG t93
-ARG t92
-t91 := CALL power
-t89 := t90 + t91
-v12 := t89
+t84 := v13
+t85 := v14
+t82 := t84 - t85
+t83 := #10
+t81 := t82 / t83
+v13 := t81
+t80 := v13
 t88 := v12
+ARG v11
+ARG v14
+t89 := CALL power
+t87 := t88 + t89
+v12 := t87
+t86 := v12
 GOTO label9
 LABEL label11 :
-t94 := v12
-t95 := v10
-IF t94 == t95 GOTO label12
+t90 := v12
+t91 := v10
+IF t90 == t91 GOTO label12
 GOTO label13
 LABEL label12 :
-t96 := #1
-RETURN t96
+t92 := #1
+RETURN t92
 GOTO label14
 LABEL label13 :
-t97 := #0
-RETURN t97
+t93 := #0
+RETURN t93
 LABEL label14 :
 FUNCTION main :
-t98 := #0
-v15 := t98
-t99 := #300
-v16 := t99
+t94 := #0
+v15 := t94
+t95 := #300
+v16 := t95
 LABEL label15 :
-t100 := v16
-t101 := #500
-IF t100 < t101 GOTO label16
+t96 := v16
+t97 := #500
+IF t96 < t97 GOTO label16
 GOTO label17
 LABEL label16 :
-t104 := v16
-ARG t104
-t102 := CALL isNarcissistic
-t103 := #1
-IF t102 == t103 GOTO label18
+ARG v16
+t98 := CALL isNarcissistic
+t99 := #1
+IF t98 == t99 GOTO label18
 GOTO label19
 LABEL label18 :
-t105 := v16
-WRITE t105
-t108 := v15
-t109 := #1
-t107 := t108 + t109
-v15 := t107
-t106 := v15
+t100 := v16
+WRITE t100
+t103 := v15
+t104 := #1
+t102 := t103 + t104
+v15 := t102
+t101 := v15
 LABEL label19 :
-t112 := v16
-t113 := #1
-t111 := t112 + t113
-v16 := t111
-t110 := v16
+t107 := v16
+t108 := #1
+t106 := t107 + t108
+v16 := t106
+t105 := v16
 GOTO label15
 LABEL label17 :
-t114 := v15
-WRITE t114
-t115 := v15
-RETURN t115
+t109 := v15
+WRITE t109
+t110 := v15
+RETURN t110
