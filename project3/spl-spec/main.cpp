@@ -313,6 +313,8 @@ void translate_Stmt(struct Node* in){
     if (in->child_num == 1) {
         translate_CompSt(in->child_list[0]);
     } else if (in->child_num== 2) {
+        // Stmt -> Exp SEMI
+        /**
         std::string tp = new_place();
         sout("*******");
         // sout(in->child_list[0]->token);
@@ -320,8 +322,22 @@ void translate_Stmt(struct Node* in){
             sout(in->child_list[0]->child_list[t]->token);
         }
         sout("*******");
-
-        translate_Exp(in->child_list[0], tp);
+        // translate_Exp(in->child_list[0], tp); **/
+        Node* exp = in->child_list[0];
+        std::string arg;
+        if (exp->child_num == 1){
+            Node* child = exp->child_list[0];
+            if (strcmp(child->token, "ID")==0){
+                std::string id = child->string_value;
+                arg = id_address_map[id];
+            }else{
+                std::string value = child->string_value;
+                arg = new_const(value);
+            }
+        }else{
+            arg = new_place();
+            translate_Exp(in->child_list[0], arg);
+        }
     } else if (in->child_num == 3) { // meaningful statements.
         // Return Exp SEMI
         std::string tp = new_place();
