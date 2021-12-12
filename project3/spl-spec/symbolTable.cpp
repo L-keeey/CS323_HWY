@@ -17,8 +17,7 @@
 typedef long long ll;
 static std::map<std::string, Type*> variable_table;
 static std::map<std::string, std::vector<Type*>> function_table;
-static std::map<std::string, Type*>struct_table;
-
+static std::map<std::string, Type*> struct_table;
 static std::map<std::string, ll> struct_hash_table;
 
 void showMap(int type);
@@ -34,7 +33,7 @@ Type* getArrayOrPrimTypeFromDefList(Node* node);
 FieldList* getFieldListFromNode(Node *node);
 FieldList* generateFieldList(Node* node, int line);
 bool isSameTypes(Type* type1, Type* type2);
-void checkReturnType(Type* define, Node* compSt, int line);
+void checkReturnType(Node* funDec, Node* compSt, int line);
 Type* paramDecNodeType(Node* paramDec, int line);
 Type* specifierNodeType(Node* specifier, int line);
 void printType1Error(int line);
@@ -220,7 +219,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
                 }else{
                     Type* type = specifierNodeType(specifier, line);
                     Node* VarDec=iter;
-                    while(childNum == 3){
+                    while(childNum == 4){
                         int size = VarDec->child_list[2]->int_value;
 
                         Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -252,7 +251,7 @@ void defVar(Node* specifier,Node* ExtDecList,int line){
 }
 
 // ExtDef -> Specifier FunDec CompSt
-void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
+void defFun(Node* specifier, Node* funDec, int line){
     sout("start defFun");
     // fetch return type
     std::vector<Type*> types;
@@ -292,9 +291,87 @@ void defFun(Node* specifier, Node* funDec, Node* compSt,int line){
     sout(types.size());  
 
     // check return type
-    if (types[0] != NULL)
-        checkReturnType(types[0], compSt, line);
+    // checkReturnType(types[0], compSt, line);
+    sout("end def fun");
 }
+
+void checkReturnType(Node* funDec, Node* compSt, int line){
+    std::vector<Node*> stack;
+    std::vector<Node*> list;
+    sout("start check return");
+    std::string funName = funDec->child_list[0]->string_value;
+    std::vector<Type*> type = function_table[funName];
+    Type* define = type[0];
+    if (define == NULL) return;
+
+    stack.push_back(compSt);
+    while (!stack.empty())
+    {
+        compSt = stack.back();
+        stack.pop_back();
+
+        // CompSt -> LC DefList StmtList RC
+        Node* stmtList = compSt->child_list[2];
+        int childNum = stmtList->child_num;
+
+        // StmtList: empty | Stmt StmtList
+        while (childNum == 2){
+            Node* stmt = stmtList->child_list[0];
+            list.push_back(stmt);
+
+            while (!list.empty())
+            {
+                stmt = list.back();
+                list.pop_back();
+
+                int stmtNum = stmt->child_num;
+
+                sout(stmtNum);
+                sout(stmt->child_list[0]->child_num);
+                // for(Node* n : stmt->child_list){
+                //     sout(n->token);
+                // }
+
+                // Stmt -> CompSt  
+                if (stmtNum == 1){
+                    stack.push_back(stmt->child_list[0]);
+                    sout("stack push CompSt");
+                }
+                // Stmt -> RETURN Exp SEMI    
+                else if (stmtNum == 3){
+                    Node* exp = stmt->child_list[1];
+                    Type* type = exp->type_value;
+                    sout("check return");
+                    if (type != NULL and !isSameTypes(define, type)){
+                        printType8Error(exp->line_No);
+                    }           
+                }
+                // Stmt -> IF LP Exp RP Stmt
+                // Stmt -> WHILE LP Exp RP Stmt 
+                else if (stmtNum == 5){
+                    list.push_back(stmt->child_list[4]);
+                }
+                // Stmt -> IF LP Exp RP Stmt ELSE Stmt 
+                else if (stmtNum == 7){
+                    list.push_back(stmt->child_list[4]);
+                    list.push_back(stmt->child_list[6]);
+                    sout("push two stmt");
+                }
+                // Stmt -> Exp SEMI
+         
+            }
+                        
+            stmtList = stmtList->child_list[1];
+            childNum = stmtList->child_num;
+            sout("stmtList childNum");
+            sout(childNum);
+        }
+        sout("stack size");
+        sout(stack.size());
+    }
+    
+}
+
 
 // Exp -> ID LP Args RP
 // Exp -> ID LP RP 
@@ -503,6 +580,7 @@ int checkINTexp(Node* exp, int allowbool){
             return 1;
         }else{
             if(strcmp(exp->type_value->name,"bool")==0){
+                //std::cout<<"is bool"<<std::endl;
                 return 0;
             }else{
                 return 1;
@@ -613,7 +691,7 @@ Type* paramDecNodeType(Node* paramDec, int line){
     else{
         Type* type = specifierNodeType(specifier, line);
 
-        while(childNum == 3){
+        while(childNum == 4){
             int size = varDec->child_list[2]->int_value;
 
             Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -630,79 +708,6 @@ Type* paramDecNodeType(Node* paramDec, int line){
         }
 
         return type;
-    }
-    
-}
-
-void checkReturnType(Type* define, Node* compSt, int line){
-    std::vector<Node*> stack;
-    std::vector<Node*> list;
-    sout("start check return");
-
-    stack.push_back(compSt);
-    while (!stack.empty())
-    {
-        compSt = stack.back();
-        stack.pop_back();
-
-        // CompSt -> LC DefList StmtList RC
-        Node* stmtList = compSt->child_list[2];
-        int childNum = stmtList->child_num;
-
-        // StmtList: empty | Stmt StmtList
-        while (childNum == 2){
-            Node* stmt = stmtList->child_list[0];
-            list.push_back(stmt);
-
-            while (!list.empty())
-            {
-                stmt = list.back();
-                list.pop_back();
-
-                int stmtNum = stmt->child_num;
-
-                sout(stmtNum);
-                sout(stmt->child_list[0]->child_num);
-                // for(Node* n : stmt->child_list){
-                //     sout(n->token);
-                // }
-
-                // Stmt -> CompSt  
-                if (stmtNum == 1){
-                    stack.push_back(stmt->child_list[0]);
-                    sout("stack push CompSt");
-                }
-                // Stmt -> RETURN Exp SEMI    
-                else if (stmtNum == 3){
-                    Node* exp = stmt->child_list[1];
-                    Type* type = exp->type_value;
-                    sout("check return");
-                    if (type != NULL and !isSameTypes(define, type)){
-                        printType8Error(exp->line_No);
-                    }           
-                }
-                // Stmt -> IF LP Exp RP Stmt
-                // Stmt -> WHILE LP Exp RP Stmt 
-                else if (stmtNum == 5){
-                    list.push_back(stmt->child_list[4]);
-                }
-                // Stmt -> IF LP Exp RP Stmt ELSE Stmt 
-                else if (stmtNum == 7){
-                    list.push_back(stmt->child_list[4]);
-                    list.push_back(stmt->child_list[6]);
-                    sout("push two stmt");
-                }
-                // Stmt -> Exp SEMI
-         
-            }
-                        
-            stmtList = stmtList->child_list[1];
-            childNum = stmtList->child_num;
-            sout("stmtList childNum");
-            sout(childNum);
-        }
-        sout("stack size");
-        sout(stack.size());
     }
     
 }
@@ -966,12 +971,14 @@ void addarg(Node* varList,int line){
    
     int childNum = varList->child_num;
     Node* paramDec;
-
+    //std::cout<<"into add arg"<<std::endl;
+    //std::cout<<childNum<<std::endl;
     // VarList -> ParamDec COMMA VarList
     while (childNum == 3){
         paramDec = varList->child_list[0];
         
         // ParamDec -> Specifier VarDec 
+        //std::cout<<"add param to table"<<std::endl;
         Node* specifier = paramDec->child_list[0];
         Node* varDec = paramDec->child_list[1];        
         Type* type = specifierNodeType(specifier, line);
@@ -990,7 +997,7 @@ void addarg(Node* varList,int line){
         else{
             Type* type = specifierNodeType(specifier, line);
 
-            while(childNum == 3){
+            while(childNum == 4){
                 int size = varDec->child_list[2]->int_value;
 
                 Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -1010,6 +1017,7 @@ void addarg(Node* varList,int line){
             if(variable_table.count(ID->string_value)>0){
                 printType3Error(line);
             }else{
+                //std::cout<<"add array to table"<<std::endl;
                 variable_table[ID->string_value]=type;
             }
 
@@ -1037,9 +1045,10 @@ void addarg(Node* varList,int line){
     }
     //array part
     else{
+        //std::cout<<"into array"<<std::endl;
         Type* type = specifierNodeType(specifier, line);
-
-        while(childNum == 3){
+        //std::cout<<childNum<<std::endl;
+        while(childNum == 4){
             int size = varDec->child_list[2]->int_value;
 
             Array* a = (struct Array*) malloc(sizeof(struct Array));
@@ -1054,11 +1063,13 @@ void addarg(Node* varList,int line){
             varDec = varDec->child_list[0];
             childNum = varDec->child_num;
         }
-
         Node* ID = varDec->child_list[0];
+        //std::cout<<ID->token<<std::endl;
         if(variable_table.count(ID->string_value)>0){
             printType3Error(line);
         }else{
+            //std::cout<<"add param to table"<<std::endl;
+            //std::cout<<ID->string_value<<std::endl;
             variable_table[ID->string_value]=type;
         }
 

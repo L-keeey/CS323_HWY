@@ -1,5 +1,6 @@
 #include "syntax.tab.c"
 #include <sstream>
+#define sout(msg)  //std::cout << msg << std::endl
 
 int var_num = 0;
 int label_num = 0;
@@ -44,9 +45,19 @@ void translate_Args(struct Node* in);
 std::string new_place();
 std::string new_var();
 std::string new_label();
+std::string retrive_value(std::string addr);
 
 template <typename T>
 std::string new_const(T c_value);
+
+void pre_order_traversal(struct Node* root, int space) {
+    if (root) {
+        print_info(root, space);
+        for (int i = 0; i < root->child_num; i ++) {
+            pre_order_traversal(root->child_list[i], space+1);
+        }
+    }
+}
 
 int main(int argc, char **argv){
     std::vector<Type*> read, write;
@@ -69,17 +80,17 @@ int main(int argc, char **argv){
         output_dir[i] = '\0';
     }
     strncpy(output_dir, argv[1], strlen(argv[1])-4);
-    strcat(output_dir,".out");
+    strcat(output_dir,".ir");
     freopen(output_dir,"w",stdout);
 
     yyparse();
-
     // if(error_num == 0){
     //     pre_order_traversal(root, 0);
     // }
 
     translate_Program(root);
-    printOutput();
+    // printOutput();
+
     fclose(stdout);
 
     return 0;
@@ -156,16 +167,20 @@ void printTAC(struct TAC* input){
 }
 
 void translate_Program(struct Node* root){
+    sout("Program");
     translate_ExtDefList(root->child_list[0]);
 }
 void translate_ExtDefList(struct Node* in){
+    sout("ExtDefList");
+    // sout(in->child_num);
     if(in->child_num!=0){
         translate_ExtDef(in->child_list[0]);
         translate_ExtDefList(in->child_list[1]);
     }
 }
 void translate_ExtDef(struct Node* in){
-    if(strcmp(in->child_list[2]->token,"ExtDecList")==0){
+    sout("ExtDef");
+    if(strcmp(in->child_list[1]->token,"ExtDecList")==0){
         //Specifier ExtDecList SEMI # variable definition
         translate_ExtDecList(in->child_list[1]);
     }else if(in->child_num==2){
@@ -177,6 +192,7 @@ void translate_ExtDef(struct Node* in){
     }
 }
 void translate_ExtDecList(struct Node* in){
+    sout("ExtDecList");
     translate_VarDec(in->child_list[0],13);
     if(in->child_num==3){
         translate_ExtDecList(in->child_list[2]);
@@ -194,6 +210,7 @@ void translate_StructSpecifier(struct Node* in){
 //TACid=14 PARAM x
 //TACid=13 DEC x
 void translate_VarDec(struct Node* in, int TACid){
+    sout("VarDec");
     //translate the staff in var map 
     if(in->child_num == 1){
         Node* ID = in->child_list[0];
@@ -201,24 +218,29 @@ void translate_VarDec(struct Node* in, int TACid){
         if(id_address_map.count(id) == 0){
             std::string varname=new_var();
             id_address_map[id] = varname;
-            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-            std::cout<<"VarDec"<<std::endl;
-            code->target[0] = varname;
-            code->id = TACid;
-            code->size=8;
-            output.push_back(code);
+            if(TACid==14){
+                TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                code->target[0] = varname;
+                code->id = TACid;
+                code->size=8;
+                output.push_back(code);
+                printTAC(code);
+            }
+            
         }
             
 
     }
 }
 void translate_FunDec(struct Node* in){
+    sout("FunDec");
     //translate the staff in function map
     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-    std::cout<<"FunDec"<<std::endl;
     code->target[0] = in->child_list[0]->string_value;
     code->id = 1;
     output.push_back(code);
+    printTAC(code);
+
     if(in->child_num==4){
         //ID LP VarList RP # with parameter
         translate_VarList(in->child_list[2]);
@@ -228,6 +250,7 @@ void translate_FunDec(struct Node* in){
 }
 
 void translate_VarList(struct Node* in){
+    sout("VarList");
     translate_ParamDec(in->child_list[0]);
     if(in->child_num==3){
         translate_VarList(in->child_list[2]);
@@ -236,6 +259,7 @@ void translate_VarList(struct Node* in){
 
 //haven't deal with array
 void translate_ParamDec(struct Node* in){
+    sout("ParamDec");
     //generate PARAM x
     //give the function the parameter
     //Specifier VarDec
@@ -244,11 +268,13 @@ void translate_ParamDec(struct Node* in){
 }
 
 void translate_CompSt(struct Node* in){
+    sout("ComSt");
     translate_DefList(in->child_list[1]);
     translate_StmtList(in->child_list[2]);
 }
 
 void translate_StmtList(struct Node* in){
+    sout("StmtList");
     if(in->child_num>0){
         translate_Stmt(in->child_list[0]);
         translate_StmtList(in->child_list[1]);
@@ -256,16 +282,21 @@ void translate_StmtList(struct Node* in){
 }
 
 void translate_Stmt(struct Node* in){
+    sout("Stmt");
     if (in->child_num == 1) {
         translate_CompSt(in->child_list[0]);
-        std::cout << "COMP STMT" << std::endl;
     } else if (in->child_num== 2) {
-        std::cout << "EXP SEMI" << std::endl;
         std::string tp = new_place();
+        sout("*******");
+        // sout(in->child_list[0]->token);
+        for (int t = 0; t < in->child_list[0]->child_num; t ++) {
+            sout(in->child_list[0]->child_list[t]->token);
+        }
+        sout("*******");
+
         translate_Exp(in->child_list[0], tp);
     } else if (in->child_num == 3) { // meaningful statements.
         // Return Exp SEMI
-        std::cout << "RETURN STMT" << std::endl;
         std::string tp = new_place();
         translate_Exp(in->child_list[1], tp);
         TAC* return_tac = (struct TAC*) malloc(sizeof(struct TAC));
@@ -273,12 +304,12 @@ void translate_Stmt(struct Node* in){
         return_tac->id = 12;
         return_tac->target[0] = tp;
         output.push_back(return_tac);
+        printTAC(return_tac);
     } else if (in->child_num == 5) {
         // There may be two conditions
         // WHILE LP Exp RP Stmt
         // IF LP Exp RP Stmt ... (The things agter the translation is ignore)
-        if (strcmp(in->child_list[0]->token, "WHILE")) {
-            std::cout << "WHILE STMT" << std::endl;
+        if (strcmp(in->child_list[0]->token, "WHILE")==0) {
             std::string lb1 = new_label();
             std::string lb2 = new_label();
             std::string lb3 = new_label();
@@ -289,12 +320,14 @@ void translate_Stmt(struct Node* in){
             code1->id = 0;
             code1->target[0] = lb1;
             output.push_back(code1);
+            printTAC(code1);
 
             translate_cond_Exp(in->child_list[2], lb2, lb3);
 
             code2->id = 0;
             code2->target[0] = lb2;
             output.push_back(code2);
+            printTAC(code2);
 
             translate_Stmt(in->child_list[4]);
 
@@ -306,9 +339,10 @@ void translate_Stmt(struct Node* in){
 
             output.push_back(code3);
             output.push_back(code4);
+            printTAC(code3);
+            printTAC(code4);
 
         } else if (in->child_list[0]->token, "IF") {
-            std::cout << "IF STMT" << std::endl;
             std::string lb1 = new_label();
             std::string lb2 = new_label();
 
@@ -318,18 +352,19 @@ void translate_Stmt(struct Node* in){
             code2->id = 0;
             code2->target[0] = lb1;
             output.push_back(code2);
+            printTAC(code2);
             translate_Stmt(in->child_list[4]);
 
             TAC* code3 = (struct TAC*) malloc(sizeof(struct TAC));
             code3->id = 0;
             code3->target[0] = lb2;
             output.push_back(code3);
+            printTAC(code3);
         } else {
             // Something wrong happen since the else branch won't be access.
             // debug part.
         }
     } else if (in->child_num == 7) {
-        std::cout << "IF-ELSE STMT" << std::endl;
         // IF LP Exp RP Stmt ELSE Stmt
         std::string lb1 = new_label();
         std::string lb2 = new_label();
@@ -343,20 +378,24 @@ void translate_Stmt(struct Node* in){
         code1->target[0] = lb1;
         code1->id = 0;
         output.push_back(code1);
+        printTAC(code1);
 
         translate_Stmt(in->child_list[4]);
         code2->target[0] = lb3;
         code2->id = 10;
         output.push_back(code2);
+        printTAC(code2);
 
         code3->target[0] = lb2;
         code3->id = 0;
         output.push_back(code3);
+        printTAC(code3);
 
         translate_Stmt(in->child_list[6]);
         code4->id = 0;
         code4->target[0] = lb3;
         output.push_back(code4);
+        printTAC(code4);
     } else {
         // Something wrong happen since the else branch won't be access.
         // debug part.
@@ -364,6 +403,7 @@ void translate_Stmt(struct Node* in){
 }
 
 void translate_DefList(struct Node* in){
+    sout("DefList");
     if(in->child_num>0){
         translate_Def(in->child_list[0]);
         translate_DefList(in->child_list[1]);
@@ -371,10 +411,12 @@ void translate_DefList(struct Node* in){
 }
 
 void translate_Def(struct Node* in){
+    sout("Def");
     translate_DecList(in->child_list[1]);
 }
 
 void translate_DecList(struct Node* in){
+    sout("DecList");
     translate_Dec(in->child_list[0]);
     if(in->child_num==3){
         translate_DecList(in->child_list[2]);
@@ -382,46 +424,59 @@ void translate_DecList(struct Node* in){
 }
 
 void translate_Dec(struct Node* in){
+    sout("Dec");
     //call vardec, assign value to address
     
-    if(in->child_num==0){
+    if(in->child_num==1){
         //VarDec
         translate_VarDec(in->child_list[0],13);
     }else{
         //VarDec ASSIGN Exp
         std::string varname;
-        if(in->child_num == 1){
-            Node* ID = in->child_list[0];
+        Node* VarDec=in->child_list[0];
+        if(VarDec->child_num == 1){
+            Node* ID = VarDec->child_list[0];
             std::string id = ID->string_value;
             if(id_address_map.count(id) == 0){
                 varname=new_var();
+                sout(varname);
                 id_address_map[id] = varname;
+                sout(id_address_map[id]);
+                /*
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 std::cout<<"Dec newvar"<<std::endl;
                 code->target[0] = varname;
                 code->id = 13;
                 code->size=8;
                 output.push_back(code);
+                */
             }
         }
+        //std::cout<<"vardec assign exp"<<std::endl;
         std::string t1=new_place();
         translate_Exp(in->child_list[2],t1);
+        //std::cout<<"before print"<<std::endl;
+        //std::cout<<varname<<t1<<std::endl;
         TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-        std::cout<<"Dec assign"<<std::endl;
         code->target[0]=varname;
         code->target[1]=t1;
         code->id=2;
         output.push_back(code);
+        printTAC(code);
 
     }
 }
 
+
 void translate_Exp(struct Node* in, std::string place){
+    sout("Exp");
     if (in->child_num == 1){
         Node* child = in->child_list[0];
         // variable access:        
         // ID (declared) 
-        if (strcpy(child->token, "ID")){
+        if (strcmp(child->token, "ID")==0){
+            sout(place);
+            sout("id");
             std::string id = child->string_value;
             std::string var = id_address_map[id];
 
@@ -431,10 +486,17 @@ void translate_Exp(struct Node* in, std::string place){
             code->id = 2;
 
             output.push_back(code);
+            printTAC(code);
         }
         // constant access:
         // INT | FLOAT | CHAR 
         else{
+            sout("const");
+            sout(child->token);
+            sout(child->child_num);
+            if(child->child_num!=0){
+                sout(child->child_list[0]->string_value);
+            }
             std::string value = child->string_value;
             std::string new_value = new_const(value);
 
@@ -444,23 +506,23 @@ void translate_Exp(struct Node* in, std::string place){
             code->id = 2;
 
             output.push_back(code);
+            printTAC(code);
         }
     }
     // function access:
     // ID LP Args RP (s.c. write(x)) | ID LP RP (s.c. read())  
-    else if (strcmp(in->child_list[0]->token, "ID")){
+    else if (strcmp(in->child_list[0]->token, "ID")==0){
         Node* ID = in->child_list[0];
         if (in->child_num == 4){
-            if(strcmp(ID->string_value, "write")){
-                std::string tp = new_place();
-
-                translate_Exp(in->child_list[2], tp);
+            if(strcmp(ID->string_value, "write")==0){
+                translate_Exp(in->child_list[2]->child_list[0], place);
 
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = place;
                 code->id = 18;
 
                 output.push_back(code);
+                printTAC(code);
             }else{
                 std::string fun = ID->string_value;
                 args.clear();
@@ -474,6 +536,7 @@ void translate_Exp(struct Node* in, std::string place){
                     code->id = 15;
 
                     output.push_back(code);
+                    printTAC(code);
                 }
 
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
@@ -482,14 +545,17 @@ void translate_Exp(struct Node* in, std::string place){
                 code->id = 16;
 
                 output.push_back(code);
+                printTAC(code);
             }
         }else{
-            if(strcmp(ID->string_value, "read")){
+            if(strcmp(ID->string_value, "read")==0){
+                sout("read");
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = place;
                 code->id = 17;
 
                 output.push_back(code);
+                printTAC(code);
             }else{
                 std::string fun = ID->string_value;
 
@@ -499,6 +565,7 @@ void translate_Exp(struct Node* in, std::string place){
                 code->id = 16;
 
                 output.push_back(code);
+                printTAC(code);
             }
         }
     } 
@@ -514,6 +581,7 @@ void translate_Exp(struct Node* in, std::string place){
         code->id = 4;
 
         output.push_back(code);
+        printTAC(code);
     } 
     // array access:
     // Exp LB Exp RB 
@@ -532,6 +600,7 @@ void translate_Exp(struct Node* in, std::string place){
         code->target[1] = var;
         code->id = 7;
         output.push_back(code);
+        printTAC(code);
 
         Type* arr = variable_table[var];
         sizes.clear();
@@ -548,6 +617,7 @@ void translate_Exp(struct Node* in, std::string place){
         code->target[2] = new_const(base_size);
         code->id = 5;
         output.push_back(code);
+        printTAC(code);
         base_size *= sizes[0];
 
         std::string offset = t1;
@@ -559,6 +629,7 @@ void translate_Exp(struct Node* in, std::string place){
             code->target[2] = new_const(base_size);
             code->id = 5;
             output.push_back(code);
+            printTAC(code);
             base_size *= sizes[1];
 
             std::string t_sum = new_place();
@@ -568,6 +639,7 @@ void translate_Exp(struct Node* in, std::string place){
             code->target[2] = t2;
             code->id = 3;
             output.push_back(code);
+            printTAC(code);
 
             for (int i = 2; i < indexes.size(); i++){
                 std::string t_new = new_place();
@@ -577,6 +649,7 @@ void translate_Exp(struct Node* in, std::string place){
                 code->target[2] = new_const(base_size);
                 code->id = 5;
                 output.push_back(code);
+                printTAC(code);
                 base_size *= sizes[i];
 
                 std::string t_pre = t_sum;
@@ -587,6 +660,7 @@ void translate_Exp(struct Node* in, std::string place){
                 code->target[2] = t_pre;
                 code->id = 3;
                 output.push_back(code);
+                printTAC(code);
             }
             
             offset = t_sum;
@@ -599,12 +673,14 @@ void translate_Exp(struct Node* in, std::string place){
         code->target[2] = offset;
         code->id = 3;
         output.push_back(code);
+        printTAC(code);
 
         code = (struct TAC*) malloc(sizeof(struct TAC));
         code->target[0] = place;
         code->target[1] = addr;
         code->id = 8;
         output.push_back(code);
+        printTAC(code);
 
     } else if (in->child_num == 3){
         // TODO:
@@ -612,7 +688,7 @@ void translate_Exp(struct Node* in, std::string place){
         // Exp DOT ID  
 
         // LP Exp RP 
-        if (strcmp(in->child_list[0]->token, "LP")){
+        if (strcmp(in->child_list[0]->token, "LP")==0){
             translate_Exp(in->child_list[1], place);
         } 
         // assignnment:
@@ -626,59 +702,168 @@ void translate_Exp(struct Node* in, std::string place){
             Node* Opt = in->child_list[1];
             Node* Exp2 = in->child_list[2];
 
-            std::string t1 = new_place();
-            std::string t2 = new_place();
+            if (strcmp(Opt->token, "ASSIGN")==0){  
+                sout("assign"); 
+                Node* ID = Exp1->child_list[0];
+                std::string left;
+                if (Exp1->child_num == 1){
+                    std::string id = ID->string_value;
+                    left = id_address_map[id];
+                    sout(id);
+                    sout(id_address_map.count(id));
+                }else if (Exp1->child_num == 4){
+                    indexes.clear();
+                    Node* Exp = in;
+                    while (Exp->child_num == 4){
+                        indexes.push_back(Exp->child_list[2]->child_list[0]->string_value);
+                        Exp = Exp->child_list[0];
+                    }
 
-            if (strcpy(Opt->token, "ASSIGN")){      
-                translate_Exp(Exp2, t2);
-                translate_Exp(Exp1, t1);
+                    std::string var = Exp->child_list[0]->string_value;
+                    std::string t0 = new_place();
+                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code->target[0] = t0;
+                    code->target[1] = var;
+                    code->id = 7;
+                    output.push_back(code);
+                    printTAC(code);
+
+                    Type* arr = variable_table[var];
+                    sizes.clear();
+                    while (arr->category == ARRAY){
+                        sizes.insert(sizes.begin(), arr->array->size);
+                        arr = arr->array->base;
+                    }
+                    int base_size = arr->primitive == _CHAR ? 1 : 4;
+
+                    std::string t1 = new_place();
+                    code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code->target[0] = t1;
+                    code->target[1] = indexes[0];
+                    code->target[2] = new_const(base_size);
+                    code->id = 5;
+                    output.push_back(code);
+                    printTAC(code);
+                    base_size *= sizes[0];
+
+                    std::string offset = t1;
+                    if (indexes.size() > 1){
+                        std::string t2 = new_place();
+                        TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                        code->target[0] = t2;
+                        code->target[1] = indexes[1];
+                        code->target[2] = new_const(base_size);
+                        code->id = 5;
+                        output.push_back(code);
+                        printTAC(code);
+                        base_size *= sizes[1];
+
+                        std::string t_sum = new_place();
+                        code = (struct TAC*) malloc(sizeof(struct TAC));
+                        code->target[0] = t_sum;
+                        code->target[1] = t1;
+                        code->target[2] = t2;
+                        code->id = 3;
+                        output.push_back(code);
+                        printTAC(code);
+
+                        for (int i = 2; i < indexes.size(); i++){
+                            std::string t_new = new_place();
+                            TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                            code->target[0] = t_new;
+                            code->target[1] = indexes[i];
+                            code->target[2] = new_const(base_size);
+                            code->id = 5;
+                            output.push_back(code);
+                            printTAC(code);
+                            base_size *= sizes[i];
+
+                            std::string t_pre = t_sum;
+                            std::string t_sum = new_place();
+                            code = (struct TAC*) malloc(sizeof(struct TAC));
+                            code->target[0] = t_sum;
+                            code->target[1] = t_new;
+                            code->target[2] = t_pre;
+                            code->id = 3;
+                            output.push_back(code);
+                            printTAC(code);
+                        }
+                        
+                        offset = t_sum;
+                    }
+
+                    std::string addr = new_place();
+                    code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code->target[0] = addr;
+                    code->target[1] = t0;
+                    code->target[2] = offset;
+                    code->id = 3;
+                    output.push_back(code);
+                    printTAC(code);
+
+                    left = retrive_value(addr);
+                }
+                sout(left);
+
+                std::string tp = new_place();
+                translate_Exp(Exp2, tp);
 
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
-                code->target[0] = t1;
-                code->target[1] = t2;
+                code->target[0] = left;
+                code->target[1] = tp;
                 code->id = 2;
                 output.push_back(code);
+                printTAC(code);
 
                 code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = place;
-                code->target[1] = t1;
+                code->target[1] = left;
                 code->id = 2;
                 output.push_back(code);
+                printTAC(code);
 
             } else {
+                std::string t1 = new_place();
+                std::string t2 = new_place();
+
                 translate_Exp(Exp1, t1);
                 translate_Exp(Exp2, t2);
-                if (strcpy(Opt->token, "PLUS")){
+                if (strcmp(Opt->token, "PLUS")==0){
                     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = t1;
                     code->target[2] = t2;
                     code->id = 3;
                     output.push_back(code);
+                    printTAC(code);
 
-                }else if (strcpy(Opt->token, "MINUS")){
+                }else if (strcmp(Opt->token, "MINUS")==0){
                     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = t1;
                     code->target[2] = t2;
                     code->id = 4;
                     output.push_back(code);
+                    printTAC(code);
                 
-                }else if (strcpy(Opt->token, "MUL")){
+                }else if (strcmp(Opt->token, "MUL")==0){
                     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = t1;
                     code->target[2] = t2;
                     code->id = 5;
                     output.push_back(code);
+                    printTAC(code);
                     
-                }else if (strcpy(Opt->token, "DIV")){
+                }else if (strcmp(Opt->token, "DIV")==0){
                     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = t1;
                     code->target[2] = t2;
                     code->id = 6;
                     output.push_back(code);
+                    printTAC(code);
+
                 }else{
                     // condition Exp
                     std::string lb1 = new_label();
@@ -689,6 +874,7 @@ void translate_Exp(struct Node* in, std::string place){
                     code->target[1] = "#0";
                     code->id = 2;
                     output.push_back(code);
+                    printTAC(code);
 
                     translate_cond_Exp(in, lb1, lb2);
 
@@ -696,17 +882,20 @@ void translate_Exp(struct Node* in, std::string place){
                     code->target[0] = lb1;
                     code->id = 0;
                     output.push_back(code);
+                    printTAC(code);
 
                     code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = place;
                     code->target[1] = "#1";
                     code->id = 2;
                     output.push_back(code);
+                    printTAC(code);
 
                     code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = lb2;
                     code->id = 0;
                     output.push_back(code);
+                    printTAC(code);
                 }
             }
         }
@@ -715,6 +904,8 @@ void translate_Exp(struct Node* in, std::string place){
 
 void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
     // NOT Exp 
+    sout("cond_Exp");
+    sout(in->child_num);
     if (in->child_num == 2){
         translate_cond_Exp(in, lb_f, lb_t);
     }else{
@@ -726,7 +917,7 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
         Node* Exp1 = in->child_list[0];
         Node* Opt = in->child_list[1];
         Node* Exp2 = in->child_list[2];
-        if (strcpy(Opt->token, "AND")){
+        if (strcmp(Opt->token, "AND")==0){
             std::string lb1 = new_label();
             translate_cond_Exp(Exp1, lb1, lb_f);
 
@@ -734,9 +925,10 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
             code->target[0] = lb1;
             code->id = 0;
             output.push_back(code);
+            printTAC(code);
 
             translate_cond_Exp(Exp2, lb_t, lb_f);
-        }else if (strcpy(Opt->token, "OR")){
+        }else if (strcmp(Opt->token, "OR")==0){
             std::string lb1 = new_label();
             translate_cond_Exp(Exp1, lb_t, lb1);
 
@@ -744,6 +936,7 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
             code->target[0] = lb1;
             code->id = 0;
             output.push_back(code);
+            printTAC(code);
 
             translate_cond_Exp(Exp2, lb_t, lb_f);
         }else {
@@ -751,43 +944,45 @@ void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f){
             std::string t2 = new_place();
             translate_Exp(Exp1, t1);
             translate_Exp(Exp2, t2);
-
             TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
             code->target[0] = t1;
             code->target[1] = t2;
             code->target[2] = lb_t;
             code->id = 11;
-                
-            if (strcpy(Opt->token, "LT")){
+          
+            if (strcmp(Opt->token, "LT")==0){
                 code->relop = "<";
-            }else if (strcpy(Opt->token, "LE")){
+            }else if (strcmp(Opt->token, "LE")==0){
                 code->relop = "<=";
-            }else if (strcpy(Opt->token, "GT")){
+            }else if (strcmp(Opt->token, "GT")==0){
                 code->relop = ">";
-            }else if (strcpy(Opt->token, "GE")){
+            }else if (strcmp(Opt->token, "GE")==0){
                 code->relop = ">=";
-            }else if (strcpy(Opt->token, "EQ")){
+            }else if (strcmp(Opt->token, "EQ")==0){
                 code->relop = "==";
-            }else if (strcpy(Opt->token, "NE")){
+            }else if (strcmp(Opt->token, "NE")==0){
                 code->relop = "!=";
             }
             output.push_back(code);
+            printTAC(code);
 
             code = (struct TAC*) malloc(sizeof(struct TAC));
             code->target[0] = lb_f;
             code->id = 10;
             output.push_back(code);
+            printTAC(code);
         }
     }
 }
 
 void translate_Args(struct Node* in){
     //should add ARG x
+    sout("Args");
     std::string tp = new_place();
     translate_Exp(in->child_list[0], tp);
     args.insert(args.begin(), tp);
 
-    if(in->child_num > 0){
+    if(in->child_num > 1){
         translate_Args(in->child_list[2]);
     }
 }
@@ -830,6 +1025,15 @@ std::string new_const(T c_value){
     std::stringstream sstream;
     std::string result;
     sstream << "#" << c_value;
+    sstream >> result;
+
+    return result;
+}
+
+std::string retrive_value(std::string addr){
+    std::stringstream sstream;
+    std::string result;
+    sstream << "*" << addr;
     sstream >> result;
 
     return result;

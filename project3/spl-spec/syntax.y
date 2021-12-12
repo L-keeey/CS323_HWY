@@ -53,7 +53,7 @@ ExtDefList:
 ExtDef: 
       Specifier ExtDecList SEMI { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);defVar($1,$2,@$.first_line);}
     | Specifier SEMI            { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); defStructure($1, @$.first_line);}
-    | Specifier FunDec CompSt   { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3); defFun($1,$2,$3,@$.first_line);}
+    | Specifier FunDec { defFun($1, $2, @$.first_line);} CompSt { $$ = new_Node_l("ExtDef", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $4); checkReturnType($2, $4, @$.first_line);}
     | Specifier ExtDecList error {show_yyerror(MISSING_SEMI);}
     ;
 ExtDecList:
@@ -137,8 +137,8 @@ Dec:
 /* Expression */
 Exp: 
       Exp ASSIGN Exp        { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);check_rvalue($1,@$.first_line);checkAssignOperand($1,$3,@$.first_line);$$->type_value=$3->type_value;}
-    | Exp AND Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1,1)&&checkINTexp($3,1))){printType7Error(@$.first_line);}$$->type_value=new_prim_type("bool");}
-    | Exp OR Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1,1)&&checkINTexp($3,1))){printType7Error(@$.first_line);}$$->type_value=new_prim_type("bool");}
+    | Exp AND Exp           { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1,0)&&checkINTexp($3,0))){printType7Error(@$.first_line);}$$->type_value=new_prim_type("bool");}
+    | Exp OR Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);if(!(checkINTexp($1,0)&&checkINTexp($3,0))){printType7Error(@$.first_line);}$$->type_value=new_prim_type("bool");}
     | Exp LT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$->type_value=new_prim_type("bool");}
     | Exp LE Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$->type_value=new_prim_type("bool");}
     | Exp GT Exp            { $$ = new_Node_l("Exp", @$.first_line); addChild($$, $1); addChild($$, $2); addChild($$, $3);typeAfterCalc($1,$3,@$.first_line);$$->type_value=new_prim_type("bool");}
