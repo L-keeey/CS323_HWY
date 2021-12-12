@@ -42,6 +42,7 @@ void translate_Dec(struct Node* in);
 void translate_Exp(struct Node* in, std::string place);
 void translate_cond_Exp(Node* in, std::string lb_t, std::string lb_f);
 void translate_Args(struct Node* in);
+int calculateSize(Type* array);
 std::string new_place();
 std::string new_var();
 std::string new_label();
@@ -217,20 +218,43 @@ void translate_VarDec(struct Node* in, int TACid){
         std::string id = ID->string_value;
         if(id_address_map.count(id) == 0){
             std::string varname=new_var();
-            id_address_map[id] = varname;
+            
+            Type* t=variable_table[id];
             if(TACid==14){
+                // PARAM x
+                id_address_map[id] = varname;
                 TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                 code->target[0] = varname;
                 code->id = TACid;
-                code->size=8;
                 output.push_back(code);
                 printTAC(code);
+            }else{
+                // DEC x
+                //put &vn into id_address_map
+                id_address_map[id] = "&"+varname;
+                if(t->category==ARRAY){
+                    TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
+                    code->target[0] = varname;
+                    code->id = TACid;
+                    code->size=calculateSize(t);
+                    output.push_back(code);
+                    printTAC(code);
+                }
             }
             
         }
             
 
     }
+}
+int calculateSize(Type* array){
+    int total_size=array->array->size;
+    Type* next=array->array->base;
+    while(next->category==ARRAY){
+        total_size*=next->array->size;
+        next=next->array->base;
+    }
+    return total_size*4;
 }
 void translate_FunDec(struct Node* in){
     sout("FunDec");
@@ -432,6 +456,7 @@ void translate_Dec(struct Node* in){
         translate_VarDec(in->child_list[0],13);
     }else{
         //VarDec ASSIGN Exp
+        // There do not exist a statement that the vardec is an array, since function cannot return array type
         std::string varname;
         Node* VarDec=in->child_list[0];
         if(VarDec->child_num == 1){
