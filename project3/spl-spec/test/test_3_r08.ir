@@ -31,9 +31,9 @@ t11 := t12 + t13
 RETURN t11
 FUNCTION main :
 READ t18
-v4 := t18
-t17 := v4
-t19 := v4
+&v4 := t18
+t17 := &v4
+t19 := &v4
 t20 := #0
 IF t19 < t20 GOTO label3
 GOTO label4
@@ -43,7 +43,7 @@ t21 := #0 - t22
 WRITE t21
 GOTO label5
 LABEL label4 :
-ARG v4
+ARG &v4
 t23 := CALL DigitSum
 WRITE t23
 LABEL label5 :

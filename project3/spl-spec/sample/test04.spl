@@ -15,7 +15,7 @@ int main()
             op[j] = i + j;
             j = j + 1;
         }
-        r[0][i] = add(op);
+        r[0][i+0] = add(op);
         write(r[0][i]);
         i = i + 1;
         j = 0;

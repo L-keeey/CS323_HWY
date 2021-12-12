@@ -14,21 +14,21 @@ t4 := t5 * t6
 RETURN t4
 FUNCTION main :
 READ t10
-v3 := t10
-t9 := v3
-t11 := v3
+&v3 := t10
+t9 := &v3
+t11 := &v3
 WRITE t11
-ARG v3
+ARG &v3
 t13 := CALL sqr
-v4 := t13
-t12 := v4
-t14 := v4
+&v4 := t13
+t12 := &v4
+t14 := &v4
 WRITE t14
-ARG v3
+ARG &v3
 t16 := CALL cbc
-v4 := t16
-t15 := v4
-t17 := v4
+&v4 := t16
+t15 := &v4
+t17 := &v4
 WRITE t17
 t18 := #0
 RETURN t18
