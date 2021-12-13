@@ -278,3 +278,7 @@ t4 := 0 * #4
 [INFO] 2021-12-13 04:53:12,720 (irsim.py 567): File loaded successfully
 [INFO] 2021-12-13 04:53:14,746 (irsim.py 567): Program has exited gracefully
 [INFO] 2021-12-13 04:53:14,746 (irsim.py 567): Total instructions = 291
+[DEBUG] 2021-12-13 05:06:08,415 (irsim.py 620): Parsed arguments: {'irpath': '../../sample/test04.ir', 'inputs': '', 'logpath': 'irsim.log'}
+[INFO] 2021-12-13 05:06:08,417 (irsim.py 567): File loaded successfully
+[INFO] 2021-12-13 05:06:10,553 (irsim.py 567): Program has exited gracefully
+[INFO] 2021-12-13 05:06:10,553 (irsim.py 567): Total instructions = 160
