@@ -8,10 +8,10 @@ t5 := t7 / t8
 t6 := v2
 t4 := t5 * t6
 t2 := t3 - t4
-&v4 := t2
-t1 := &v4
+v4 := t2
+t1 := v4
 LABEL label1 :
-t9 := &v4
+t9 := v4
 t10 := #0
 IF t9 != t10 GOTO label2
 GOTO label3
@@ -19,7 +19,7 @@ LABEL label2 :
 t12 := v2
 v1 := t12
 t11 := v1
-t14 := &v4
+t14 := v4
 v2 := t14
 t13 := v2
 t17 := v1
@@ -29,14 +29,14 @@ t19 := t21 / t22
 t20 := v2
 t18 := t19 * t20
 t16 := t17 - t18
-&v4 := t16
-t15 := &v4
+v4 := t16
+t15 := v4
 GOTO label1
 LABEL label3 :
 t24 := v2
-&v3 := t24
-t23 := &v3
-t25 := &v3
+v3 := t24
+t23 := v3
+t25 := v3
 RETURN t25
 FUNCTION gcd2 :
 PARAM v5

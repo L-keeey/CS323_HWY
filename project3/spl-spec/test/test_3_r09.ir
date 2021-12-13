@@ -126,10 +126,10 @@ LABEL label10 :
 ARG #10
 ARG v13
 t79 := CALL mod
-&v14 := t79
-t78 := &v14
+v14 := t79
+t78 := v14
 t84 := v13
-t85 := &v14
+t85 := v14
 t82 := t84 - t85
 t83 := #10
 t81 := t82 / t83
@@ -137,7 +137,7 @@ v13 := t81
 t80 := v13
 t88 := v12
 ARG v11
-ARG &v14
+ARG v14
 t89 := CALL power
 t87 := t88 + t89
 v12 := t87
