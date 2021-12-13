@@ -13,3 +13,4 @@ make
 
 
 ./bin/splc ./test-ex/test_a.spl
+./bin/splc ./test-ex/test_b.spl

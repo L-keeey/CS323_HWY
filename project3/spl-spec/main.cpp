@@ -236,7 +236,7 @@ void translate_VarDec(struct Node* in, int TACid){
                 //put &vn into id_address_map
                 id_address_map[id] = varname;
                 if(t->category==ARRAY){
-                    id_address_map[id] = "&" + varname;
+                    id_address_map[id] = "&"+varname;
                     TAC* code = (struct TAC*) malloc(sizeof(struct TAC));
                     code->target[0] = varname;
                     code->id = TACid;
