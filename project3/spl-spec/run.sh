@@ -12,4 +12,4 @@ make
 ./bin/splc ./test/test_3_r10.spl 
 
 
-./bin/splc ./sample/test04.spl
+./bin/splc ./test-ex/test_a.spl

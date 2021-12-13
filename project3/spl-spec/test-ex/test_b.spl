@@ -1,0 +1,17 @@
+int main() {
+    int array[3][4];
+    int a, b, c, d;
+    a = read();
+    b = read();
+    c = 2;
+    while (c >= 0) {
+        d = 3;
+        while (d >= 0) {
+            array[c][d] = c+d;
+            d = d - 1;
+        }
+        c = c - 1;
+    }
+    write(array[a][b]);
+    return 0;
+}
