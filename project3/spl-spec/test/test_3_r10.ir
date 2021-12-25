@@ -1,8 +1,8 @@
 FUNCTION main :
 READ t2
-&v1 := t2
-t1 := &v1
-t3 := &v1
+v1 := t2
+t1 := v1
+t3 := v1
 t4 := #0
 IF t3 > t4 GOTO label1
 GOTO label2
@@ -11,7 +11,7 @@ t5 := #1
 WRITE t5
 GOTO label3
 LABEL label2 :
-t6 := &v1
+t6 := v1
 t7 := #0
 IF t6 < t7 GOTO label4
 GOTO label5

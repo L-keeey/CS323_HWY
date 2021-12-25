@@ -1,0 +1,14 @@
+int main() {
+    int array[5];
+    int t, k;
+    t = read();
+    array[0] = 1;
+    array[1] = 2;
+    array[2] = 3;
+    array[3] = 5;
+    array[4] = 8;
+    k = array[t];
+    write(t);
+    write(k);
+    return 0;
+}
