@@ -19,6 +19,8 @@ struct RegDesc {    // the register descriptor
     char var[8];
     bool dirty; // value updated but not stored
     /* add other fields as you need */
+    int ttl;
+    int time;
 } regs[NUM_REGS];
 
 
@@ -27,9 +29,15 @@ struct VarDesc {    // the variable descriptor
     Register reg;
     int offset; // the offset from stack
     /* add other fields as you need */
+    int ttl;
     struct VarDesc *next;
 } *vars;
 
+struct FunctionDesc {
+    char var[8];
+    int param_num;
+    struct FunctionDesc * next;
+} *funcs;
 
 void mips32_gen(tac *head, FILE *_fd);
 

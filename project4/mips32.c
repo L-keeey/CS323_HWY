@@ -29,6 +29,9 @@ FILE *fd;
 
 int stack_var_num = 0;
 int var_time_counter = 0;
+int param_count = 0;
+int arg_count = 0;
+struct _tac_inst* to_print[4];
 
 struct VarDesc* find_varDesc(char *var){
     struct VarDesc* curr = vars;
@@ -233,7 +236,9 @@ tac *emit_label(tac *label){
     return label->next;
 }
 
+// make a label to jump to
 tac *emit_function(tac *function){
+    param_count=0;
     _mips_printf("%s:", _tac_quadruple(function).funcname);
     return function->next;
 }
@@ -418,9 +423,25 @@ tac *emit_ifeq(tac *ifeq){
     /* COMPLETE emit function */
     return ifeq->next;
 }
+//TODO: if there is a recursive call of a function, since the para name are the same
+//      is it possible multiple suitable VarDesc will be fund?
+//      can we use the `offset` to check the variable is/isn't in memory?
 
+// TAC code: return xxx
+// put the return value to `$v0,$v1`
+// for mips:
+// move $v0,xxx
+// jr,$ra
+// take the former saved `$a` from memory
+// take the former saved `$ra` from memory
 tac *emit_return(tac *return_){
     /* COMPLETE emit function */
+    //jr must before load all(the $ra will be rewrite)
+    struct VarDesc* vd = find_varDesc(return_->code.return_.var->char_val);
+    _mips_printf("move $v0, %s",_reg_name(vd->reg));
+    _mips_iprintf("jr $ra");
+    load_all();
+    load_args();
     return return_->next;
 }
 
@@ -429,18 +450,97 @@ tac *emit_dec(tac *dec){
     return dec->next;
 }
 
+// TAC code: arg xxx
+// add a new variable `xxx` to VarDesc
+// save the former `$a` to memory (maybe use a stack to indicate how many $a are saved)
+// we only consider the case that all the args are just before the function call
+// we do not consider something like: ARG CALL ARG CALL, which the two arg belongs to the second call
 tac *emit_arg(tac *arg){
     /* COMPLETE emit function */
+    //struct VarDesc* vd = find_varDesc(arg->code.arg.var->char_val);
+    //_mips_printf("move %s, %s:",_reg_name(a0+arg_count),_reg_name(vd->reg));
+    to_print[arg_count]=&arg->code;
+    arg_count++;
     return arg->next;
 }
 
+// TAC code: target_name := call function_name
+// for mips:
+// 1.save the frame (`$t0-$s7`) to memory
+// 2.jal function_name 
+// 3.put the former frame (`$t0-$s7`) back from memory
+// 4.add a new variable `target_name` to VarDesc
+// 5.assign `$v0,$v1` value to `target_name` and allocate a new register for it
 tac *emit_call(tac *call){
     /* COMPLETE emit function */
+    assert(_tac_kind(call) == CALL);
+    save_all();
+    save_move_args();
+    _mips_printf("jal %s:", (call)->code.call.funcname);
+    struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
+    _mips_printf("move %s,$v0",_reg_name(vd->reg));
+    arg_count=0;
     return call->next;
 }
-
+//should we update the reg value of vardec here?
+void save_all(){
+    int offset=0;
+    //16*4+4=68
+    _mips_printf("addi sp,sp,-68");
+    for (int r = t1; r <= s7; r++){
+        _mips_printf("sw %s, %d($sp)", _reg_name(r), offset);
+        offset+=4;
+    }
+    _mips_printf("sw $ra,%d($sp)",offset);
+}
+void load_all(){
+    int offset=0;
+    //16*4+4=68
+    for (int r = t1; r <= s7; r++){
+        _mips_printf("lw %s, %d($sp)", _reg_name(r), offset);
+        offset+=4;
+    }
+    _mips_printf("lw $ra,%d($sp)",offset);
+    _mips_printf("addi sp,sp,68");
+}
+void load_args(){
+    int offset=0;
+    //load args
+    //4*4=16
+    for (int r = a0; r <= a3; r++){
+        _mips_printf("lw %s, %d($sp)", _reg_name(r), offset);
+        offset+=4;
+    }
+    _mips_printf("addi sp,sp,16");
+}
+void save_move_args(){
+    int offset=0;
+    //save args
+    //4*4=16
+    _mips_printf("addi sp,sp,-16");
+    for (int r = a0; r <= a3; r++){
+        _mips_printf("sw %s, %d($sp)", _reg_name(r), offset);
+        offset+=4;
+    }
+    //move args
+    for(int i=0;i<arg_count;i++){
+        struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
+        _mips_printf("move %s, %s:",_reg_name(a0+arg_count),_reg_name(vd->reg));
+    }
+}
+// TAC code: param xxx
+// use a global variable `param count` to find to get value from which `$a`
+// make a new variable xxx and assign the `$a` value to it
+// param count++
 tac *emit_param(tac *param){
     /* COMPLETE emit function */
+    init_varDesc(param->code.param.p);
+    char *var = param->code.param.p->char_val;
+    struct VarDesc* vd = find_varDesc(var);
+    //TODO: consider parameter number > 4
+    vd->reg=a0+param_count;
+    strcpy(regs[a0+param_count].var,var);
+    param_count++;
     return param->next;
 }
 
