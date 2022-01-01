@@ -396,31 +396,67 @@ tac *emit_goto(tac *goto_){
 
 tac *emit_iflt(tac *iflt){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(iflt).c1);
+    y = get_register(_tac_quadruple(iflt).c2);
+
+    int lb = _tac_quadruple(iflt).labelno->int_val;
+    _mips_iprintf("blt %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return iflt->next;
 }
 
 tac *emit_ifle(tac *ifle){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(ifle).c1);
+    y = get_register(_tac_quadruple(ifle).c2);
+
+    int lb = _tac_quadruple(ifle).labelno->int_val;
+    _mips_iprintf("ble %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return ifle->next;
 }
 
 tac *emit_ifgt(tac *ifgt){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(ifgt).c1);
+    y = get_register(_tac_quadruple(ifgt).c2);
+
+    int lb = _tac_quadruple(ifgt).labelno->int_val;
+    _mips_iprintf("bgt %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return ifgt->next;
 }
 
 tac *emit_ifge(tac *ifge){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(ifge).c1);
+    y = get_register(_tac_quadruple(ifge).c2);
+
+    int lb = _tac_quadruple(ifge).labelno->int_val;
+    _mips_iprintf("bge %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return ifge->next;
 }
 
 tac *emit_ifne(tac *ifne){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(ifne).c1);
+    y = get_register(_tac_quadruple(ifne).c2);
+
+    int lb = _tac_quadruple(ifne).labelno->int_val;
+    _mips_iprintf("bne %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return ifne->next;
 }
 
 tac *emit_ifeq(tac *ifeq){
     /* COMPLETE emit function */
+    Register x, y;
+    x = get_register(_tac_quadruple(ifeq).c1);
+    y = get_register(_tac_quadruple(ifeq).c2);
+
+    int lb = _tac_quadruple(ifeq).labelno->int_val;
+    _mips_iprintf("beq %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
     return ifeq->next;
 }
 //TODO: if there is a recursive call of a function, since the para name are the same
