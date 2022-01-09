@@ -146,6 +146,5 @@ tac *tac_init_write(tac_opd*);
 tac *tac_init_none();
 
 FILE* debug;
-#define sout(msg) fprintf(debug,msg);fflush(debug);
-#define vfdebug(format,arg) vfprintf(debug,format,arg);fflush(debug);
+#define sout(msg) fprintf(debug,msg);fprintf(debug,"\n");fflush(debug);
 #endif // TAC_H

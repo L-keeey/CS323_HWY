@@ -37,8 +37,12 @@ struct VarDesc* find_varDesc(char *var){
     struct VarDesc* curr = vars;
     while (curr->next != NULL){
         curr = curr->next;
-        if (strcmp(curr->var, var) == 0)
+        if (strcmp(curr->var, var) == 0){
+            sout("find");
+            sout(var);
             return curr;
+        }
+            
     }
 }
 
@@ -102,17 +106,22 @@ Register get_register(tac_opd *opd){
     /* COMPLETE the register allocation */
     // find the register that contains the opd
     struct VarDesc* vdx = find_varDesc(var);
+    sout("after find vardesc");
     Register reg = NUM_REGS;
+    sout("before ttl");
+    sout(var);
     vdx->ttl--;
-
+    sout("place1");
     // some register contains the ropd
     if (vdx->reg != zero){
+        sout("b1");
         reg = vdx->reg;
         regs[reg].ttl--;
     }
     // no register contains the ropd
     else{
         // some idle register can be used
+        sout("b2");
         Register idle = first_idle_reg();
         if (idle != zero)
             reg = idle;
@@ -214,22 +223,17 @@ void _mips_printf(const char *fmt, ...){
     va_list args;
     va_start(args, fmt);
     vfprintf(fd, fmt, args);
-    vfdebug(fmt,args);
     va_end(args);
     fputs("\n", fd);
-    sout("\n");
 }
 
 void _mips_iprintf(const char *fmt, ...){
     va_list args;
     fputs("  ", fd); // `iprintf` stands for indented printf
-    sout("  ");
     va_start(args, fmt);
     vfprintf(fd, fmt, args);  
-    vfdebug(fmt,args);
     va_end(args);
     fputs("\n", fd);
-    sout("\n");
 }
 
 
@@ -291,9 +295,11 @@ tac *emit_add(tac *add){
 
 tac *emit_sub(tac *sub){
     Register x, y, z;
-
+    sout("in sub");
     x = get_register_w(_tac_quadruple(sub).left);
+    sout("load finish");
     if(_tac_quadruple(sub).r1->kind == OP_CONSTANT){
+        sout("r1 const");
         y = get_register_o(_tac_quadruple(sub).left, _tac_quadruple(sub).r2);
         _mips_iprintf("neg %s, %s", _reg_name(y), _reg_name(y));
         _mips_iprintf("addi %s, %s, %d", _reg_name(x),
@@ -301,6 +307,7 @@ tac *emit_sub(tac *sub){
                                          _tac_quadruple(sub).r1->int_val);
     }
     else if(_tac_quadruple(sub).r2->kind == OP_CONSTANT){
+        sout("r2 const");
         y = get_register_o(_tac_quadruple(sub).left, _tac_quadruple(sub).r1);
         _mips_iprintf("addi %s, %s, -%d", _reg_name(x),
                                           _reg_name(y),
@@ -313,6 +320,7 @@ tac *emit_sub(tac *sub){
                                         _reg_name(y),
                                         _reg_name(z));
     }
+    sout("end sub");
     return sub->next;
 }
 
@@ -398,119 +406,168 @@ tac *emit_goto(tac *goto_){
     _mips_iprintf("j label%d", _tac_quadruple(goto_).labelno->int_val);
     return goto_->next;
 }
-
 tac *emit_iflt(tac *iflt){
     /* COMPLETE emit function */
-    Register x, y;
-    x = get_register(_tac_quadruple(iflt).c1);
-    y = get_register(_tac_quadruple(iflt).c2);
+    char x[8], y[8];
+    if (_tac_quadruple(iflt).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(iflt).c1)));
+    } else if (_tac_quadruple(iflt).c1->kind == 2){
+        sprintf(x,"%d", _tac_quadruple(iflt).c1->int_val);
+    }
+
+    if (_tac_quadruple(iflt).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(iflt).c2)));
+    } else if (_tac_quadruple(iflt).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(iflt).c2->int_val);
+    }
 
     int lb = _tac_quadruple(iflt).labelno->int_val;
-    _mips_iprintf("blt %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("blt %s, %s, label%d", x, y, lb);
     return iflt->next;
 }
 
 tac *emit_ifle(tac *ifle){
     /* COMPLETE emit function */
-    Register x, y;
-    x = get_register(_tac_quadruple(ifle).c1);
-    y = get_register(_tac_quadruple(ifle).c2);
+    char x[8], y[8];
+    if (_tac_quadruple(ifle).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(ifle).c1)));
+    } else if (_tac_quadruple(ifle).c1->kind == 2){
+        sprintf(x,"%d", _tac_quadruple(ifle).c1->int_val);
+    }
+
+    if (_tac_quadruple(ifle).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(ifle).c2)));
+    } else if (_tac_quadruple(ifle).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(ifle).c2->int_val);
+    }
 
     int lb = _tac_quadruple(ifle).labelno->int_val;
-    _mips_iprintf("ble %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("ble %s, %s, label%d", x, y, lb);
     return ifle->next;
 }
 
 tac *emit_ifgt(tac *ifgt){
     /* COMPLETE emit function */
-    Register x, y;
-    x = get_register(_tac_quadruple(ifgt).c1);
-    y = get_register(_tac_quadruple(ifgt).c2);
+    char x[8], y[8];
+    if (_tac_quadruple(ifgt).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(ifgt).c1)));
+    } else if (_tac_quadruple(ifgt).c1->kind == 2){
+        sprintf(x,"%d", _tac_quadruple(ifgt).c1->int_val);
+    }
+
+    if (_tac_quadruple(ifgt).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(ifgt).c2)));
+    } else if (_tac_quadruple(ifgt).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(ifgt).c2->int_val);
+    }
 
     int lb = _tac_quadruple(ifgt).labelno->int_val;
-    _mips_iprintf("bgt %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("bgt %s, %s, label%d", x, y, lb);
     return ifgt->next;
 }
 
 tac *emit_ifge(tac *ifge){
     /* COMPLETE emit function */
-    Register x, y;
-    x = get_register(_tac_quadruple(ifge).c1);
-    y = get_register(_tac_quadruple(ifge).c2);
+    char x[8], y[8];
+    if (_tac_quadruple(ifge).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(ifge).c1)));
+    } else if (_tac_quadruple(ifge).c1->kind == 2){
+        sprintf(x,"%d", _tac_quadruple(ifge).c1->int_val);
+    }
+
+    if (_tac_quadruple(ifge).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(ifge).c2)));
+    } else if (_tac_quadruple(ifge).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(ifge).c2->int_val);
+    }
 
     int lb = _tac_quadruple(ifge).labelno->int_val;
-    _mips_iprintf("bge %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("bge %s, %s, label%d", x, y, lb);
     return ifge->next;
 }
 
 tac *emit_ifne(tac *ifne){
     /* COMPLETE emit function */
-    Register x, y;
-    x = get_register(_tac_quadruple(ifne).c1);
-    y = get_register(_tac_quadruple(ifne).c2);
+    char x[8], y[8];
+    if (_tac_quadruple(ifne).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(ifne).c1)));
+    } else if (_tac_quadruple(ifne).c1->kind == 2){
+        sprintf(x,"%d", _tac_quadruple(ifne).c1->int_val);
+    }
 
+    if (_tac_quadruple(ifne).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(ifne).c2)));
+    } else if (_tac_quadruple(ifne).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(ifne).c2->int_val);
+    }
     int lb = _tac_quadruple(ifne).labelno->int_val;
-    _mips_iprintf("bne %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("bne %s, %s, label%d", x, y, lb);
     return ifne->next;
 }
 
 tac *emit_ifeq(tac *ifeq){
     /* COMPLETE emit function */
-    sout("in if eq");
-    Register x, y;
-    x = get_register(_tac_quadruple(ifeq).c1);
-    y = get_register(_tac_quadruple(ifeq).c2);
-    sout("load x y");
+    char x[8], y[8];
+    if (_tac_quadruple(ifeq).c1->kind == 1) {
+        strcpy(x, _reg_name(get_register(_tac_quadruple(ifeq).c1)));
+    } else if (_tac_quadruple(ifeq).c1->kind == 2){
+        sprintf(x,"%d",_tac_quadruple(ifeq).c1->int_val);
+    }
+    if (_tac_quadruple(ifeq).c2->kind == 1) {
+        strcpy(y, _reg_name(get_register(_tac_quadruple(ifeq).c2)));
+    } else if (_tac_quadruple(ifeq).c2->kind == 2){
+        sprintf(y,"%d", _tac_quadruple(ifeq).c2->int_val);
+    }
     int lb = _tac_quadruple(ifeq).labelno->int_val;
-    _mips_iprintf("beq %s, %s, label%d", _reg_name(x), _reg_name(y), lb);
+    _mips_iprintf("beq %s, %s, label%d", x, y, lb);
     return ifeq->next;
 }
 
 void load_all(){
     int offset=0;
     //16*4+4=68
-    for (int r = t1; r <= s7; r++){
-        _mips_printf("lw %s, %d($sp)", _reg_name(r), offset);
+    for (int r = t0; r <= s7; r++){
+        _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_printf("lw $ra,%d($sp)",offset);
-    _mips_printf("addi sp,sp,68");
+    _mips_iprintf("lw $ra,%d($sp)",offset);
+    _mips_iprintf("addi sp,sp,68");
 }
 void load_args(){
     int offset=0;
     //load args
     //4*4=16
     for (int r = a0; r <= a3; r++){
-        _mips_printf("lw %s, %d($sp)", _reg_name(r), offset);
+        _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_printf("addi sp,sp,16");
+    _mips_iprintf("addi sp,sp,16");
 }
 void save_move_args(){
     int offset=0;
     //save args
     //4*4=16
-    _mips_printf("addi sp,sp,-16");
+    _mips_iprintf("addi sp,sp,-16");
     for (int r = a0; r <= a3; r++){
-        _mips_printf("sw %s, %d($sp)", _reg_name(r), offset);
+        _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
     //move args
     for(int i=0;i<arg_count;i++){
         struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
-        _mips_printf("move %s, %s:",_reg_name(a0+arg_count),_reg_name(vd->reg));
+        _mips_iprintf("move %s, %s:",_reg_name(a0+arg_count),_reg_name(vd->reg));
     }
 }
 //should we update the reg value of vardec here?
 void save_all(){
     int offset=0;
     //16*4+4=68
-    _mips_printf("addi sp,sp,-68");
-    for (int r = t1; r <= s7; r++){
-        _mips_printf("sw %s, %d($sp)", _reg_name(r), offset);
+    _mips_iprintf("addi sp,sp,-68");
+    for (int r = t0; r <= s7; r++){
+        _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_printf("sw $ra,%d($sp)",offset);
+    _mips_iprintf("sw $ra,%d($sp)",offset);
 }
 //TODO: if there is a recursive call of a function, since the para name are the same
 //      is it possible multiple suitable VarDesc will be fund?
@@ -526,8 +583,21 @@ void save_all(){
 tac *emit_return(tac *return_){
     /* COMPLETE emit function */
     //jr must before load all(the $ra will be rewrite)
-    struct VarDesc* vd = find_varDesc(return_->code.return_.var->char_val);
-    _mips_printf("move $v0, %s",_reg_name(vd->reg));
+    //need to consider the case when return is a immediate value
+    sout("in return");
+    if(return_->code.return_.var->kind==OP_CONSTANT){
+        int value=return_->code.return_.var->int_val;
+        Register x= get_register_w(return_->code.return_.var);
+        _mips_iprintf("li %s, %d",_reg_name(x),value);
+        _mips_iprintf("move $v0, %s",_reg_name(x));
+    }else{
+        struct VarDesc* vd = find_varDesc(return_->code.return_.var->char_val);
+        sout(vd->var);
+        sout(_reg_name(vd->reg));
+        _mips_iprintf("move $v0, %s",_reg_name(vd->reg));
+    }
+    
+    sout("after move");
     _mips_iprintf("jr $ra");
     load_all();
     load_args();
@@ -565,9 +635,9 @@ tac *emit_call(tac *call){
     assert(_tac_kind(call) == CALL);
     save_all();
     save_move_args();
-    _mips_printf("jal %s:", (call)->code.call.funcname);
+    _mips_iprintf("jal %s:", (call)->code.call.funcname);
     struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
-    _mips_printf("move %s,$v0",_reg_name(vd->reg));
+    _mips_iprintf("move %s,$v0",_reg_name(vd->reg));
     arg_count=0;
     return call->next;
 }
@@ -584,6 +654,8 @@ tac *emit_param(tac *param){
     struct VarDesc* vd = find_varDesc(var);
     //TODO: consider parameter number > 4
     vd->reg=a0+param_count;
+    sout(var);
+    sout(_reg_name(vd->reg));
     strcpy(regs[a0+param_count].var,var);
     param_count++;
     sout("after param\n");
@@ -656,6 +728,7 @@ static tac* (*emitter[])(tac*) = {
 tac *emit_code(tac *head){
     tac *(*tac_emitter)(tac*);
     tac *tac_code = head;
+    init_varDescs(head);
     emit_preamble();
     emit_read_function();
     emit_write_function();
@@ -684,6 +757,8 @@ void init_varDesc(tac_opd *opd){
 
     struct VarDesc* new_var = (struct VarDesc*)malloc(sizeof(struct VarDesc));
     strcpy(new_var->var, var);
+    sout("generating new var:");
+    sout(var);
     new_var->next = NULL;
     new_var->ttl = 1;
     curr->next = new_var;
@@ -799,5 +874,6 @@ void mips32_gen(tac *head, FILE *_fd){
     vars = (struct VarDesc*)malloc(sizeof(struct VarDesc));
     vars->next = NULL;
     fd = _fd;
+
     emit_code(head);
 }
