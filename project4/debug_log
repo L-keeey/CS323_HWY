@@ -54,11 +54,7 @@ after param
 
 find
 v1
-after find vardesc
-before ttl
 v1
-place1
-b1
 in return
 find
 v1
@@ -68,11 +64,7 @@ after move
 in sub
 find
 t1
-after find vardesc
-before ttl
 t1
-place1
-b2
 load finish
 r2 const
 find
@@ -83,12 +75,11 @@ t1
 find
 t2
 find
+t2
+t2
+find
 t3
-after find vardesc
-before ttl
 t3
-place1
-b2
 find
 v1
 find
@@ -97,60 +88,40 @@ in return
 find
 t3
 t3
-$t1
+$t2
 after move
 find
 t4
-after find vardesc
-before ttl
 t4
-place1
-b2
 find
 v2
-after find vardesc
-before ttl
 v2
-place1
-b2
 find
 t4
 find
 v2
-after find vardesc
-before ttl
 v2
-place1
-b1
+find
+t1
 find
 v2
 find
 t5
 find
+t5
+t5
+find
 v3
-after find vardesc
-before ttl
 v3
-place1
-b2
 find
 t5
 find
 v3
-after find vardesc
-before ttl
 v3
-place1
-b1
 find
 v3
-after find vardesc
-before ttl
 v3
-place1
-b1
 in return
-before print
 after move
 generation finish
 

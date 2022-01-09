@@ -106,22 +106,17 @@ Register get_register(tac_opd *opd){
     /* COMPLETE the register allocation */
     // find the register that contains the opd
     struct VarDesc* vdx = find_varDesc(var);
-    sout("after find vardesc");
     Register reg = NUM_REGS;
-    sout("before ttl");
     sout(var);
     vdx->ttl--;
-    sout("place1");
     // some register contains the ropd
     if (vdx->reg != zero){
-        sout("b1");
         reg = vdx->reg;
         regs[reg].ttl--;
     }
     // no register contains the ropd
     else{
         // some idle register can be used
-        sout("b2");
         Register idle = first_idle_reg();
         if (idle != zero)
             reg = idle;
@@ -531,7 +526,7 @@ void load_all(){
         offset+=4;
     }
     _mips_iprintf("lw $ra,%d($sp)",offset);
-    _mips_iprintf("addi sp,sp,68");
+    _mips_iprintf("addi $sp,$sp,68");
 }
 void load_args(){
     int offset=0;
@@ -541,13 +536,13 @@ void load_args(){
         _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_iprintf("addi sp,sp,16");
+    _mips_iprintf("addi $sp,$sp,16");
 }
 void save_move_args(){
     int offset=0;
     //save args
     //4*4=16
-    _mips_iprintf("addi sp,sp,-16");
+    _mips_iprintf("addi $sp,$sp,-16");
     for (int r = a0; r <= a3; r++){
         _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
@@ -555,14 +550,14 @@ void save_move_args(){
     //move args
     for(int i=0;i<arg_count;i++){
         struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
-        _mips_iprintf("move %s, %s:",_reg_name(a0+arg_count),_reg_name(vd->reg));
+        _mips_iprintf("move %s, %s",_reg_name(a0+arg_count),_reg_name(vd->reg));
     }
 }
 //should we update the reg value of vardec here?
 void save_all(){
     int offset=0;
     //16*4+4=68
-    _mips_iprintf("addi sp,sp,-68");
+    _mips_iprintf("addi $sp,$sp,-68");
     for (int r = t0; r <= s7; r++){
         _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
@@ -599,8 +594,6 @@ tac *emit_return(tac *return_){
     
     sout("after move");
     _mips_iprintf("jr $ra");
-    load_all();
-    load_args();
     return return_->next;
 }
 
@@ -635,10 +628,18 @@ tac *emit_call(tac *call){
     assert(_tac_kind(call) == CALL);
     save_all();
     save_move_args();
-    _mips_iprintf("jal %s:", (call)->code.call.funcname);
+    _mips_iprintf("jal %s", (call)->code.call.funcname);
+    load_all();
+    load_args();
     struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
-    _mips_iprintf("move %s,$v0",_reg_name(vd->reg));
-    arg_count=0;
+    if(vd->reg==zero){
+        Register x=get_register(call->code.call.ret);
+        vd->reg=x;
+        _mips_iprintf("move %s,$v0",_reg_name(x));
+    }else{
+        _mips_iprintf("move %s,$v0",_reg_name(vd->reg));
+        arg_count=0;
+    }
     return call->next;
 }
 
