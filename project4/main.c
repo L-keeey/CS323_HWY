@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
     tac *head;
     char c, *file;
     int size, len;
-
+    debug=fopen("debug_log","w");
     if(argc != 2){
         fprintf(stderr, "Usage:\n");
         fprintf(stderr, "  %s <IR-file>\n", argv[0]);
@@ -20,19 +20,25 @@ int main(int argc, char *argv[]){
 
     // read the IR code
     size = 0;
+    sout("reading IR\n");
     fp = fopen(file, "r");
-    while ((c = getc(fp)) != EOF)
+    while ((c = getc(fp)) != EOF){
         buf[size++] = c;
+    }
     buf[size] = '\x7f';
     fclose(fp);
+    sout("reading finish\n");
 
     // write the target code
     len = strlen(file);
     file[len-2] = 's';
     file[len-1] = '\0';
     fp = stdout; // fopen(file, "w");
+    sout("generating code\n");
     head = tac_from_buffer(buf);
+    sout("loading IR finish\n");
     mips32_gen(head, fp);
+    sout("generation finish\n");
     // fclose(fp);
 
     return 0;
