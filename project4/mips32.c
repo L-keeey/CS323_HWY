@@ -407,13 +407,17 @@ tac *emit_iflt(tac *iflt){
     if (_tac_quadruple(iflt).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(iflt).c1)));
     } else if (_tac_quadruple(iflt).c1->kind == 2){
-        sprintf(x,"%d", _tac_quadruple(iflt).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(iflt).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(iflt).c1->int_val);
+        strcpy(x,_reg_name(m));
     }
 
     if (_tac_quadruple(iflt).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(iflt).c2)));
     } else if (_tac_quadruple(iflt).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(iflt).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(iflt).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(iflt).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     int lb = _tac_quadruple(iflt).labelno->int_val;
@@ -427,13 +431,17 @@ tac *emit_ifle(tac *ifle){
     if (_tac_quadruple(ifle).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(ifle).c1)));
     } else if (_tac_quadruple(ifle).c1->kind == 2){
-        sprintf(x,"%d", _tac_quadruple(ifle).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(ifle).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifle).c1->int_val);
+        strcpy(x,_reg_name(m));
     }
 
     if (_tac_quadruple(ifle).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(ifle).c2)));
     } else if (_tac_quadruple(ifle).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(ifle).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(ifle).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifle).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     int lb = _tac_quadruple(ifle).labelno->int_val;
@@ -447,13 +455,17 @@ tac *emit_ifgt(tac *ifgt){
     if (_tac_quadruple(ifgt).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(ifgt).c1)));
     } else if (_tac_quadruple(ifgt).c1->kind == 2){
-        sprintf(x,"%d", _tac_quadruple(ifgt).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(ifgt).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifgt).c1->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     if (_tac_quadruple(ifgt).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(ifgt).c2)));
     } else if (_tac_quadruple(ifgt).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(ifgt).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(ifgt).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifgt).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     int lb = _tac_quadruple(ifgt).labelno->int_val;
@@ -467,13 +479,17 @@ tac *emit_ifge(tac *ifge){
     if (_tac_quadruple(ifge).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(ifge).c1)));
     } else if (_tac_quadruple(ifge).c1->kind == 2){
-        sprintf(x,"%d", _tac_quadruple(ifge).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(ifge).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifge).c1->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     if (_tac_quadruple(ifge).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(ifge).c2)));
     } else if (_tac_quadruple(ifge).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(ifge).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(ifge).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifge).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     int lb = _tac_quadruple(ifge).labelno->int_val;
@@ -487,13 +503,17 @@ tac *emit_ifne(tac *ifne){
     if (_tac_quadruple(ifne).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(ifne).c1)));
     } else if (_tac_quadruple(ifne).c1->kind == 2){
-        sprintf(x,"%d", _tac_quadruple(ifne).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(ifne).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifne).c1->int_val);
+        strcpy(y,_reg_name(m));
     }
 
     if (_tac_quadruple(ifne).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(ifne).c2)));
     } else if (_tac_quadruple(ifne).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(ifne).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(ifne).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifne).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
     int lb = _tac_quadruple(ifne).labelno->int_val;
     _mips_iprintf("bne %s, %s, label%d", x, y, lb);
@@ -506,12 +526,16 @@ tac *emit_ifeq(tac *ifeq){
     if (_tac_quadruple(ifeq).c1->kind == 1) {
         strcpy(x, _reg_name(get_register(_tac_quadruple(ifeq).c1)));
     } else if (_tac_quadruple(ifeq).c1->kind == 2){
-        sprintf(x,"%d",_tac_quadruple(ifeq).c1->int_val);
+        Register m=get_register_w(_tac_quadruple(ifeq).c1);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifeq).c1->int_val);
+        strcpy(y,_reg_name(m));
     }
     if (_tac_quadruple(ifeq).c2->kind == 1) {
         strcpy(y, _reg_name(get_register(_tac_quadruple(ifeq).c2)));
     } else if (_tac_quadruple(ifeq).c2->kind == 2){
-        sprintf(y,"%d", _tac_quadruple(ifeq).c2->int_val);
+        Register m=get_register_w(_tac_quadruple(ifeq).c2);
+        _mips_iprintf("li %s, %d",_reg_name(m), _tac_quadruple(ifeq).c2->int_val);
+        strcpy(y,_reg_name(m));
     }
     int lb = _tac_quadruple(ifeq).labelno->int_val;
     _mips_iprintf("beq %s, %s, label%d", x, y, lb);
