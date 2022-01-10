@@ -44,6 +44,19 @@ struct VarDesc* find_varDesc(char *var){
         }
             
     }
+    return NULL;
+}
+
+struct VarDesc* find_varDesc_by_reg(Register tofind){
+    struct VarDesc* curr = vars;
+    while (curr->next != NULL){
+        curr = curr->next;
+        if (curr->reg == tofind){
+            return curr;
+        }
+            
+    }
+    return NULL;
 }
 
 Register find_register(char* var){
@@ -547,38 +560,49 @@ tac *emit_ifeq(tac *ifeq){
     return ifeq->next;
 }
 
-void load_all(){
+void load_all(struct VarDesc* reg_arr[16],int sp_change){
     int offset=0;
     //16*4+4=68
-    for (int r = t0; r <= s7; r++){
-        _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
-        offset+=4;
-    }
     for (int r = a0; r <= a3; r++){
         _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
+    for(int i=0;i<16;i++){
+        if(reg_arr[i]!=0){
+            _mips_iprintf("lw %s, %d($sp)", _reg_name(t0+i), offset);
+            reg_arr[i]->reg=t0+i;
+            regs[reg_arr[i]->reg].dirty=TRUE;
+            offset+=4;
+        }
+    }
+    
     _mips_iprintf("lw $ra,%d($sp)",offset);
-    _mips_iprintf("addi $sp,$sp,84");
+    _mips_iprintf("addi $sp,$sp,%d",offset+4);
 }
 //should we update the reg value of vardec here?
-void save_all(){
+void save_all(struct VarDesc* reg_arr[16],int sp_change){
     int offset=0;
     //16*4+4=68
-    _mips_iprintf("addi $sp,$sp,-84");
-    for (int r = t0; r <= s7; r++){
-        _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
-        offset+=4;
-    }
+    _mips_iprintf("addi $sp,$sp,-%d",sp_change*4+20);
     for (int r = a0; r <= a3; r++){
         _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_iprintf("sw $ra,%d($sp)",offset);
     for(int i=0;i<arg_count;i++){
         struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
         _mips_iprintf("move %s, %s",_reg_name(a0+i),_reg_name(vd->reg));
     }
+    for(int i=0;i<16;i++){
+        if(reg_arr[i]!=0){
+            _mips_iprintf("sw %s, %d($sp)", _reg_name(t0+i), offset);
+            reg_arr[i]->reg=zero;
+            regs[reg_arr[i]->reg].dirty=FALSE;
+            offset+=4;
+        }
+    }
+    
+    _mips_iprintf("sw $ra,%d($sp)",offset);
+    
 }
 //TODO: if there is a recursive call of a function, since the para name are the same
 //      is it possible multiple suitable VarDesc will be fund?
@@ -643,13 +667,27 @@ tac *emit_call(tac *call){
     /* COMPLETE emit function */
     assert(_tac_kind(call) == CALL);
     printf("%d/n",arg_count);
-    save_all();
+    struct VarDesc* reg_arr[16];
+    int sp_change=0;
+    for(int i=t0;i<=s7;i++){
+        if(find_varDesc_by_reg(i)!=NULL){
+            reg_arr[i-t0]=find_varDesc_by_reg(i);
+            sp_change++;
+        }else{
+            reg_arr[i-t0]=0;
+        }
+    }
+    int stack_var_num_copy=stack_var_num;
+    stack_var_num=0;
+    save_all(reg_arr,sp_change);
     _mips_iprintf("jal %s", (call)->code.call.funcname);
-    load_all();
+    load_all(reg_arr,sp_change);
+    stack_var_num=stack_var_num_copy;
     struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
     if(vd->reg==zero){
         Register x=get_register(call->code.call.ret);
         vd->reg=x;
+        regs[vd->reg].dirty=TRUE;
         _mips_iprintf("move %s,$v0",_reg_name(x));
         arg_count=0;
     }else{
@@ -671,6 +709,7 @@ tac *emit_param(tac *param){
     struct VarDesc* vd = find_varDesc(var);
     //TODO: consider parameter number > 4
     vd->reg=a0+param_count;
+    regs[vd->reg].dirty=TRUE;
     sout(var);
     sout(_reg_name(vd->reg));
     strcpy(regs[a0+param_count].var,var);

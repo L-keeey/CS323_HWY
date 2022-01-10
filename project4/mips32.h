@@ -41,10 +41,8 @@ struct FunctionDesc {
 
 void mips32_gen(tac *head, FILE *_fd);
 void _mips_iprintf(const char *fmt, ...);
-void load_all();
-void load_args();
-void save_all();
-void save_move_args();
+void load_all(struct VarDesc* reg_arr[16],int sp_change);
+void save_all(struct VarDesc* reg_arr[16],int sp_change);
 void init_varDesc(tac_opd *opd);
 
 #endif // MIPS_H
