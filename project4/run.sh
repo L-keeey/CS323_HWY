@@ -1,3 +1,3 @@
 make clean
 make
-./bin/splc ./sample/test_4_fact.ir
+./bin/splc ./test/test_4_r01.ir

@@ -33,13 +33,14 @@ int main(int argc, char *argv[]){
     len = strlen(file);
     file[len-2] = 's';
     file[len-1] = '\0';
-    fp = stdout; // fopen(file, "w");
+    //fp = stdout; // 
+    fopen("mips.s", "w");
     sout("generating code\n");
     head = tac_from_buffer(buf);
     sout("loading IR finish\n");
     mips32_gen(head, fp);
     sout("generation finish\n");
-    // fclose(fp);
+    fclose(fp);
 
     return 0;
 }

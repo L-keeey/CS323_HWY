@@ -118,8 +118,10 @@ Register get_register(tac_opd *opd){
     else{
         // some idle register can be used
         Register idle = first_idle_reg();
-        if (idle != zero)
+        if (idle != zero){
             reg = idle;
+            regs[reg].ttl = vdx->ttl;
+        }
 
         // all the registers are ocupied
         else {
@@ -133,10 +135,10 @@ Register get_register(tac_opd *opd){
                 reg = find_oldest_reg();
                 spill_register(reg);
             }
+            load_reg_var(vdx, reg);
         }
-        load_reg_var(vdx, idle);
     }
-
+    vdx->reg = reg;
     return reg;
 }
 
@@ -160,9 +162,11 @@ Register get_register_o(tac_opd *lopd, tac_opd *ropd){
     else{
         // some idle register can be used
         Register idle = first_idle_reg();
-        if (idle != zero)
+        if (idle != zero){
             reg = idle;
-
+            regs[reg].ttl = vdx->ttl;
+        }
+            
         // all the registers are ocupied
         else {
             //load without spill
@@ -184,10 +188,11 @@ Register get_register_o(tac_opd *lopd, tac_opd *ropd){
                     spill_register(reg);
                 }
             }
+            load_reg_var(vdx, reg);
         }
-        load_reg_var(vdx, idle);
     }
 
+    vdx->reg = reg;
     return reg;
 }
 
@@ -549,44 +554,31 @@ void load_all(){
         _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_iprintf("lw $ra,%d($sp)",offset);
-    _mips_iprintf("addi $sp,$sp,68");
-}
-void load_args(){
-    int offset=0;
-    //load args
-    //4*4=16
     for (int r = a0; r <= a3; r++){
         _mips_iprintf("lw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    _mips_iprintf("addi $sp,$sp,16");
-}
-void save_move_args(){
-    int offset=0;
-    //save args
-    //4*4=16
-    _mips_iprintf("addi $sp,$sp,-16");
-    for (int r = a0; r <= a3; r++){
-        _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
-        offset+=4;
-    }
-    //move args
-    for(int i=0;i<arg_count;i++){
-        struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
-        _mips_iprintf("move %s, %s",_reg_name(a0+arg_count),_reg_name(vd->reg));
-    }
+    _mips_iprintf("lw $ra,%d($sp)",offset);
+    _mips_iprintf("addi $sp,$sp,84");
 }
 //should we update the reg value of vardec here?
 void save_all(){
     int offset=0;
     //16*4+4=68
-    _mips_iprintf("addi $sp,$sp,-68");
+    _mips_iprintf("addi $sp,$sp,-84");
     for (int r = t0; r <= s7; r++){
         _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
+    for (int r = a0; r <= a3; r++){
+        _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
+        offset+=4;
+    }
     _mips_iprintf("sw $ra,%d($sp)",offset);
+    for(int i=0;i<arg_count;i++){
+        struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
+        _mips_iprintf("move %s, %s",_reg_name(a0+i),_reg_name(vd->reg));
+    }
 }
 //TODO: if there is a recursive call of a function, since the para name are the same
 //      is it possible multiple suitable VarDesc will be fund?
@@ -650,16 +642,16 @@ tac *emit_arg(tac *arg){
 tac *emit_call(tac *call){
     /* COMPLETE emit function */
     assert(_tac_kind(call) == CALL);
+    printf("%d/n",arg_count);
     save_all();
-    save_move_args();
     _mips_iprintf("jal %s", (call)->code.call.funcname);
     load_all();
-    load_args();
     struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
     if(vd->reg==zero){
         Register x=get_register(call->code.call.ret);
         vd->reg=x;
         _mips_iprintf("move %s,$v0",_reg_name(x));
+        arg_count=0;
     }else{
         _mips_iprintf("move %s,$v0",_reg_name(vd->reg));
         arg_count=0;
