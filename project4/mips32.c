@@ -27,7 +27,7 @@ FILE *fd;
 
 */
 
-int stack_var_num = 0;
+int stack_var_num = 1;
 int var_time_counter = 0;
 int param_count = 0;
 int arg_count = 0;
@@ -108,7 +108,7 @@ void spill_register(Register reg){
     struct VarDesc* vd = find_varDesc(var);
     vd->reg = zero;
     // TODO: discuss how yo maintain the stack
-    int offset = 4 * stack_var_num++; 
+    int offset = -4 * stack_var_num++; 
     vd->offset = offset;
     _mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
 }
@@ -148,7 +148,8 @@ Register get_register(tac_opd *opd){
                 reg = find_oldest_reg();
                 spill_register(reg);
             }
-            load_reg_var(vdx, reg);
+            if (vdx->offset != 0)
+                load_reg_var(vdx, reg);
         }
     }
     vdx->reg = reg;
@@ -201,7 +202,8 @@ Register get_register_o(tac_opd *lopd, tac_opd *ropd){
                     spill_register(reg);
                 }
             }
-            load_reg_var(vdx, reg);
+            if (vdx->offset != 0)
+                load_reg_var(vdx, reg);
         }
     }
 
