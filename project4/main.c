@@ -34,7 +34,16 @@ int main(int argc, char *argv[]){
     file[len-2] = 's';
     file[len-1] = '\0';
     //fp = stdout; // 
-    fopen("mips.s", "w");
+
+    char output_dir[100];
+    for (int i = 0; i < 100; i ++) {
+        output_dir[i] = '\0';
+    }
+    strncpy(output_dir, argv[1], strlen(argv[1])-2);
+    strcat(output_dir,".s");
+    fopen(output_dir,"w");
+
+    // fopen("mips.s", "w");
     sout("generating code\n");
     head = tac_from_buffer(buf);
     sout("loading IR finish\n");

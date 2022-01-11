@@ -9,445 +9,100 @@ loading IR finish
 generating new var:
 v0
 generating new var:
-v1
+v2
+generating new var:
+v4
+generating new var:
+v8
+generating new var:
+v0
 generating new var:
 v2
 generating new var:
-v3
-generating new var:
-v4
-generating new var:
-v0
-generating new var:
-v5
-generating new var:
-v4
-generating new var:
-v5
-generating new var:
-v9
-generating new var:
-v1
-generating new var:
-v10
-generating new var:
-v8
-generating new var:
-v9
-generating new var:
-v10
+v13
 generating new var:
 v11
 generating new var:
-v3
-generating new var:
-v7
-generating new var:
-v8
-generating new var:
-v11
-generating new var:
-v7
-generating new var:
-v14
-generating new var:
-v0
-generating new var:
-v15
+v4
 generating new var:
 v13
 generating new var:
-v14
+v7
+generating new var:
+v8
+generating new var:
+v11
+generating new var:
+v4
+generating new var:
+v7
+generating new var:
+v15
+generating new var:
+v4
 generating new var:
 v15
 generating new var:
 v16
 generating new var:
-v1
-generating new var:
-v17
-generating new var:
-v3
-generating new var:
-v18
-generating new var:
-v2
-generating new var:
-v18
-generating new var:
-v18
-generating new var:
-v17
-generating new var:
-v17
-generating new var:
 v16
-generating new var:
-v16
-generating new var:
-v13
-generating new var:
-v13
-generating new var:
-v12
-generating new var:
-v22
-generating new var:
-v1
-generating new var:
-v23
-generating new var:
-v21
-generating new var:
-v22
-generating new var:
-v23
-generating new var:
-v24
-generating new var:
-v3
-generating new var:
-v20
-generating new var:
-v21
-generating new var:
-v24
-generating new var:
-v20
-generating new var:
-v27
-generating new var:
-v0
-generating new var:
-v28
-generating new var:
-v26
-generating new var:
-v27
-generating new var:
-v28
-generating new var:
-v29
-generating new var:
-v2
-generating new var:
-v30
-generating new var:
-v1
-generating new var:
-v31
-generating new var:
-v3
-generating new var:
-v31
-generating new var:
-v31
-generating new var:
-v30
-generating new var:
-v30
-generating new var:
-v29
-generating new var:
-v29
-generating new var:
-v26
-generating new var:
-v26
-generating new var:
-v25
-generating new var:
-v32
-generating new var:
-v32
-generating new var:
-v34
-generating new var:
-v33
-generating new var:
-v34
-generating new var:
-v36
-generating new var:
-v33
-generating new var:
-v37
-generating new var:
-v38
-generating new var:
-v39
-generating new var:
-v39
-generating new var:
-v39
-generating new var:
-v38
-generating new var:
-v38
-generating new var:
-v37
-generating new var:
-v37
-generating new var:
-v36
-generating new var:
-v36
-generating new var:
-v35
-generating new var:
-v40
-generating new var:
-v40
-before param
-
 find
 v0
 v0
-$a0
-after param
-
-before param
-
-find
-v1
-v1
-$a1
-after param
-
-before param
-
 find
 v2
 v2
-$a2
-after param
-
-before param
-
-find
-v3
-v3
-$a3
-after param
-
 find
 v4
 v4
-find
-v0
-find
-v5
-v5
-find
-v4
-v4
-find
-v5
-v5
-find
-v9
-v9
-find
-v1
-find
-v10
-v10
-find
-v8
-v8
-find
-v9
-find
-v10
-find
-v11
-v11
-find
-v3
-find
-v7
-v7
-find
-v8
-find
-v11
-find
-v7
-v7
-find
-v14
-v14
-find
-v0
-find
-v15
-v15
 in sub
 find
-v13
-v13
+v8
+v8
 load finish
-find
-v14
-find
-v15
-end sub
-find
-v16
-v16
-find
-v1
-find
-v17
-v17
-find
-v3
-find
-v18
-v18
-find
-v2
-find
-v13
-find
-v16
-find
-v17
-find
-v18
-find
-v12
-find
-v12
-v12
-find
-v22
-v22
-find
-v1
-find
-v23
-v23
-find
-v21
-v21
-find
-v22
-find
-v23
-find
-v24
-v24
-find
-v3
-find
-v20
-v20
-find
-v21
-find
-v24
-find
-v20
-v20
-find
-v27
-v27
 find
 v0
 find
-v28
-v28
-in sub
-find
-v26
-v26
-load finish
-find
-v27
-find
-v28
+v2
 end sub
 find
-v29
-v29
+v13
+v13
 find
-v2
+v11
+v11
 find
-v30
-v30
+v4
 find
-v1
+v13
 find
-v31
-v31
+v7
+v7
 find
-v3
+v8
 find
-v26
+v11
 find
-v29
+v4
+v4
 find
-v30
+v7
 find
-v31
+v15
+v15
 find
-v25
+v4
 find
-v25
-v25
+v15
+v15
 find
-v32
-v32
+v16
+v16
 in return
 find
-v32
-v32
-$s2
-after move
-find
-v34
-v34
-find
-v33
-v33
-find
-v34
-find
-v36
-v36
-find
-v33
-find
-v37
-v37
-find
-v38
-v38
-find
-v39
-v39
-find
-v36
-find
-v37
-find
-v38
-find
-v39
-find
-v35
-find
-v35
-v35
-find
-v40
-v40
-in return
-find
-v40
-v40
-$t2
+v16
+v16
+$s0
 after move
 generation finish
 
