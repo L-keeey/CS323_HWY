@@ -32,6 +32,7 @@ int var_time_counter = 0;
 int param_count = 0;
 int arg_count = 0;
 struct _tac_inst* to_print[4];
+int data_segment=0x10010000+10000;
 
 struct VarDesc* find_varDesc(char *var){
     struct VarDesc* curr = vars;
@@ -61,8 +62,10 @@ struct VarDesc* find_varDesc_by_reg(Register tofind){
 
 Register find_register(char* var){
     for (int r = t0; r <= s7; r++){
-        if (strcmp(regs[r].var, var) == 0)
+        struct VarDesc* vdx=find_varDesc_by_reg(r);
+        if(vdx->ttl==0){
             return r;
+        }
     }
     return zero;
 }
@@ -103,11 +106,10 @@ void load_reg_var(struct VarDesc* vdx, Register rx){
 }
 
 void spill_register(Register reg){
-    char *var = (char *)regs[reg].name;
-    struct VarDesc* vd = find_varDesc(var);
+    struct VarDesc* vd = find_varDesc_by_reg(reg);
     vd->reg = zero;
     // TODO: discuss how yo maintain the stack
-    int offset = -4 * stack_var_num++; 
+    int offset = 4 * stack_var_num++; 
     vd->offset = offset;
     _mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
 }
@@ -138,15 +140,15 @@ Register get_register(tac_opd *opd){
         // all the registers are ocupied
         else {
             // use the reg that is no use later
-            Register nu = no_use_reg();
-            if (nu != zero)
-                reg = nu;
+            // Register nu = no_use_reg();
+            // if (nu != zero)
+            //     reg = nu;
 
             // spill the oldest var and reuse the register
-            else{
+            //else{
                 reg = find_oldest_reg();
                 spill_register(reg);
-            }
+            //}
             if (vdx->offset != 0)
                 load_reg_var(vdx, reg);
         }
@@ -707,7 +709,6 @@ tac *emit_call(tac *call){
 tac *emit_param(tac *param){
     /* COMPLETE emit function */
     sout("before param\n");
-    init_varDesc(param->code.param.p);
     char *var = param->code.param.p->char_val;
     struct VarDesc* vd = find_varDesc(var);
     //TODO: consider parameter number > 4
@@ -736,12 +737,14 @@ tac *emit_read(tac *read){
 tac *emit_write(tac *write){
     Register x = get_register(_tac_quadruple(write).p);
 
+    _mips_iprintf("addi $sp, $sp, -8");
+    _mips_iprintf("sw $a0, 0($sp)");
     _mips_iprintf("move $a0, %s", _reg_name(x));
-    _mips_iprintf("addi $sp, $sp, -4");
-    _mips_iprintf("sw $ra, 0($sp)");
+    _mips_iprintf("sw $ra, 4($sp)");
     _mips_iprintf("jal write");
-    _mips_iprintf("lw $ra, 0($sp)");
-    _mips_iprintf("addi $sp, $sp, 4");
+    _mips_iprintf("lw $a0, 0($sp)");
+    _mips_iprintf("lw $ra, 4($sp)");
+    _mips_iprintf("addi $sp, $sp, 8");
     return write->next;
 }
 
@@ -900,7 +903,11 @@ void init_varDescs(tac *head){
             break;
         case WRITE:
             init_varDesc(tac_code->code.write.p);
-            break;                                                    
+            break; 
+        case ARG:
+            init_varDesc(tac_code->code.arg.var);
+        case PARAM:
+            init_varDesc(tac_code->code.param.p);                                                   
         default:
             break;
         }
