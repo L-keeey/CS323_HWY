@@ -102,7 +102,9 @@ void load_reg_var(struct VarDesc* vdx, Register rx){
     vdx->reg = rx;
     strcpy(regs[rx].var, vdx->var);
     regs[rx].ttl = vdx->ttl;
-    _mips_iprintf("lw %s, %d($sp)", _reg_name(rx), vdx->offset);
+    _mips_iprintf("li $fp, %d",data_segment+vdx->offset);
+    _mips_iprintf("lw %s, %d($fp)", _reg_name(rx), vdx->offset);
+    //_mips_iprintf("lw %s, %d($sp)", _reg_name(rx), vdx->offset);
 }
 
 void spill_register(Register reg){
@@ -111,7 +113,9 @@ void spill_register(Register reg){
     // TODO: discuss how yo maintain the stack
     int offset = 4 * stack_var_num++; 
     vd->offset = offset;
-    _mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
+    _mips_iprintf("li $fp, %d",data_segment+offset);
+    _mips_iprintf("lw %s, %d($fp)", _reg_name(reg), offset);
+    //_mips_iprintf("sw %s, %d($sp)", _reg_name(reg), offset);
 }
 
 Register get_register(tac_opd *opd){
@@ -593,9 +597,10 @@ void save_all(struct VarDesc* reg_arr[16],int sp_change){
         _mips_iprintf("sw %s, %d($sp)", _reg_name(r), offset);
         offset+=4;
     }
-    for(int i=0;i<arg_count;i++){
+    for(int i=arg_count-1;i>=0;i--){
+        int id=arg_count-1-i;
         struct VarDesc* vd = find_varDesc(to_print[i]->arg.var->char_val);
-        _mips_iprintf("move %s, %s",_reg_name(a0+i),_reg_name(vd->reg));
+        _mips_iprintf("move %s, %s",_reg_name(a0+id),_reg_name(vd->reg));
     }
     for(int i=0;i<16;i++){
         if(reg_arr[i]!=0){
@@ -682,12 +687,12 @@ tac *emit_call(tac *call){
             reg_arr[i-t0]=0;
         }
     }
-    int stack_var_num_copy=stack_var_num;
-    stack_var_num=0;
+    //int stack_var_num_copy=stack_var_num;
+    //stack_var_num=0;
     save_all(reg_arr,sp_change);
     _mips_iprintf("jal %s", (call)->code.call.funcname);
     load_all(reg_arr,sp_change);
-    stack_var_num=stack_var_num_copy;
+    //stack_var_num=stack_var_num_copy;
     struct VarDesc* vd = find_varDesc(call->code.call.ret->char_val);
     if(vd->reg==zero){
         Register x=get_register(call->code.call.ret);

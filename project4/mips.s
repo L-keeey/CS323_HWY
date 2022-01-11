@@ -51,10 +51,10 @@ label1:
   sw $a1, 4($sp)
   sw $a2, 8($sp)
   sw $a3, 12($sp)
-  move $a0, $s4
-  move $a1, $s3
-  move $a2, $s2
-  move $a3, $s1
+  move $a0, $s1
+  move $a1, $s2
+  move $a2, $s3
+  move $a3, $s4
   sw $t0, 16($sp)
   sw $t1, 20($sp)
   sw $t2, 24($sp)
@@ -92,11 +92,14 @@ label1:
   move $s5,$v0
   move $s6, $a1
   li $s7, 10000
-  sw $t0, 4($sp)
+  li $fp, 268510996
+  lw $t0, 4($fp)
   mul $t0, $s6, $s7
-  sw $t1, 8($sp)
+  li $fp, 268511000
+  lw $t1, 8($fp)
   move $t1, $a3
-  sw $t2, 12($sp)
+  li $fp, 268511004
+  lw $t2, 12($fp)
   add $t2, $t0, $t1
   addi $sp, $sp, -8
   sw $a0, 0($sp)
@@ -106,27 +109,33 @@ label1:
   lw $a0, 0($sp)
   lw $ra, 4($sp)
   addi $sp, $sp, 8
-  sw $t3, 16($sp)
+  li $fp, 268511008
+  lw $t3, 16($fp)
   move $t3, $a0
-  sw $t4, 20($sp)
+  li $fp, 268511012
+  lw $t4, 20($fp)
   li $t4, 1
-  sw $t5, 24($sp)
+  li $fp, 268511016
+  lw $t5, 24($fp)
   sub $t5, $t3, $t4
-  sw $t6, 28($sp)
+  li $fp, 268511020
+  lw $t6, 28($fp)
   move $t6, $a2
-  sw $s1, 32($sp)
+  li $fp, 268511024
+  lw $s1, 32($fp)
   move $s1, $a1
-  sw $t7, 36($sp)
+  li $fp, 268511028
+  lw $t7, 36($fp)
   move $t7, $a3
   addi $sp,$sp,-84
   sw $a0, 0($sp)
   sw $a1, 4($sp)
   sw $a2, 8($sp)
   sw $a3, 12($sp)
-  move $a0, $t7
-  move $a1, $s1
-  move $a2, $t6
-  move $a3, $t5
+  move $a0, $t5
+  move $a1, $t6
+  move $a2, $s1
+  move $a3, $t7
   sw $t0, 16($sp)
   sw $t1, 20($sp)
   sw $t2, 24($sp)
@@ -167,35 +176,43 @@ label1:
   lw $s7, 76($sp)
   lw $ra,80($sp)
   addi $sp,$sp,84
-  sw $s0, 40($sp)
+  li $fp, 268511032
+  lw $s0, 40($fp)
   move $s0,$v0
 label2:
-  sw $s2, 44($sp)
+  li $fp, 268511036
+  lw $s2, 44($fp)
   li $s2, 0
   move $v0, $s2
   jr $ra
 main:
-  sw $s3, 48($sp)
+  li $fp, 268511040
+  lw $s3, 48($fp)
   li $s3, 3
-  sw $s4, 52($sp)
+  li $fp, 268511044
+  lw $s4, 52($fp)
   move $s4, $s3
-  sw $s5, 56($sp)
+  li $fp, 268511048
+  lw $s5, 56($fp)
   move $s5, $s4
-  sw $s6, 60($sp)
+  li $fp, 268511052
+  lw $s6, 60($fp)
   li $s6, 1
-  sw $s7, 64($sp)
+  li $fp, 268511056
+  lw $s7, 64($fp)
   li $s7, 2
-  sw $t0, 68($sp)
+  li $fp, 268511060
+  lw $t0, 68($fp)
   li $t0, 3
   addi $sp,$sp,-84
   sw $a0, 0($sp)
   sw $a1, 4($sp)
   sw $a2, 8($sp)
   sw $a3, 12($sp)
-  move $a0, $t0
-  move $a1, $s7
-  move $a2, $s6
-  move $a3, $s5
+  move $a0, $s5
+  move $a1, $s6
+  move $a2, $s7
+  move $a3, $t0
   sw $t0, 16($sp)
   sw $t1, 20($sp)
   sw $t2, 24($sp)
@@ -236,9 +253,11 @@ main:
   lw $s7, 76($sp)
   lw $ra,80($sp)
   addi $sp,$sp,84
-  sw $t1, 72($sp)
+  li $fp, 268511064
+  lw $t1, 72($fp)
   move $t1,$v0
-  sw $t2, 76($sp)
+  li $fp, 268511068
+  lw $t2, 76($fp)
   li $t2, 0
   move $v0, $t2
   jr $ra
