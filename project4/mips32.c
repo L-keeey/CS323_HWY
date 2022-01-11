@@ -98,7 +98,6 @@ Register find_oldest_reg(){
 void load_reg_var(struct VarDesc* vdx, Register rx){
     vdx->reg = rx;
     strcpy(regs[rx].var, vdx->var);
-    regs[rx].time = var_time_counter++;
     regs[rx].ttl = vdx->ttl;
     _mips_iprintf("lw %s, %d($sp)", _reg_name(rx), vdx->offset);
 }
@@ -153,6 +152,7 @@ Register get_register(tac_opd *opd){
         }
     }
     vdx->reg = reg;
+    regs[reg].time = var_time_counter++;
     return reg;
 }
 
@@ -208,6 +208,7 @@ Register get_register_o(tac_opd *lopd, tac_opd *ropd){
     }
 
     vdx->reg = reg;
+    regs[reg].time = var_time_counter++;
     return reg;
 }
 
